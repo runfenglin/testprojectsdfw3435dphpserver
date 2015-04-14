@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="tr_user")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  */
-class User
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -31,21 +32,21 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=64)
+     * @ORM\Column(name="password", type="string", length=128, nullable=TRUE)
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="salt", type="string", length=64)
+     * @ORM\Column(name="salt", type="string", length=64, nullable=TRUE)
      */
     private $salt;	
 	
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=128)
+     * @ORM\Column(name="email", type="string", length=128, nullable=TRUE)
      */
     private $email;
 
@@ -148,6 +149,26 @@ class User
 	public function eraseCredentials()
 	{
 		
+	}
+	
+	public function isAccountNonExpired()
+	{
+	
+	}
+	
+	public function isAccountNonLocked()
+	{
+	
+	}
+	
+	public function isCredentialsNonExpired()
+	{
+	
+	}
+	
+	public function isEnabled()
+	{
+		return (boolean) $this->enabled;
 	}
 	
     public function serialize()

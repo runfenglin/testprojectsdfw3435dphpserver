@@ -4,8 +4,8 @@ parameters:
     database_host: localhost
     database_port: null
     database_name: thumbup_dev
-    database_user: root
-    database_password: null
+    database_user: app_user
+    database_password: 528699
     mailer_transport: mail
     mailer_host: localhost
     mailer_port: false

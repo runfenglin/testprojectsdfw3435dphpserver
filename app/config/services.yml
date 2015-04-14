@@ -10,3 +10,8 @@ services:
 
     api_key_user_provider:
         class: AppBundle\Security\ApiKeyUserProvider
+        arguments: ["@service_container"]
+
+    api_key_authenticator:
+        class: AppBundle\Security\ApiKeyAuthenticator
+        arguments: ["@api_key_user_provider"]

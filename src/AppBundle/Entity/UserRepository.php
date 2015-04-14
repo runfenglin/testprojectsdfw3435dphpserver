@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+
+	public function getUserByApiKey($apiKey)
+	{
+		return $this->_em
+		            ->createQueryBuilder()
+					->select('u')
+					->from($this->_entityName, 'u')
+					->join('u.token', 't')
+					->where('t.key = :key')
+					->setParameter('key', $apiKey)
+					->getQuery()
+					->getOneOrNullResult();
+	}
 }

@@ -18,6 +18,8 @@ security:
                     user:  { password: userpass, roles: [ 'ROLE_USER' ] }
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
+        api_key_user_provider:
+            id: api_key_user_provider
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
     firewalls:
@@ -29,8 +31,15 @@ security:
         demo_login:
             pattern:  ^/demo/secured/login$
             security: false
-
+        
+    #    api_login:
+    #        pattern: ^/api/login$
         # secures part of the application
+        secured_area:
+            pattern: ^/api/
+            stateless: true
+            simple_preauth:
+                authenticator: api_key_authenticator
         demo_secured_area:
             pattern:    ^/demo/secured/
             # it's important to notice that in this case _demo_security_check and _demo_login

@@ -6,11 +6,15 @@ use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterfa
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
-use Symfony\Component\Security\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
-class ApiKeyAuthenticator implements SimplePreAuthenticatiorInterface
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+
+
+class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     protected $userProvider;
     
@@ -35,16 +39,20 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatiorInterface
         );
     }
     
-    public function anthenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey) 
+    public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey) 
     {
         $apiKey = $token->getCredentials();
-        $username = $this->userProvider->getUsernameForApiKey($apiKey);
+    //    $username = $this->userProvider->getUsernameForApiKey($apiKey);
         
-        if (!$username) {
+        if (!$apiKey) {
             throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
         }
         
-        $user = $this->userProvider->loadUserByUsername($username);
+        $user = $this->userProvider->loadUserByApiKey($apiKey);
+		
+		if (!$user) {
+            throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
+        }
         
         return new PreAuthenticatedToken($user, $apiKey, $providerKey, $user->getRoles());
     }
@@ -57,4 +65,9 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatiorInterface
         return $token instanceof PreAuthenticatedToken 
                    && $token->getProviderKey() === $providerKey;
     }
+	
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+	{
+		return new Response('Authentication Failed', Response::HTTP_FORBIDDEN);
+	}
 }
