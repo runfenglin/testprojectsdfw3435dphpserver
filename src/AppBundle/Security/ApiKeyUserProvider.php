@@ -16,4 +16,19 @@ class ApiKeyUserProvider implements UserProviderInterface
 		
 		return $username;
 	}
+	
+	public function loadUserByUsername($username)
+	{
+		return new User($username, null, array('ROLE_USER'))
+	}
+	
+	public function refreshUser(UserInterface $user)
+	{
+		throw new UnsupportedUserException();
+	}
+	
+	public function supportsClass($class)
+	{
+		return 'Symfony\Component\Security\Core\User\User' === $class;
+	}
 }

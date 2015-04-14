@@ -1,0 +1,15 @@
+
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: thumbup_dev
+    database_user: root
+    database_password: null
+    mailer_transport: mail
+    mailer_host: localhost
+    mailer_port: false
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: b343e39919e76c69e891b6c9a52bc37fa7cd209d
