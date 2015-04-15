@@ -15,27 +15,42 @@ use FOS\RestBundle\Controller\Annotations AS Rest;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class DefaultController extends FOSRestController
+class SecuredController extends FOSRestController
 {
 	/**
-     * Api Test.
+     * Login.
      *
      * @ApiDoc(
-     *   resource = true
+     *   resource = false
      * )
-     * @Rest\Get("/")
+     * @Rest\Get("/login")
      * @Rest\View()
      *
      * @param Request $request the request object
      *
      * @return JSON
      */
-    public function indexAction(Request $request)
+    public function loginAction(Request $request)
     {
-		if (!$query = $request->query->all()) {
-			$query = array('All parameters will be returned as JSON format if you append some GET parameters to this URL'); 
-		}
-		return new JsonResponse($query);
-    //  return $this->render('default/index.html.twig');
+        return array('id' => 'who.am.i');
+    }
+
+
+	/**
+     * Login.
+     *
+     * @ApiDoc(
+     *   resource = false
+     * )
+     * @Rest\Get("/logout")
+     * @Rest\View()
+     *
+     * @param Request $request the request object
+     *
+     * @return JSON
+     */
+    public function logoutAction()
+    {
+        // The security layer will intercept this request
     }
 }

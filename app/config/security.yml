@@ -31,9 +31,9 @@ security:
         demo_login:
             pattern:  ^/demo/secured/login$
             security: false
-        
-    #    api_login:
-    #        pattern: ^/api/login$
+        api_login:
+            pattern: ^/api/v1/secured/
+            security: false
         # secures part of the application
         secured_area:
             pattern: ^/api/
