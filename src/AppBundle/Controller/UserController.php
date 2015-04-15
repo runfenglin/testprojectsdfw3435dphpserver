@@ -31,7 +31,7 @@ class UserController extends FOSRestController
      *     400 = "Returned when failure"
      *   }
      * )
-     * @Rest\Post("/")
+     * @Rest\Post("/user")
      * @Rest\View()
      *
      * @param Request $request the request object
@@ -55,6 +55,24 @@ class UserController extends FOSRestController
 		else {
 			return new JsonResponse(array('message' => 'You do not have access to this section.'), Response::HTTP_FORBIDDEN);
 		}
+    }
+	
+	/**
+     * Regenerate API Key.
+     *
+     * @ApiDoc(
+     *   resource = false
+     * )
+     * @Rest\Get("/generate/apikey")
+     * @Rest\View()
+     *
+     * @param Request $request the request object
+     *
+     * @return JSON
+     */
+    public function generateKeyAction(Request $request)
+    {
+        return array('apikey' => '9900-2232-2334-0983');
     }
 	
 }

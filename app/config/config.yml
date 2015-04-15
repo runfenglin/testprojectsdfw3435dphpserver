@@ -79,14 +79,14 @@ sensio_framework_extra:
     request: { converters: true }
     
 fos_rest:
-    param_fetcher_listener: true
+    param_fetcher_listener: force
     body_listener: true
     format_listener: 
         rules:
             # prefer_extension: true to specify format explicitly in the extension. Ex: /api/v1/users/2.json
             # prefer_extension: false to specify format using Accept header. Ex: curl -i -H "Accept: application/json" api.tagcade.dev/api/v1/users/2 
             # Some best-practices documentation about REST recommends to not use the URL as an indicator of the response format
-            - { path: ^/api/, priorities: [xml, json], fallback_format: ~, prefer_extension: true }
+            - { path: ^/api/, priorities: [json, xml], fallback_format: ~, prefer_extension: true }
             - { path: ^/, priorities: [html, "*/*"], fallback_format: ~, prefer_extension: true }
     view:
         view_response_listener: true
@@ -101,7 +101,7 @@ fos_rest:
         default_engine: twig
 
     routing_loader:
-        default_format: json
+        default_format: ~
 
     exception:
         codes:

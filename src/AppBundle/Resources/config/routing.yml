@@ -1,5 +1,5 @@
 api_v1_test:
-    prefix: /example
+    prefix: /
     type: rest
     resource: "AppBundle\Controller\DefaultController"
     name_prefix: api_v1_
@@ -10,8 +10,12 @@ api_v1_login:
     resource: "AppBundle\Controller\SecuredController"
     name_prefix: api_v1_    
 
+#api_v1_secured:
+#    resource: "@AppBundle/Controller/SecuredController.php"
+#    type:     annotation
+    
 api_v1_user:
-    prefix: /user
+    prefix: /
     type: rest
     resource: "AppBundle\Controller\UserController"
     name_prefix: api_v1_

@@ -23,7 +23,7 @@ class DefaultController extends FOSRestController
      * @ApiDoc(
      *   resource = true
      * )
-     * @Rest\Get("/")
+     * @Rest\Get("/example")
      * @Rest\View()
      *
      * @param Request $request the request object

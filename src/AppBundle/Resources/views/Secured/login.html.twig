@@ -11,7 +11,7 @@
         <div class="error">{{ error.message }}</div>
     {% endif %}
 
-    <form action="{{ path("api_v1_login") }}.json" method="post" id="login">
+    <form action="{{ path("app_security_check") }}" method="post" id="login">
         <div>
             <label for="username">Phone</label>
             <input type="text" id="username" name="_username" value="{{ last_username }}" />
