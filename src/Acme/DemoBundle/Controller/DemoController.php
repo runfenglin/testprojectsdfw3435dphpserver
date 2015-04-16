@@ -53,4 +53,13 @@ class DemoController extends Controller
 
         return array('form' => $form->createView());
     }
+	
+	/**
+     * @Route("/register", name="demo_registration")
+     * @Template()
+     */
+    public function registerAction()
+    {
+        return array();
+    }
 }

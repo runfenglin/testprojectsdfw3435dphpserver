@@ -5,17 +5,23 @@ api_v1_test:
     name_prefix: api_v1_
 
 api_v1_login:
-    prefix: /secured
+    prefix: /login
     type: rest
-    resource: "AppBundle\Controller\SecuredController"
-    name_prefix: api_v1_    
+    resource: "AppBundle\Controller\\LoginController"
+    name_prefix: api_v1_login_    
 
-#api_v1_secured:
-#    resource: "@AppBundle/Controller/SecuredController.php"
-#    type:     annotation
+api_v1_logout:
+    type: rest
+    resource: "AppBundle\Controller\\LogoutController"
+    name_prefix: api_v1_
+    
+api_v1_register:
+    type: rest
+    resource: "AppBundle\Controller\RegisterController"
+    name_prefix: api_v1_    
     
 api_v1_user:
     prefix: /
     type: rest
     resource: "AppBundle\Controller\UserController"
-    name_prefix: api_v1_
+    name_prefix: api_v1_user_

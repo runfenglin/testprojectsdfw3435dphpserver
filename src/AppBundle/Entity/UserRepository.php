@@ -29,8 +29,22 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 					->getOneOrNullResult();
 	}
 	
+	public function getUserByPhoneLogin($phone, $country)
+	{
+		return $this->createQueryBuilder('u')
+		            ->select('u')
+					->from($this->_entityNamej, 'u')
+					->join('u.country', 'c')
+					->where('u.phone =: phone')
+					->andWhere('c.code =: country')
+					->setParameter('phone', $phone)
+					->setParameter('country', $country)
+					->getQuery()
+					->getOneOrNullResult();
+	}
+	
 	public function loadUserByUsername($username)
-    {die;
+    {
         $user = $this->createQueryBuilder('u')
             ->where('u.phone = :phone OR u.email = :email')
             ->setParameter('phone', $username)

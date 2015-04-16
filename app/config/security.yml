@@ -40,7 +40,10 @@ security:
             pattern:  ^/demo/secured/login$
             security: false
         api_login:
-            pattern: ^/api/v1/secured/login
+            pattern: ^/api/v1/login/*$
+            security: false
+        api_register:
+            pattern: ^/api/v1/register
             security: false
         # secures part of the application
         secured_area:

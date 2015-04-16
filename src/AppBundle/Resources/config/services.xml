@@ -5,7 +5,9 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+		<parameter key="user.entity">AppBundle\Entity\User</parameter>
 		<parameter key="app.exception.listener.class">AppBundle\EventListener\ExceptionListener</parameter>
+		<parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
     </parameters>
 	
     <services>
@@ -15,6 +17,25 @@
 			<argument type="service" id="service_container" />
 		</service>
 		
+		<service id="form.service" class="AppBundle\Service\FormService">
+            <argument type="string">%kernel.environment%</argument>
+        </service>
+		
+		<service id="app.user.model" class="%app.user.model.class%">
+            <argument type='service' id="service_container" />
+        </service>
         
+		<service id="app.user.form.type" class="AppBundle\Form\UserType">
+            <argument type="service" id="app.user.form.listener" />
+            <tag name="form.type" alias="usertype" />
+        </service>
+
+        <service id="app.user.form.listener" class="AppBundle\Form\Listener\UserFormListener">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+            <argument type='service' id="service_container" />
+        </service>
+		
     </services>
 </container>

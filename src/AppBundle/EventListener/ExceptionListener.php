@@ -21,7 +21,8 @@ class ExceptionListener
 		if ($exception instanceof HttpException) {
 		
 			switch($exception->getStatusCode()) {
-				case 404: {
+				case 404:
+				case 405:{
 					
 					$response = new Response('Invalid URL Address', Response::HTTP_NOT_FOUND);				 
 					$event->setResponse($response);

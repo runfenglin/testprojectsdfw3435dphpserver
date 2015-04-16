@@ -1,0 +1,50 @@
+{% extends 'AcmeDemoBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1 class="title">Register</h1>
+
+    <p>
+        Choose between two default users: <em>user/userpass</em> <small>(ROLE_USER)</small> or <em>admin/adminpass</em> <small>(ROLE_ADMIN)</small>
+    </p>
+
+    {% if error is defined %}
+        <div class="error">{{ error.message }}</div>
+    {% endif %}
+
+    <form action="{{ path("api_v1_register") }}.json" method="post" id="login">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" />
+        </div>
+		
+		<div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" />
+        </div>
+	
+		<div>
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" />
+        </div>
+		
+		<div>
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" />
+        </div>
+
+        <!--div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" />
+        </div-->
+
+        <button type="submit" class="sf-button">
+            <span class="border-l">
+                <span class="border-r">
+                    <span class="btn-bg">Sign up</span>
+                </span>
+            </span>
+        </button>
+    </form>
+{% endblock %}
+
+{% set code = code(_self) %}
