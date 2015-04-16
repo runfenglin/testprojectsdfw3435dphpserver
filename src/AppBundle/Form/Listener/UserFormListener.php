@@ -91,12 +91,18 @@ class UserFormListener implements EventSubscriberInterface
             )
         )->add(
             'country',
-            'text',
+            'number',
 			array(
                 'constraints' => array(
-                    new Constraint\Country(
+                /*    new Constraint\Country(
 						array(
 							'message' => 'Invalid country code'
+						)
+					)*/
+					new Constraint\Regex(
+						array(
+							'pattern' => '/[0-9\-]{2,5}/',
+							'message' => 'Invalid phone number'
 						)
 					)
                 )
@@ -115,7 +121,23 @@ class UserFormListener implements EventSubscriberInterface
                 ),
                 'required' => FALSE
             )
-        );
+        )->add(
+			'password', 
+			'repeated', 
+			array(
+				'required' => TRUE,
+				'first_name' => 'password',
+				'second_name' => 'confpass',
+				'type' => 'password',
+				'invalid_message' => 'Passwords do not match.',
+				'constraints' => array(
+					new Constraint\NotBlank(
+						array('message'=>'Please give an initial password.')
+					)
+				),
+				'mapped' => FALSE
+			)
+		);
         
     }
     
@@ -125,7 +147,15 @@ class UserFormListener implements EventSubscriberInterface
     
     public function postBind(FormEvent $event) 
     {
-        
+		$password = $event->getForm()->get('password')->getData();
+		
+        $encoder = $this->_container->get('security.encoder_factory')
+						->getEncoder($this->_userEntity);
+			
+		$encodedPass = $encoder->encodePassword($password, $this->_userEntity->getSalt());
+		
+		$this->_userEntity->setPassword($encodedPass);
+			
     }
 
 }

@@ -1,0 +1,36 @@
+{% extends 'AcmeDemoBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1 class="title">Login with Phone</h1>
+
+
+    {% if error is defined %}
+        <div class="error">{{ error.message }}</div>
+    {% endif %}
+
+    <form action="{{ path("api_v1_login_phone") }}.json" method="post" id="login">
+        
+		<div>
+            <label for="country">Country</label>
+            <input type="number" id="country" name="country" />
+        </div>
+		
+		<div>
+            <label for="phone">Phone</label>
+            <input type="number" id="phone" name="phone" />
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" />
+        </div>
+
+        <button type="submit" class="sf-button">
+            <span class="border-l">
+                <span class="border-r">
+                    <span class="btn-bg">Sign in</span>
+                </span>
+            </span>
+        </button>
+    </form>
+{% endblock %}

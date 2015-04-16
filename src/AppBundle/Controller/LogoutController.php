@@ -27,7 +27,7 @@ class LogoutController extends FOSRestController
      *   resource = false,
 	 *   statusCodes = {
      *     200 = "Returned when successful",
-	 *     400 = ""
+	 *     400 = "Returned when failure"
 	 *   }
      * )
      * @Rest\Get("/logout")
@@ -35,8 +35,14 @@ class LogoutController extends FOSRestController
      *
      * @return JSON
      */
-    public function logoutAction()
+    public function logoutAction(Request $request)
     {
-        
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($user->getToken());
+		$em->flush();
+		
+		return array('success' => true);
     }
 }

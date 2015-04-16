@@ -40,7 +40,7 @@ security:
             pattern:  ^/demo/secured/login$
             security: false
         api_login:
-            pattern: ^/api/v1/login/*$
+            pattern: ^/api/v1/login/
             security: false
         api_register:
             pattern: ^/api/v1/register

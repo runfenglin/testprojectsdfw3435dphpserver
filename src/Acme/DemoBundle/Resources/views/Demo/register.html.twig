@@ -32,10 +32,15 @@
             <input type="text" id="phone" name="phone" />
         </div>
 
-        <!--div>
+        <div>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" />
-        </div-->
+            <input type="password" id="password" name="password[password]" />
+        </div>
+		
+		<div>
+            <label for="password">Confirm</label>
+            <input type="password" id="password" name="password[confpass]" />
+        </div>
 
         <button type="submit" class="sf-button">
             <span class="border-l">
@@ -47,4 +52,3 @@
     </form>
 {% endblock %}
 
-{% set code = code(_self) %}

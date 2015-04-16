@@ -62,4 +62,31 @@ class DemoController extends Controller
     {
         return array();
     }
+
+	/**
+     * @Route("/login/facebook", name="demo_login_facebook")
+     * @Template()
+     */
+    public function loginFacebookAction()
+    {
+        return array();
+    }
+	
+	/**
+     * @Route("/login/phone", name="demo_login_phone")
+     * @Template()
+     */
+    public function loginPhoneAction()
+    {
+        return array();
+    }
+
+	/**
+     * @Route("/logout", name="demo_logout")
+     * @Template()
+     */
+    public function logoutAction()
+    {
+        return array();
+    }
 }

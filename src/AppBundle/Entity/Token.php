@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Token
  *
- * @ORM\Table(name="tr_token", uniqueConstraints={@ORM\UniqueConstraint(name="user_idx", columns={"user_id"}), @ORM\UniqueConstraint(name="key_idx", columns={"key"})})
+ * @ORM\Table(name="tr_token", uniqueConstraints={@ORM\UniqueConstraint(name="user_idx", columns={"user_id"}), @ORM\UniqueConstraint(name="key_idx", columns={"api_key"})})
  * @ORM\Entity
  */
 class Token
@@ -31,13 +31,13 @@ class Token
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=32)
+     * @ORM\Column(name="api_key", type="string", length=32)
      */
     private $key;
 
 
 	/**
-	 * @ORM\OneToOne(targetEntity="User", inversedBy="token")
+	 * @ORM\OneToOne(targetEntity="User", inversedBy="token", cascade={"persist"})
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 */
 	private $user;

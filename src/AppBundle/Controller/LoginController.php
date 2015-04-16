@@ -54,22 +54,22 @@ class LoginController extends FOSRestController
 			// phone login
 
 			// verify country
-			$countryConstraint = new Constraint\Country();
-			$countryConstraint->message = 'Invalid country code';
+			$regexConstraint = new Constraint\Regex(array('pattern' => '/[0-9\-]{2,5}/'));
+			$regexConstraint->message = 'Invalid country code';
 			
-			if ($this->get('validator')->validateValue($country, $countryConstraint))
+			if ($this->get('validator')->validateValue($country, $regexConstraint)->count())
 			{
-				return new Response("Invalid country code", Response::HTTP_BAD_REQUEST);
+				return new JsonResponse(array("error" => "Invalid country code"), Response::HTTP_BAD_REQUEST);
 			}
 			
 			// verfiy phone
-			$regexConstraint = new Constraint\Regex();
+			$regexConstraint = new Constraint\Regex(array('pattern' => '/\d+/'));
 			$regexConstraint->message = 'Invalid phone number';
 			$regexConstraint->pattern = '/\d+/';
 			
-			if ($this->get('validator')->validateValue($country, $countryConstraint))
+			if ($this->get('validator')->validateValue($phone, $regexConstraint)->count())
 			{
-				return new Response("Invalid phone number", Response::HTTP_BAD_REQUEST);
+				return new JsonResponse(array("error" => "Invalid phone number"), Response::HTTP_BAD_REQUEST);
 			}
 			 
 			$em = $this->getDoctrine()->getManager();
@@ -85,10 +85,11 @@ class LoginController extends FOSRestController
 			
 			$encodedPass = $encoder->encodePassword($password, $user->getSalt());
 			
-			if($encodedPass != $this->getPassword()) {
-				return new Response("Bad Credential", Response::HTTP_FORBIDDEN);
+			if($encodedPass != $user->getPassword()) {
+
+				return new JsonResponse(array("error" => "Bad Credential"), Response::HTTP_FORBIDDEN);
 			}
-			
+		
 			$user->updateToken();
 			
 			$em->persist($user);
@@ -97,7 +98,7 @@ class LoginController extends FOSRestController
 			return array('apikey' => $user->getToken()->getKey());
 		}
 		else {
-			return new Response("You must pass country code, phone number and password", Response::HTTP_BAD_REQUEST);
+			return new JsonResponse(array("error" => "You must pass country code, phone number and password"), Response::HTTP_BAD_REQUEST);
 		}
     }
 	
@@ -126,19 +127,19 @@ class LoginController extends FOSRestController
 		
 		if (!$token || !$email || !$username) 
 		{
-			return new Response("Incorrect parameters passed", Response::HTTP_BAD_REQUEST);
+			return new JsonResponse(array("error" => "Incorrect parameters passed"), Response::HTTP_BAD_REQUEST);
 		}
 		
 		$emailConstraint = new Constraint\Email();
 		$emailConstraint->message = 'Invalid email address';
 		if($this->get('validator')->validateValue($email, $emailConstraint)) 
 		{
-			return new Response("Invalid email address", Response::HTTP_BAD_REQUEST);
+			return new JsonResponse(array("error" => "Invalid email address"), Response::HTTP_BAD_REQUEST);
 		}
 		
 		//TODO verify token
 		if((boolean) $token) {
-			return new Response("Invalid token", Response::HTTP_BAD_REQUEST);
+			return new JsonResponse(array("error" => "Invalid token"), Response::HTTP_BAD_REQUEST);
 		}
 	
 		$em = $this->getDoctrine()->getManager();

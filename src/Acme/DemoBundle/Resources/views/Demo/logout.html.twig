@@ -1,0 +1,25 @@
+{% extends 'AcmeDemoBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1 class="title">Logout</h1>
+
+
+    {% if error is defined %}
+        <div class="error">{{ error.message }}</div>
+    {% endif %}
+
+    <form action="{{ path("api_v1_logout") }}.json" method="post" id="login">
+        <div>
+            <label for="apikey">API Key</label>
+            <input type="text" id="apikey" name="apikey" />
+        </div>
+		
+        <button type="submit" class="sf-button">
+            <span class="border-l">
+                <span class="border-r">
+                    <span class="btn-bg">Logout</span>
+                </span>
+            </span>
+        </button>
+    </form>
+{% endblock %}

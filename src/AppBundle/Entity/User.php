@@ -4,14 +4,15 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Doctrine\Common\Collections\Criteria;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints;
 use AppBundle\Entity\Token;
 /**
  * User
  *
- * @ORM\Table(name="tr_user")
+ * @ORM\Table(name="tr_user", uniqueConstraints={@ORM\UniqueConstraint(name="username_idx", columns={"username"}), @ORM\UniqueConstraint(name="phone_idx", columns={"country", "phone"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
+ * @Constraints\UniqueEntity(fields={"username"}, message="Username already exist")
+ * @Constraints\UniqueEntity(fields={"country", "phone"}, message="Phone already exist")
  */
 class User implements AdvancedUserInterface, \Serializable
 {
@@ -76,16 +77,9 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var integer
      *
-     * @ORM\Column(name="country", type="integer", nullable=TRUE)
+     * @ORM\Column(name="country", type="string", length=5, nullable=TRUE)
      */
-    private $country;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="token_id", type="integer", nullable=TRUE)
-     */
-    private $tokenId;	
+    private $country;	
 	
     /**
      * @var string
@@ -99,7 +93,7 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="friend_count", type="integer")
      */
-    private $friendCount;
+    private $friendCount = 0;
 
     /**
      * @var \DateTime
@@ -119,12 +113,12 @@ class User implements AdvancedUserInterface, \Serializable
 	
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Token", mappedBy="user")
+	 * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
 	 */
 	private $token;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Media")
+	 * @ORM\OneToOne(targetEntity="Media", cascade={"persist", "remove"})
 	 * @ORM\JoinColumn(name="avatar_id", referencedColumnName="id")
 	 */
 	private $avatar;
@@ -490,28 +484,6 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->salt;
     }
 
-    /**
-     * Set tokenId
-     *
-     * @param integer $tokenId
-     * @return User
-     */
-    public function setTokenId($tokenId)
-    {
-        $this->tokenId = $tokenId;
-
-        return $this;
-    }
-
-    /**
-     * Get tokenId
-     *
-     * @return integer 
-     */
-    public function getTokenId()
-    {
-        return $this->tokenId;
-    }
 
     /**
      * Set token
@@ -622,7 +594,7 @@ class User implements AdvancedUserInterface, \Serializable
 		$apiKey = self::generateApiKey();
 			
 		if ($this->getToken()) {
-			$this->setToken()->setKey($apiKey);
+			$this->getToken()->setKey($apiKey);
 		}
 		else {
 			$token = new Token();

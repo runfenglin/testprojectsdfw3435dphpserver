@@ -32,11 +32,8 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 	public function getUserByPhoneLogin($phone, $country)
 	{
 		return $this->createQueryBuilder('u')
-		            ->select('u')
-					->from($this->_entityNamej, 'u')
-					->join('u.country', 'c')
-					->where('u.phone =: phone')
-					->andWhere('c.code =: country')
+					->where('u.phone = :phone')
+					->andWhere('u.country = :country')
 					->setParameter('phone', $phone)
 					->setParameter('country', $country)
 					->getQuery()
