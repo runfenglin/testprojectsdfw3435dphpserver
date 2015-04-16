@@ -3,10 +3,6 @@
 {% block content %}
     <h1 class="title">Register</h1>
 
-    <p>
-        Choose between two default users: <em>user/userpass</em> <small>(ROLE_USER)</small> or <em>admin/adminpass</em> <small>(ROLE_ADMIN)</small>
-    </p>
-
     {% if error is defined %}
         <div class="error">{{ error.message }}</div>
     {% endif %}
@@ -24,7 +20,12 @@
 	
 		<div>
             <label for="country">Country</label>
-            <input type="text" id="country" name="country" />
+			<select id="country" name="country">
+				<option value="61">Australia</option>
+				<option value="86">China</option>
+				<option value="64">New Zealand</option>
+			</select>
+            
         </div>
 		
 		<div>

@@ -132,13 +132,13 @@ class LoginController extends FOSRestController
 		
 		$emailConstraint = new Constraint\Email();
 		$emailConstraint->message = 'Invalid email address';
-		if($this->get('validator')->validateValue($email, $emailConstraint)) 
+		if($this->get('validator')->validateValue($email, $emailConstraint)->count()) 
 		{
 			return new JsonResponse(array("error" => "Invalid email address"), Response::HTTP_BAD_REQUEST);
 		}
 		
 		//TODO verify token
-		if((boolean) $token) {
+		if(!(boolean) $token) {
 			return new JsonResponse(array("error" => "Invalid token"), Response::HTTP_BAD_REQUEST);
 		}
 	
@@ -166,6 +166,7 @@ class LoginController extends FOSRestController
 			$user = new User();
 			$user->setEmail($email);
 			$user->setName($username);
+			$user->generateUsername();
 			$user->updateToken();
 			
 			$socialType = $em->getRepository('AppBundle:SocialType')

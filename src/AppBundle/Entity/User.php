@@ -124,7 +124,7 @@ class User implements AdvancedUserInterface, \Serializable
 	private $avatar;
 	
     /**
-     * @ORM\OneToMany(targetEntity="SocialLogin", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="SocialLogin", mappedBy="user", cascade={"persist", "remove"})
      **/
 	private $socialAccounts;
 
@@ -584,6 +584,16 @@ class User implements AdvancedUserInterface, \Serializable
 	public static function generateApiKey()
 	{
 		return md5(uniqid(mt_rand(), TRUE));
+	}
+
+	/**
+	 * Customized method to generate username for social login, it might move to other place later
+	 */
+	public function generateUsername()
+	{
+		if (!$this->getUsername()) {
+			$this->setUsername(uniqid(mt_rand(), TRUE));
+		}
 	}
 	
 	/**

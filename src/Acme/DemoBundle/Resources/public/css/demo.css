@@ -74,6 +74,7 @@ ul#demo-list a {
     display: block;
     float: left;
     width: 90px;
+	line-height: 25px;
 }
 .sf-reset ul#menu {
     float: right;
@@ -98,4 +99,8 @@ ul#demo-list a {
 .sf-reset .symfony-content pre {
     white-space: pre;
     font-family: monospace;
+}
+
+form > div {
+	padding-bottom: 10px !important;
 }

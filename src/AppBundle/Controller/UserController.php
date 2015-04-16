@@ -21,58 +21,53 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class UserController extends FOSRestController
 {
 	/**
-     * Create a User from the submitted data.
+     * Get User Profile
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Creates a new user",
+     *   description = "Get user profile",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when failure"
      *   }
      * )
-     * @Rest\Post("/user")
+     * @Rest\Get("/profile")
      * @Rest\View()
-     *
-     * @param Request $request the request object
      *
      * @return JSON
      */
-    public function createUserAction(Request $request)
+    public function profileAction(Request $request)
     {
-		$myself = $this->getUser();
-        
-		if (!is_object($myself) || !$myself instanceof UserInterface) {
-			return new JsonResponse(array('message' => 'You do not have access to this section.'), Response::HTTP_UNAUTHORIZED);
-        }
-	
-		if ($myself->isSuperAdmin()) {
-			
-			return $this->container
-						->get('site.api.user.handler')
-						->post($request->request->all());
+		$user = $this->container->get('security.context')->getToken()->getUser();
+
+		$socialAccounts = array();
+		
+		$socialAccounts['count'] = $user->getSocialAccounts()->count();
+		$socialAccounts['accounts'] = array();
+		
+		foreach($user->getSocialAccounts() as $key => $account) {
+			$social = array(
+				'type' => $account->getType()->getName(),
+				'sm_username' => $account->getSmUsername(),
+				'sm_email' => $account->getSmEmail(),
+				'sm_token' => $account->getSmToken(),
+				'created' => $account->getCreated()->getTimestamp(),
+			); 
+			$socialAccounts['accounts'][] = $social;
 		}
-		else {
-			return new JsonResponse(array('message' => 'You do not have access to this section.'), Response::HTTP_FORBIDDEN);
-		}
-    }
-	
-	/**
-     * Regenerate API Key.
-     *
-     * @ApiDoc(
-     *   resource = false
-     * )
-     * @Rest\Get("/generate/apikey")
-     * @Rest\View()
-     *
-     * @param Request $request the request object
-     *
-     * @return JSON
-     */
-    public function generateKeyAction(Request $request)
-    {
-        return array('apikey' => '9900-2232-2334-0983');
+		
+		$data = array(
+			'apikey' => $user->getToken()->getKey(),
+			'username' => $user->getUsername(),
+			'name' => $user->getName(),
+			'phone' => $user->getPhone(),
+			'email' => $user->getEmail(),
+			'friend_count' => $user->getFriendCount(),
+			'created' => $user->getCreated()->getTimestamp(),
+			'socialAcccounts' => $socialAccounts
+		);
+		
+		return array('result' => $data);
     }
 	
 }

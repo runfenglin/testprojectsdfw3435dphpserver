@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Acme\DemoBundle\Form\ContactType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 // these import the "@Route" and "@Template" annotations
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use AppBundle\Entity\Token;
 
 class DemoController extends Controller
 {
@@ -19,7 +22,28 @@ class DemoController extends Controller
      */
     public function indexAction()
     {
-        return array();
+		$router = $this->container->get('router');
+		$collection = $router->getRouteCollection();
+		$allRoutes = $collection->all();
+		
+		$routes = array();
+
+		foreach ($allRoutes as $name => $params)
+		{
+			if (0 !== strpos($name, 'demo_')) {
+				continue;
+			}
+			
+			$defaults = $params->getDefaults();
+
+			if (isset($defaults['_controller']))
+			{
+				$routes[$name]= $params->getPath();
+			}
+		}
+		
+	//	return new JsonResponse($routes);
+        return array('routes' => $routes);
     }
 
     /**
@@ -53,6 +77,18 @@ class DemoController extends Controller
 
         return array('form' => $form->createView());
     }
+
+	/**
+     * @Route("/profile", name="demo_profile")
+     * @Template()
+     */	
+	public function profileAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$tokens = $em->getRepository('AppBundle:Token')
+				   ->findAll();
+		return array('tokens' => $tokens);
+	}
 	
 	/**
      * @Route("/register", name="demo_registration")

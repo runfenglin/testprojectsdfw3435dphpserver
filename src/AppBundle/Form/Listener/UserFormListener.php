@@ -78,7 +78,7 @@ class UserFormListener implements EventSubscriberInterface
             )
         )->add(
             'phone',
-            'number',
+            'text',
 			array(
                 'constraints' => array(
                     new Constraint\Regex(

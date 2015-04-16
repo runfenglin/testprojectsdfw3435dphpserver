@@ -21,7 +21,7 @@ api_v1_register:
     name_prefix: api_v1_    
     
 api_v1_user:
-    prefix: /
+    prefix: /user
     type: rest
     resource: "AppBundle\Controller\UserController"
     name_prefix: api_v1_user_
