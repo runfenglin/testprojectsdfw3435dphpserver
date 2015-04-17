@@ -39,6 +39,9 @@ security:
         demo_login:
             pattern:  ^/demo/secured/login$
             security: false
+        api_doc:
+            pattern: ^/api/doc
+            security: false  
         api_login:
             pattern: ^/api/v1/login/
             security: false
