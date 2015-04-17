@@ -30,7 +30,7 @@ class LogoutController extends FOSRestController
 	 *     400 = "Returned when failure"
 	 *   }
      * )
-     * @Rest\Get("/logout")
+     * @Rest\Post("/logout")
      * @Rest\View()
      *
      * @return JSON

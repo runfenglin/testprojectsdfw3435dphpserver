@@ -11,7 +11,11 @@
     <form action="{{ path("api_v1_logout") }}.json" method="post" id="login">
         <div>
             <label for="apikey">API Key</label>
-            <input type="text" id="apikey" name="apikey" />
+            <select id="apikey" name="apikey">
+				{% for k in tokens%}
+				<option value="{{ k.key }}">{{ k.key }}</option>
+				{% endfor %}
+			</select>
         </div>
 		
         <button type="submit" class="sf-button">

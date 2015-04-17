@@ -123,6 +123,9 @@ class DemoController extends Controller
      */
     public function logoutAction()
     {
-        return array();
+		$em = $this->getDoctrine()->getManager();
+		$tokens = $em->getRepository('AppBundle:Token')
+				   ->findAll();
+        return array('tokens' => $tokens);
     }
 }
