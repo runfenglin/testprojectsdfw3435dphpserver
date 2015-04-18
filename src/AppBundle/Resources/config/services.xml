@@ -5,35 +5,39 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-		<parameter key="user.entity">AppBundle\Entity\User</parameter>
-		<parameter key="app.exception.listener.class">AppBundle\EventListener\ExceptionListener</parameter>
-		<parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
+        <parameter key="user.entity">AppBundle\Entity\User</parameter>
+        <parameter key="app.exception.listener.class">AppBundle\EventListener\ExceptionListener</parameter>
+        <parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
     </parameters>
-	
+    
     <services>
         <service id="doctrine.entity.listener" class="AppBundle\Doctrine\EntityListener">
             <argument type='service' id="service_container" />
             <tag name="doctrine.event_listener" event="onFlush"/>
             <tag name="doctrine.event_listener" event="postFlush"/>
-			<tag name="doctrine.event_listener" event="postRemove"/>
-			<tag name="doctrine.event_listener" event="preFlush"/>
-			<tag name="doctrine.event_listener" event="prePersist"/>
+            <tag name="doctrine.event_listener" event="postRemove"/>
+            <tag name="doctrine.event_listener" event="preFlush"/>
+            <tag name="doctrine.event_listener" event="prePersist"/>
         </service>
-		
-		<service id="app.exception.listener" class="%app.exception.listener.class%">
-			<tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
-			<argument type="service" id="service_container" />
-		</service>
-		
-		<service id="form.service" class="AppBundle\Service\FormService">
+        
+        <service id="app.exception.listener" class="%app.exception.listener.class%">
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
+            <argument type="service" id="service_container" />
+        </service>
+        
+        <service id="form.service" class="AppBundle\Service\FormService">
             <argument type="string">%kernel.environment%</argument>
         </service>
-		
-		<service id="app.user.model" class="%app.user.model.class%">
+    
+        <service id="curl.service" class="AppBundle\Service\CurlService">
+            <argument type="string">%kernel.environment%</argument>
+        </service>
+        
+        <service id="app.user.model" class="%app.user.model.class%">
             <argument type='service' id="service_container" />
         </service>
         
-		<service id="app.user.form.type" class="AppBundle\Form\UserType">
+        <service id="app.user.form.type" class="AppBundle\Form\UserType">
             <argument type="service" id="app.user.form.listener" />
             <tag name="form.type" alias="usertype" />
         </service>
@@ -44,6 +48,6 @@
             <argument type="service" id="security.context" />
             <argument type='service' id="service_container" />
         </service>
-		
+        
     </services>
 </container>

@@ -45,7 +45,7 @@ class SocialLogin
     /**
      * @var string
      *
-     * @ORM\Column(name="sm_token", type="string", length=64)
+     * @ORM\Column(name="sm_token", type="string", length=255)
      */
     private $smToken;
 
@@ -63,18 +63,18 @@ class SocialLogin
      */
     private $created;
 
-	
+    
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="socialAccounts")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
-    private $user;	 
-	
-	/**
-	 * @ORM\ManyToOne(targetEntity="SocialType", inversedBy="socialAccounts")
-	 * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
-	 */
-	private $type;
+    private $user;   
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="SocialType", inversedBy="socialAccounts")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    private $type;
 
     /**
      * Get id

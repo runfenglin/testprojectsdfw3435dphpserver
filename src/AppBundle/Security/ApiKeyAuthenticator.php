@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
@@ -50,8 +51,8 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
         }
         
         $user = $this->userProvider->loadUserByApiKey($apiKey);
-		
-		if (!$user) {
+        
+        if (!$user) {
             throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
         }
         
@@ -60,15 +61,15 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     
     public function supportsToken(TokenInterface $token, $providerKey)
     {
-		// Make sure that this method returns TRUE for a token that has been
-		// created by createToken().
-		
+        // Make sure that this method returns TRUE for a token that has been
+        // created by createToken().
+        
         return $token instanceof PreAuthenticatedToken 
                    && $token->getProviderKey() === $providerKey;
     }
-	
-	public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
-	{
-		return new Response('Authentication Failed', Response::HTTP_FORBIDDEN);
-	}
+    
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        return new JsonResponse(array("error" => "Authentication Failed"), Response::HTTP_FORBIDDEN);
+    }
 }

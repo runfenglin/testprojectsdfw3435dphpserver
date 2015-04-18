@@ -18,15 +18,15 @@ use AppBundle\Exception\InvalidFormException;
 
 class RegisterController extends FOSRestController
 {
-	/**
+    /**
      * Register with Phone Number.
      *
      * @ApiDoc(
      *   resource = true,
-	 *   statusCodes = {
+     *   statusCodes = {
      *     200 = "Returned when successful",
-	 *     400 = ""
-	 *   }
+     *     400 = ""
+     *   }
      * )
      * @Rest\Post("/register")
      * @Rest\View()
@@ -35,24 +35,24 @@ class RegisterController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-		try {
-			$user = $this->container
-						 ->get('app.user.model')
-						 ->post($request->request->all());
-			
-			if ($user instanceof User) {
-				return array('apikey' => $user->getToken()->getKey());
-			}
-		}
-		catch (InvalidFormException $exception) {
-			$errors = $this->container->get('form.service')->getErrorMessages($exception->getForm());
-			
-			return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
-		}
-		catch (\Exception $exception) {
-			return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
-		}
-		
+        try {
+            $user = $this->container
+                         ->get('app.user.model')
+                         ->post($request->request->all());
+            
+            if ($user instanceof User) {
+                return array('apikey' => $user->getToken()->getKey());
+            }
+        }
+        catch (InvalidFormException $exception) {
+            $errors = $this->container->get('form.service')->getErrorMessages($exception->getForm());
+            
+            return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
+        }
+        catch (\Exception $exception) {
+            return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+        }
+        
     }
 
 }

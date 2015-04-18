@@ -13,3 +13,6 @@ parameters:
     mailer_password: null
     locale: en
     secret: b343e39919e76c69e891b6c9a52bc37fa7cd209d
+
+    social_verify_url:
+        facebook: 'https://graph.facebook.com/me'

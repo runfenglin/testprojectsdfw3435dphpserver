@@ -20,7 +20,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class UserController extends FOSRestController
 {
-	/**
+    /**
      * Get User Profile
      *
      * @ApiDoc(
@@ -38,36 +38,36 @@ class UserController extends FOSRestController
      */
     public function profileAction(Request $request)
     {
-		$user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.context')->getToken()->getUser();
 
-		$socialAccounts = array();
-		
-		$socialAccounts['count'] = $user->getSocialAccounts()->count();
-		$socialAccounts['accounts'] = array();
-		
-		foreach($user->getSocialAccounts() as $key => $account) {
-			$social = array(
-				'type' => $account->getType()->getName(),
-				'sm_username' => $account->getSmUsername(),
-				'sm_email' => $account->getSmEmail(),
-				'sm_token' => $account->getSmToken(),
-				'created' => $account->getCreated()->getTimestamp(),
-			); 
-			$socialAccounts['accounts'][] = $social;
-		}
-		
-		$data = array(
-			'apikey' => $user->getToken()->getKey(),
-			'username' => $user->getUsername(),
-			'name' => $user->getName(),
-			'phone' => $user->getPhone(),
-			'email' => $user->getEmail(),
-			'friend_count' => $user->getFriendCount(),
-			'created' => $user->getCreated()->getTimestamp(),
-			'socialAcccounts' => $socialAccounts
-		);
-		
-		return array('result' => $data);
+        $socialAccounts = array();
+        
+        $socialAccounts['count'] = $user->getSocialAccounts()->count();
+        $socialAccounts['accounts'] = array();
+        
+        foreach($user->getSocialAccounts() as $key => $account) {
+            $social = array(
+                'type' => $account->getType()->getName(),
+                'sm_username' => $account->getSmUsername(),
+                'sm_email' => $account->getSmEmail(),
+                'sm_token' => $account->getSmToken(),
+                'created' => $account->getCreated()->getTimestamp(),
+            ); 
+            $socialAccounts['accounts'][] = $social;
+        }
+        
+        $data = array(
+            'apikey' => $user->getToken()->getKey(),
+            'username' => $user->getUsername(),
+            'name' => $user->getName(),
+            'phone' => $user->getPhone(),
+            'email' => $user->getEmail(),
+            'friend_count' => $user->getFriendCount(),
+            'created' => $user->getCreated()->getTimestamp(),
+            'socialAcccounts' => $socialAccounts
+        );
+        
+        return array('result' => $data);
     }
-	
+    
 }

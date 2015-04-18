@@ -3,16 +3,16 @@ namespace AppBundle\Service;
 
 class FormService
 {
-	private $_environment;
+    private $_environment;
 
     public function __construct($env) {
         $this->_environment = $env;
     }
-	
-	public function getErrorMessages(\Symfony\Component\Form\Form $form)
-	{
-		$errors = array();
-		
+    
+    public function getErrorMessages(\Symfony\Component\Form\Form $form)
+    {
+        $errors = array();
+        
         foreach ($form->getErrors() as $key => $error) {
             $template = $error->getMessageTemplate();
             $parameters = $error->getMessageParameters();
@@ -32,5 +32,5 @@ class FormService
         }
 
         return $errors;
-	}
+    }
 }

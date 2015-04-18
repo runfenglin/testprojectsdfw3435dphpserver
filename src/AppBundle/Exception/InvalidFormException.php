@@ -8,7 +8,7 @@ class InvalidFormException extends \RuntimeException
     public function __construct($message, $form = null)
     {
         parent::__construct($message);
-		
+        
         $this->_form = $form;
     }
 

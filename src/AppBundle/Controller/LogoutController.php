@@ -20,15 +20,15 @@ use AppBundle\Entity\Token;
 
 class LogoutController extends FOSRestController
 {
-	/**
+    /**
      * Logout.
      *
      * @ApiDoc(
      *   resource = false,
-	 *   statusCodes = {
+     *   statusCodes = {
      *     200 = "Returned when successful",
-	 *     400 = "Returned when failure"
-	 *   }
+     *     400 = "Returned when failure"
+     *   }
      * )
      * @Rest\Post("/logout")
      * @Rest\View()
@@ -39,10 +39,10 @@ class LogoutController extends FOSRestController
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-		$em = $this->getDoctrine()->getManager();
-		$em->remove($user->getToken());
-		$em->flush();
-		
-		return array('success' => true);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($user->getToken());
+        $em->flush();
+        
+        return array('success' => true);
     }
 }

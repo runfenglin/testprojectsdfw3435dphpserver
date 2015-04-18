@@ -28,7 +28,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=32)
+     * @ORM\Column(name="username", type="string", length=40)
      */
     private $username;
 
@@ -44,8 +44,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="salt", type="string", length=64, nullable=TRUE)
      */
-    private $salt;	
-	
+    private $salt;  
+    
     /**
      * @var string
      *
@@ -79,8 +79,8 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @ORM\Column(name="country", type="string", length=5, nullable=TRUE)
      */
-    private $country;	
-	
+    private $country;   
+    
     /**
      * @var string
      *
@@ -109,57 +109,57 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $created;
 
-	
-	
-	
-	/**
-	 * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
-	 */
-	private $token;
-	
-	/**
-	 * @ORM\OneToOne(targetEntity="Media", cascade={"persist", "remove"})
-	 * @ORM\JoinColumn(name="avatar_id", referencedColumnName="id")
-	 */
-	private $avatar;
-	
+    
+    
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $token;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Media", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="avatar_id", referencedColumnName="id")
+     */
+    private $avatar;
+    
     /**
      * @ORM\OneToMany(targetEntity="SocialLogin", mappedBy="user", cascade={"persist", "remove"})
      **/
-	private $socialAccounts;
+    private $socialAccounts;
 
-	
-	
-	public function getRoles()
-	{
-		return array('ROLE_USER');
-	}
-	
-	public function eraseCredentials()
-	{
-		
-	}
-	
-	public function isAccountNonExpired()
-	{
-	
-	}
-	
-	public function isAccountNonLocked()
-	{
-	
-	}
-	
-	public function isCredentialsNonExpired()
-	{
-	
-	}
-	
-	public function isEnabled()
-	{
-		return (boolean) $this->enabled;
-	}
-	
+    
+    
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+    
+    public function eraseCredentials()
+    {
+        
+    }
+    
+    public function isAccountNonExpired()
+    {
+    
+    }
+    
+    public function isAccountNonLocked()
+    {
+    
+    }
+    
+    public function isCredentialsNonExpired()
+    {
+    
+    }
+    
+    public function isEnabled()
+    {
+        return (boolean) $this->enabled;
+    }
+    
     public function serialize()
     {
         return serialize(array(
@@ -171,7 +171,7 @@ class User implements AdvancedUserInterface, \Serializable
             $this->id,
         ));
     }
-	
+    
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
@@ -182,13 +182,13 @@ class User implements AdvancedUserInterface, \Serializable
         list(
             $this->password,
             $this->salt,
-			$this->name,
+            $this->name,
             $this->username,
             $this->enabled,
             $this->id
         ) = $data;
     }
-	
+    
     /**
      * Get id
      *
@@ -457,8 +457,8 @@ class User implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->socialAccounts = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->enabled = TRUE;
-		$this->salt = md5(uniqid(null, true));
+        $this->enabled = TRUE;
+        $this->salt = md5(uniqid(null, true));
     }
 
     /**
@@ -563,56 +563,56 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->socialAccounts;
     }
-	
-	/**
-	 * Customized method to filter social account by social type
-	 */
-	public function getSocialAccountByType($type)
-	{
-		return $this->getSocialAccounts()->filter(
-			
-			function($account) use ($type) {
-				return $type == $account->getType()->getCode();
-			}
-			
-		)->first();
-	}
-	
-	/**
-	 * Customized method to generate api key, it might move to other place later
-	 */
-	public static function generateApiKey()
-	{
-		return md5(uniqid(mt_rand(), TRUE));
-	}
+    
+    /**
+     * Customized method to filter social account by social type
+     */
+    public function getSocialAccountByType($type)
+    {
+        return $this->getSocialAccounts()->filter(
+            
+            function($account) use ($type) {
+                return $type == $account->getType()->getCode();
+            }
+            
+        )->first();
+    }
+    
+    /**
+     * Customized method to generate api key, it might move to other place later
+     */
+    public static function generateApiKey()
+    {
+        return md5(uniqid(mt_rand(), TRUE));
+    }
 
-	/**
-	 * Customized method to generate username for social login, it might move to other place later
-	 */
-	public function generateUsername()
-	{
-		if (!$this->getUsername()) {
-			$this->setUsername(uniqid(mt_rand(), TRUE));
-		}
-	}
-	
-	/**
-	 * Customized method to update token, it might move to other place later
-	 */
-	public function updateToken()
-	{
-		$apiKey = self::generateApiKey();
-			
-		if ($this->getToken()) {
-			$this->getToken()->setKey($apiKey);
-		}
-		else {
-			$token = new Token();
-			$token->setUser($this);
-			$token->setKey($apiKey);
-			$this->setToken($token);
-		}
-		
-		$this->setLoginAt(new \DateTime('@' . time()));
-	}
+    /**
+     * Customized method to generate username for social login, it might move to other place later
+     */
+    public function generateUsername()
+    {
+        if (!$this->getUsername()) {
+            $this->setUsername(uniqid(mt_rand(), TRUE));
+        }
+    }
+    
+    /**
+     * Customized method to update token, it might move to other place later
+     */
+    public function updateToken()
+    {
+        $apiKey = self::generateApiKey();
+            
+        if ($this->getToken()) {
+            $this->getToken()->setKey($apiKey);
+        }
+        else {
+            $token = new Token();
+            $token->setUser($this);
+            $token->setKey($apiKey);
+            $this->setToken($token);
+        }
+        
+        $this->setLoginAt(new \DateTime('@' . time()));
+    }
 }

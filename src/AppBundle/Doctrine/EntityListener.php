@@ -23,41 +23,41 @@ class EntityListener
         $this->_container = $container;
     }
     
-	public function postRemove(LifecycleEventArgs $args)
-	{
-
-	}
-	
-	public function preFlush(PreFlushEventArgs $args)
-	{
-
-	}
-	
-	public function prePersist(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args)
     {
-	
-		$entity = $args->getEntity();
-		
+
+    }
+    
+    public function preFlush(PreFlushEventArgs $args)
+    {
+
+    }
+    
+    public function prePersist(LifecycleEventArgs $args)
+    {
+    
+        $entity = $args->getEntity();
+        
         if (method_exists($entity, 'getCreated') 
-			&& !$entity->getCreated() 
-			&& method_exists($entity, 'setCreated')) {
+            && !$entity->getCreated() 
+            && method_exists($entity, 'setCreated')) {
             // setting created time
             $entity->setCreated(new \DateTime('@' . time()));
         }
-		else if (method_exists($entity, 'setUpdated')) {
-			$entity->setUpdated(new \DateTime('@' . time()));
-		}
+        else if (method_exists($entity, 'setUpdated')) {
+            $entity->setUpdated(new \DateTime('@' . time()));
+        }
      
     }
-	
+    
     public function onFlush(OnFlushEventArgs $args)
     {
-		
+        
     }
     
     public function postFlush(PostFlushEventArgs $event)
     {
-		
+        
     }
     
 }
