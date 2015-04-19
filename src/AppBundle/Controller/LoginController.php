@@ -117,11 +117,10 @@ class LoginController extends FOSRestController
     public function facebookAction(Request $request)
     {
         $token = $request->request->get('token', NULL);
-    //    $email = $request->request->get('email', NULL);
-    //    $username = $request->request->get('username', NULL);
+
         $type = 'facebook';
         
-        if (!$token /*|| !$email || !$username*/) 
+        if (!$token) 
         {
             return new JsonResponse(array("error" => "Access token not found"), Response::HTTP_BAD_REQUEST);
         }
@@ -133,49 +132,40 @@ class LoginController extends FOSRestController
             return new JsonResponse(array("error" => "Invalid email address"), Response::HTTP_BAD_REQUEST);
         }
     */    
-        //TODO verify token
-        $verifyUrls = $this->container->getParameter('social_verify_url');
-        $entryPoint = $verifyUrls['facebook'];
-        $data = array(
-            'fields' => 'username,email',
-            'access_token' => $token
-        );
+		try{
+			//Verify token
+			$socialService = $this->container->get('social.service');
+			$result = $socialService->verifyFacebookToken($token);
+		}
+		catch(AccessDeniedException $e) {
+			return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
+		}
         
-        $curlService = $this->get('curl.service');
-        if (200 != $curlService->curlGet($entryPoint, $data))
-        {
-            return new JsonResponse(array("error" => "Invalid Facebook Access Token"), Response::HTTP_BAD_REQUEST);
-        }
-        
-        $result = json_decode($curlService->getResult());
-
-        $email = $result->email;
-        $username = $result->username;
-    
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AppBundle:User')
-                   ->findOneBy(array('email' => $email));
+                   ->findOneBy(array('email' => $result->email));
         
         if ($user) {
             $socialAccount = $user->getSocialAccountByType($type);
             
             if ($socialAccount) {
-                $socialAccount->setSmEmail($email);
+                $socialAccount->setSmEmail($result->email);
                 $socialAccount->setSmToken($token);
-                $socialAccount->setSmUsername($username);
+                $socialAccount->setSmUsername($result->username);
+				$socialAccount->setSmId($result->id);
             }
             else {
                 //TODO, is it possible?
             }
             // Should we update name to this social account name?
-            $user->setName($username);
+            $user->setName($result->username);
             $user->updateToken();
 
         }
         else {
             $user = new User();
-            $user->setEmail($email);
-            $user->setName($username);
+            $user->setEmail($result->email);
+            $user->setName($result->username);
             $user->generateUsername();
             $user->updateToken();
             
@@ -184,9 +174,10 @@ class LoginController extends FOSRestController
 
             // Also add this social account to social login table
             $socialAccount = new SocialLogin();
-            $socialAccount->setSmUsername($username);
+            $socialAccount->setSmUsername($result->username);
             $socialAccount->setSmToken($token);
-            $socialAccount->setSmEmail($email);
+            $socialAccount->setSmEmail($result->email);
+			$socialAccount->setSmId($result->id);
             $socialAccount->setType($socialType);
             $socialAccount->setCreated(new \DateTime('@' . time()));
             $socialAccount->setUser($user);

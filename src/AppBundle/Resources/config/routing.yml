@@ -25,3 +25,9 @@ api_v1_user:
     type: rest
     resource: "AppBundle\Controller\UserController"
     name_prefix: api_v1_user_
+
+api_v1_friend:
+    prefix: /friend
+    type: rest
+    resource: "AppBundle\Controller\FriendController"
+    name_prefix: api_v1_friend_

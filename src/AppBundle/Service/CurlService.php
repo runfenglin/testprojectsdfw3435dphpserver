@@ -58,7 +58,7 @@ class CurlService
     public function curlGet($url, array $get = NULL, array $options = array()) 
     {    
         $defaults = array( 
-            CURLOPT_URL => $url. (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($get), 
+            CURLOPT_URL => $url . (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($get), 
             CURLOPT_HEADER => 0, 
             CURLOPT_RETURNTRANSFER => TRUE, 
             CURLOPT_TIMEOUT => 4 
@@ -67,7 +67,7 @@ class CurlService
         if ($this->_environment != 'prod') {
             $defaults[CURLOPT_SSL_VERIFYPEER] = 0;
         }
-        
+    
         $ch = curl_init(); 
         curl_setopt_array($ch, ($options + $defaults)); 
         if( ! $this->_result = curl_exec($ch)) 

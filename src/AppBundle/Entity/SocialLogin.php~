@@ -276,27 +276,4 @@ class SocialLogin
     {
         return $this->type;
     }
-
-    /**
-     * Set smId
-     *
-     * @param string $smId
-     * @return SocialLogin
-     */
-    public function setSmId($smId)
-    {
-        $this->smId = $smId;
-
-        return $this;
-    }
-
-    /**
-     * Get smId
-     *
-     * @return string 
-     */
-    public function getSmId()
-    {
-        return $this->smId;
-    }
 }

@@ -32,6 +32,10 @@
         <service id="curl.service" class="AppBundle\Service\CurlService">
             <argument type="string">%kernel.environment%</argument>
         </service>
+
+		<service id="social.service" class="AppBundle\Service\SocialService">
+            <argument type="service" id="service_container" />
+        </service>
         
         <service id="app.user.model" class="%app.user.model.class%">
             <argument type='service' id="service_container" />

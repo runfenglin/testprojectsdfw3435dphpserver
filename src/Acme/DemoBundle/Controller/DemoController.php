@@ -79,6 +79,18 @@ class DemoController extends Controller
     }
 
 	/**
+     * @Route("/friend/list", name="demo_facebook_friend_list")
+     * @Template()
+     */	
+	public function friendListAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+		$tokens = $em->getRepository('AppBundle:Token')
+				   ->findAll();
+		return array('tokens' => $tokens);
+	}
+	
+	/**
      * @Route("/profile", name="demo_profile")
      * @Template()
      */	
