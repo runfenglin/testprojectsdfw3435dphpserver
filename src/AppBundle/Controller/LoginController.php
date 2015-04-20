@@ -27,6 +27,11 @@ class LoginController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
+	 *   requirements = {
+	 *     {"name"="country", "dataType"="string", "requirement"="/[0-9\-]{2,5}/", "required"=true, "description"="country code"},
+	 *     {"name"="phone", "dataType"="string", "requirement"="/\d+/", "required"=true, "description"="phone number"},
+	 *     {"name"="password", "dataType"="string", "requirement"="/[0-9a-z\_\-]{6,20}/", "required"=true, "description"="password"},
+	 *   },
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when missing one of phone, password and country code",
@@ -36,7 +41,6 @@ class LoginController extends FOSRestController
      * @Rest\Post("/phone")
      * @Rest\View()
      *
-     * @return JSON
      */
     public function phoneAction(Request $request)
     {
