@@ -133,6 +133,12 @@ class UserFormListener implements EventSubscriberInterface
                 'constraints' => array(
                     new Constraint\NotBlank(
                         array('message'=>'Please give an initial password.')
+                    ), 
+                    new Constraint\Regex(
+                        array(
+                            'pattern' => '/[0-9a-z\-\_]{6,20}/i',
+                            'message' => 'Invalid password'
+                        )
                     )
                 ),
                 'mapped' => FALSE

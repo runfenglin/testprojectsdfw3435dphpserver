@@ -23,6 +23,14 @@ class RegisterController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
+     *   requirements = {
+     *     {"name"="name", "dataType"="string", "requirement"="/.+/", "required"=true, "description"="display name"},
+     *     {"name"="username", "dataType"="string", "requirement"="/.+/", "required"=true, "description"="unique user ID"},
+     *     {"name"="country", "dataType"="string", "requirement"="/[0-9\-]{2, 5}/", "required"=true, "description"="country code"},
+     *     {"name"="phone", "dataType"="string", "requirement"="/[0-9]+/", "required"=true, "description"="phone number"},
+     *     {"name"="password[password]", "dataType"="string", "requirement"="/[0-9a-z\-\_]{6,20}/i", "required"=true, "description"="password"},
+     *     {"name"="password[confpass]", "dataType"="string", "requirement"="/[0-9a-z\-\_]{6,20}/i", "required"=true, "description"="confirmed password"}   
+     *   },
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = ""

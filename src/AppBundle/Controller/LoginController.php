@@ -27,11 +27,11 @@ class LoginController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = true,
-	 *   requirements = {
-	 *     {"name"="country", "dataType"="string", "requirement"="/[0-9\-]{2,5}/", "required"=true, "description"="country code"},
-	 *     {"name"="phone", "dataType"="string", "requirement"="/\d+/", "required"=true, "description"="phone number"},
-	 *     {"name"="password", "dataType"="string", "requirement"="/[0-9a-z\_\-]{6,20}/", "required"=true, "description"="password"},
-	 *   },
+     *   requirements = {
+     *     {"name"="country", "dataType"="string", "requirement"="/[0-9\-]{2,5}/", "required"=true, "description"="country code"},
+     *     {"name"="phone", "dataType"="string", "requirement"="/\d+/", "required"=true, "description"="phone number"},
+     *     {"name"="password", "dataType"="string", "requirement"="/[0-9a-z\_\-]{6,20}/", "required"=true, "description"="password"},
+     *   },
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when missing one of phone, password and country code",
@@ -107,6 +107,9 @@ class LoginController extends FOSRestController
      *
      * @ApiDoc(
      *   resource = false,
+     *   requirements = {
+     *     {"name"="token", "dataType"="string", "requirement"="/[0-9a-zA-Z]+/", "required"=true, "description"="access token"},
+     *   },
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when missing parameters",
@@ -136,14 +139,14 @@ class LoginController extends FOSRestController
             return new JsonResponse(array("error" => "Invalid email address"), Response::HTTP_BAD_REQUEST);
         }
     */    
-		try{
-			//Verify token
-			$socialService = $this->container->get('social.service');
-			$result = $socialService->verifyFacebookToken($token);
-		}
-		catch(AccessDeniedException $e) {
-			return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
-		}
+        try{
+            //Verify token
+            $socialService = $this->container->get('social.service');
+            $result = $socialService->verifyFacebookToken($token);
+        }
+        catch(AccessDeniedException $e) {
+            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
+        }
         
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('AppBundle:User')
@@ -156,12 +159,12 @@ class LoginController extends FOSRestController
                 $socialAccount->setSmEmail($result->email);
                 $socialAccount->setSmToken($token);
                 $socialAccount->setSmName($result->name);
-				$socialAccount->setSmId($result->id);
+                $socialAccount->setSmId($result->id);
             }
             else {
                 //TODO, is it possible?
-				// It should not be possible in normal operation. 
-				
+                // It should not be possible in normal operation. 
+                
             }
             // Should we update name to this social account name?
             $user->setName($result->name);
@@ -183,7 +186,7 @@ class LoginController extends FOSRestController
             $socialAccount->setSmName($result->name);
             $socialAccount->setSmToken($token);
             $socialAccount->setSmEmail($result->email);
-			$socialAccount->setSmId($result->id);
+            $socialAccount->setSmId($result->id);
             $socialAccount->setType($socialType);
             $socialAccount->setCreated(new \DateTime('@' . time()));
             $socialAccount->setUser($user);

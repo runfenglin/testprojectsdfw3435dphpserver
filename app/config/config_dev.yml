@@ -47,3 +47,8 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+### nelmio api doc
+nelmio_api_doc:
+    cache:
+        enabled: false

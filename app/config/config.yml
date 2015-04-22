@@ -116,4 +116,36 @@ fos_rest:
     disable_csrf_role: ROLE_USER
 
 ### nelmio api doc
-nelmio_api_doc: ~  
+nelmio_api_doc:
+    name: 'Thumbup Ride'
+    
+    cache:
+        enabled: true
+    
+    swagger:
+        api_base_path: /api
+        swagger_version: '1.0'
+        api_version: '1.0'
+        info:
+            title: 'Thumbup Ride'
+            description: 'Thumbup Ride API!'
+            TermsOfServiceUrl:    null
+            contact:              null
+            license:              null
+            licenseUrl:           null
+    
+    sandbox:        
+        accept_type: application/json
+        
+        body_format: 
+            formats: [ form, json ]
+            default_format: json
+        
+        request_format: 
+            formats:
+                json: application/json
+                xml: apllication/xml
+                
+            method: format_param
+            
+            default_format: json

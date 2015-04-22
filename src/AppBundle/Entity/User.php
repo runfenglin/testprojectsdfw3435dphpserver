@@ -12,7 +12,7 @@ use AppBundle\Entity\Token;
  * @ORM\Table(name="tr_user", uniqueConstraints={@ORM\UniqueConstraint(name="username_idx", columns={"username"}), @ORM\UniqueConstraint(name="phone_idx", columns={"country", "phone"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\UserRepository")
  * @Constraints\UniqueEntity(fields={"username"}, message="Username already exist")
- * @Constraints\UniqueEntity(fields={"country", "phone"}, message="Phone already exist")
+ * @Constraints\UniqueEntity(fields={"phone", "country"}, message="Phone already exist")
  */
 class User implements AdvancedUserInterface, \Serializable
 {

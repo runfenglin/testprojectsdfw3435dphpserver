@@ -28,7 +28,7 @@ class FriendController extends FOSRestController
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when failure",
-	 *     403 = "Returned when token verification failure"
+     *     403 = "Returned when token verification failure"
      *   }
      * )
      * @Rest\Get("/facebook")
@@ -38,27 +38,27 @@ class FriendController extends FOSRestController
      */
     public function facebookAction(Request $request)
     {
-		$type = 'facebook';
-		
+        $type = 'facebook';
+        
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $socialAccount = $user->getSocialAccountByType($type);
-		
-		if (!$socialAccount) {
-			return new JsonResponse(array("error" => "No facebook account is bound to this account"), Response::HTTP_BAD_REQUEST);
-		}
-		
-		try{
-			$token = $socialAccount->getSmToken();
-			$userId = $socialAccount->getSmId();
-		
-			$socialService = $this->container->get('social.service');
-			return $socialService->getFacebookFriendList($userId, $token);
-			
-		}
-		catch(\Exception $e) {
-			return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
-		}
+        
+        if (!$socialAccount) {
+            return new JsonResponse(array("error" => "No facebook account is bound to this account"), Response::HTTP_BAD_REQUEST);
+        }
+        
+        try{
+            $token = $socialAccount->getSmToken();
+            $userId = $socialAccount->getSmId();
+        
+            $socialService = $this->container->get('social.service');
+            return $socialService->getFacebookFriendList($userId, $token);
+            
+        }
+        catch(\Exception $e) {
+            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
+        }
     }
     
 }

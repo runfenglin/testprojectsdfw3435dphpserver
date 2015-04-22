@@ -41,7 +41,7 @@ class SocialLogin
      * @ORM\Column(name="sm_id", type="string", length=32)
      */
     private $smId;
-	
+    
     /**
      * @var string
      *
