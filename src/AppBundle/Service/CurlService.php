@@ -63,7 +63,7 @@ class CurlService
             CURLOPT_RETURNTRANSFER => TRUE, 
             CURLOPT_TIMEOUT => 4 
         ); 
-        
+
         if ($this->_environment != 'prod') {
             $defaults[CURLOPT_SSL_VERIFYPEER] = 0;
         }
@@ -78,7 +78,7 @@ class CurlService
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
         curl_close($ch); 
-        
+
         return $status;
     } 
     

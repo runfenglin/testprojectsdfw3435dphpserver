@@ -45,9 +45,9 @@ class SocialLogin
     /**
      * @var string
      *
-     * @ORM\Column(name="sm_username", type="string", length=64)
+     * @ORM\Column(name="sm_name", type="string", length=64)
      */
-    private $smUsername;
+    private $smName;
 
     /**
      * @var string
@@ -137,29 +137,6 @@ class SocialLogin
     public function getTypeId()
     {
         return $this->typeId;
-    }
-
-    /**
-     * Set smUsername
-     *
-     * @param string $smUsername
-     * @return SocialLogin
-     */
-    public function setSmUsername($smUsername)
-    {
-        $this->smUsername = $smUsername;
-
-        return $this;
-    }
-
-    /**
-     * Get smUsername
-     *
-     * @return string 
-     */
-    public function getSmUsername()
-    {
-        return $this->smUsername;
     }
 
     /**
@@ -298,5 +275,28 @@ class SocialLogin
     public function getSmId()
     {
         return $this->smId;
+    }
+
+    /**
+     * Set smName
+     *
+     * @param string $smName
+     * @return SocialLogin
+     */
+    public function setSmName($smName)
+    {
+        $this->smName = $smName;
+
+        return $this;
+    }
+
+    /**
+     * Get smName
+     *
+     * @return string 
+     */
+    public function getSmName()
+    {
+        return $this->smName;
     }
 }

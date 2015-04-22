@@ -155,21 +155,23 @@ class LoginController extends FOSRestController
             if ($socialAccount) {
                 $socialAccount->setSmEmail($result->email);
                 $socialAccount->setSmToken($token);
-                $socialAccount->setSmUsername($result->username);
+                $socialAccount->setSmName($result->name);
 				$socialAccount->setSmId($result->id);
             }
             else {
                 //TODO, is it possible?
+				// It should not be possible in normal operation. 
+				
             }
             // Should we update name to this social account name?
-            $user->setName($result->username);
+            $user->setName($result->name);
             $user->updateToken();
 
         }
         else {
             $user = new User();
             $user->setEmail($result->email);
-            $user->setName($result->username);
+            $user->setName($result->name);
             $user->generateUsername();
             $user->updateToken();
             
@@ -178,7 +180,7 @@ class LoginController extends FOSRestController
 
             // Also add this social account to social login table
             $socialAccount = new SocialLogin();
-            $socialAccount->setSmUsername($result->username);
+            $socialAccount->setSmName($result->name);
             $socialAccount->setSmToken($token);
             $socialAccount->setSmEmail($result->email);
 			$socialAccount->setSmId($result->id);

@@ -23,7 +23,7 @@ class SocialService
 		$entryPoint = $this->_container->getParameter('facebook') . '/me';
 
         $data = array(
-            'fields' => 'username,email',
+            'fields' => 'name,email',
             'access_token' => $token
         );
         
@@ -44,16 +44,17 @@ class SocialService
 		$data = array(
             'access_token' => $facebookToken
         );
-		
+	
 		$curlService = $this->_container->get('curl.service');
 		$code = $curlService->curlGet($entryPoint, $data);
         if (200 != $code)
         {
-			$result = $curlService->getResult();
-			
+			$result = json_decode($curlService->getResult());
+
 			throw new \Exception($result->error->message, $code);
         }
 		
+		//Here, we need return array to controller, instead of object.
 		return json_decode($curlService->getResult(), TRUE);
 	}
 }

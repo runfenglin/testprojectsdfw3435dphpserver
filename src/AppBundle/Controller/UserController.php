@@ -48,7 +48,7 @@ class UserController extends FOSRestController
         foreach($user->getSocialAccounts() as $key => $account) {
             $social = array(
                 'type' => $account->getType()->getName(),
-                'sm_username' => $account->getSmUsername(),
+                'sm_name' => $account->getSmNname(),
                 'sm_email' => $account->getSmEmail(),
                 'sm_token' => $account->getSmToken(),
                 'created' => $account->getCreated()->getTimestamp(),

@@ -50,10 +50,10 @@ class FriendController extends FOSRestController
 		
 		try{
 			$token = $socialAccount->getSmToken();
-			$username = $socialAccount->getSmUsername();
+			$userId = $socialAccount->getSmId();
 		
 			$socialService = $this->container->get('social.service');
-			return $socialService->getFacebookFriendList($username, $token);
+			return $socialService->getFacebookFriendList($userId, $token);
 			
 		}
 		catch(\Exception $e) {
