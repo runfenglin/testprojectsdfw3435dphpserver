@@ -53,7 +53,7 @@ class FriendController extends FOSRestController
             $userId = $socialAccount->getSmId();
         
             $socialService = $this->container->get('social.service');
-            return $socialService->getFacebookFriendList($userId, $token);
+            return $socialService->getFacebookFriendList($token);
             
         }
         catch(\Exception $e) {

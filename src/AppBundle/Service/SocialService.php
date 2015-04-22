@@ -36,11 +36,11 @@ class SocialService
         return json_decode($curlService->getResult());
     }
     
-    public function getFacebookFriendList($facebookId, $facebookToken)
+    public function getFacebookFriendList($facebookToken, $array = TRUE)
     {
         $entryPoint = $this->_container->getParameter('facebook');
-        $entryPoint .= '/' . $facebookId . '/friends';
-        
+    //    $entryPoint .= '/' . $facebookId . '/friends';
+        $entryPoint .= '/v2.0/me/friends';
         $data = array(
             'access_token' => $facebookToken
         );
@@ -54,7 +54,6 @@ class SocialService
             throw new \Exception($result->error->message, $code);
         }
         
-        //Here, we need return array to controller, instead of object.
-        return json_decode($curlService->getResult(), TRUE);
+        return json_decode($curlService->getResult(), $array);
     }
 }

@@ -191,6 +191,10 @@ class LoginController extends FOSRestController
             $socialAccount->setCreated(new \DateTime('@' . time()));
             $socialAccount->setUser($user);
             $user->addSocialAccount($socialAccount);
+			
+			// First login to bind friendship automatically
+			$socialService = $this->container->get('social.service');
+            $friends = $socialService->getFacebookFriendList($token, FALSE);
         }
         
         $em->persist($user);
