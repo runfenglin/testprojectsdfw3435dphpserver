@@ -17,6 +17,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\Token;
+use AppBundle\Entity\SocialType;
 use AppBundle\Entity\SocialLogin;
 
 use Symfony\Component\Validator\Constraints as Constraint;
@@ -125,20 +126,15 @@ class LoginController extends FOSRestController
     {
         $token = $request->request->get('token', NULL);
 
-        $type = 'facebook';
+        $type = SocialType::FACEBOOK;
+        
+        $resData = array();
         
         if (!$token) 
         {
             return new JsonResponse(array("error" => "Access token not found"), Response::HTTP_BAD_REQUEST);
         }
-    /* 
-        $emailConstraint = new Constraint\Email();
-        $emailConstraint->message = 'Invalid email address';
-        if($this->get('validator')->validateValue($email, $emailConstraint)->count()) 
-        {
-            return new JsonResponse(array("error" => "Invalid email address"), Response::HTTP_BAD_REQUEST);
-        }
-    */    
+  
         try{
             //Verify token
             $socialService = $this->container->get('social.service');
@@ -160,6 +156,7 @@ class LoginController extends FOSRestController
                 $socialAccount->setSmToken($token);
                 $socialAccount->setSmName($result->name);
                 $socialAccount->setSmId($result->id);
+			//	var_dump($user->getSocialAccounts()->first()->getSmToken());die;
             }
             else {
                 //TODO, is it possible?
@@ -191,16 +188,26 @@ class LoginController extends FOSRestController
             $socialAccount->setCreated(new \DateTime('@' . time()));
             $socialAccount->setUser($user);
             $user->addSocialAccount($socialAccount);
-			
-			// First login to bind friendship automatically
-			$socialService = $this->container->get('social.service');
-            $friends = $socialService->getFacebookFriendList($token, FALSE);
+            
+            // First login to bind friendship automatically
+            $friendIds = $socialService->getFacebookFriendIds($token);
+            if (!empty($friendIds)) {
+                $friendUserAccounts = $em->getRepository('AppBundle:User')
+                                         ->fbAutoLinkUsers($friendIds);
+                foreach($friendUserAccounts as $u)
+                {
+                    $user->addMyFriend($u);
+                }
+            }
+            
+            $resData['friend_count'] = count($friendUserAccounts);
         }
         
         $em->persist($user);
         $em->flush();
         
-        return array('apikey' => $user->getToken()->getKey());
+        $resData['apikey'] = $user->getToken()->getKey();
+        return $resData;
 
     }
     

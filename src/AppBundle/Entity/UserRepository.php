@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+
 /**
  * UserRepository
  *
@@ -38,6 +39,22 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 					->setParameter('country', $country)
 					->getQuery()
 					->getOneOrNullResult();
+	}
+	
+	public function fbAutoLinkUsers(array $friendIds)
+	{
+		$type = SocialType::FACEBOOK;
+		
+		return $this->createQueryBuilder('u')
+		            ->select('u')
+			        ->join('u.socialAccounts', 'sa')
+			        ->join('sa.type', 'st')
+			        ->where('st.code = :socialType')
+			        ->andWhere('sa.smId IN (:friendIds)')
+			        ->setParameter('socialType', $type)
+			        ->setParameter('friendIds', $friendIds)
+			        ->getQuery()
+			        ->getResult();
 	}
 	
 	public function loadUserByUsername($username)

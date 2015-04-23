@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
-
+use AppBundle\Entity\SocialType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class FriendController extends FOSRestController
      */
     public function facebookAction(Request $request)
     {
-        $type = 'facebook';
+        $type = SocialType::FACEBOOK;
         
         $user = $this->container->get('security.context')->getToken()->getUser();
 

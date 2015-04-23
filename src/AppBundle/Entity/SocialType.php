@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SocialType
 {
+	const FACEBOOK = 'facebook';
+	const GOOGLE = 'google+';
+	const TWITTER = 'twitter';
+	const LINKEDIN = 'linkedin';
+	
     /**
      * @var integer
      *

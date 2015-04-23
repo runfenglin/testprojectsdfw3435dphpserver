@@ -52,7 +52,7 @@ class SocialLogin
     /**
      * @var string
      *
-     * @ORM\Column(name="sm_token", type="string", length=255)
+     * @ORM\Column(name="sm_token", type="text")
      */
     private $smToken;
 
