@@ -57,7 +57,7 @@ class UserController extends FOSRestController
             $socialAccounts['data'][] = $social;
         }
         
-		$friends['count'] = $user->getMyFriends()->count();
+		$friends['count'] = $user->getMyFriends()->count() + $user->getFriendsWithMe()->count();
 		$friends['data'] = array();
 		
 		foreach($user->getMyFriends() as $key => $friend) {
@@ -69,6 +69,16 @@ class UserController extends FOSRestController
             ); 
             $friends['data'][] = $item;
         }
+		
+		foreach($user->getFriendsWithMe() as $key => $friend) {
+			$item = array(
+                'name' => $friend->getName(),
+                'username' => $friend->getUsername(),
+                'avatar' => '',
+                'created' => $friend->getCreated()->getTimestamp(),
+            ); 
+            $friends['data'][] = $item;
+		}
         $data = array(
             'apikey' => $user->getToken()->getKey(),
             'username' => $user->getUsername(),
