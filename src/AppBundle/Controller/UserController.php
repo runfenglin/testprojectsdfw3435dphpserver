@@ -41,9 +41,10 @@ class UserController extends FOSRestController
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $socialAccounts = array();
-        
+        $friends = array();
+		
         $socialAccounts['count'] = $user->getSocialAccounts()->count();
-        $socialAccounts['accounts'] = array();
+        $socialAccounts['data'] = array();
         
         foreach($user->getSocialAccounts() as $key => $account) {
             $social = array(
@@ -53,18 +54,30 @@ class UserController extends FOSRestController
                 'sm_token' => $account->getSmToken(),
                 'created' => $account->getCreated()->getTimestamp(),
             ); 
-            $socialAccounts['accounts'][] = $social;
+            $socialAccounts['data'][] = $social;
         }
         
+		$friends['count'] = $user->getMyFriends()->count();
+		$friends['data'] = array();
+		
+		foreach($user->getMyFriends() as $key => $friend) {
+            $item = array(
+                'name' => $friend->getName(),
+                'username' => $friend->getUsername(),
+                'avatar' => '',
+                'created' => $friend->getCreated()->getTimestamp(),
+            ); 
+            $friends['data'][] = $item;
+        }
         $data = array(
             'apikey' => $user->getToken()->getKey(),
             'username' => $user->getUsername(),
             'name' => $user->getName(),
             'phone' => $user->getPhone(),
             'email' => $user->getEmail(),
-            'friend_count' => $user->getFriendCount(),
             'created' => $user->getCreated()->getTimestamp(),
-            'socialAcccounts' => $socialAccounts
+            'socialAcccounts' => $socialAccounts,
+			'friends' => $friends
         );
         
         return array('result' => $data);

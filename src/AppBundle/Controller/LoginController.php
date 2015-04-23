@@ -200,7 +200,7 @@ class LoginController extends FOSRestController
                 }
             }
             
-            $resData['friend_count'] = count($friendUserAccounts);
+            $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
         }
         
         $em->persist($user);
