@@ -1,0 +1,72 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+/**
+ * Checkin
+ *
+ * @ORM\Entity
+ */
+class Checkin extends Activity
+{
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="checkin_reference", type="string", length=255, nullable=TRUE)
+     */
+    protected $checkinReference;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="checkin_name", type="string", length=128, nullable=TRUE)
+     */
+    protected $checkinName;
+	
+	    /**
+     * Set checkinReference
+     *
+     * @param string $checkinReference
+     * @return Checkin
+     */
+    public function setCheckinReference($checkinReference)
+    {
+        $this->checkinReference = $checkinReference;
+
+        return $this;
+    }
+
+    /**
+     * Get checkinReference
+     *
+     * @return string 
+     */
+    public function getCheckinReference()
+    {
+        return $this->checkinReference;
+    }
+
+    /**
+     * Set checkinName
+     *
+     * @param string $checkinName
+     * @return Checkin
+     */
+    public function setCheckinName($checkinName)
+    {
+        $this->checkinName = $checkinName;
+
+        return $this;
+    }
+
+    /**
+     * Get checkinName
+     *
+     * @return string 
+     */
+    public function getCheckinName()
+    {
+        return $this->checkinName;
+    }
+}

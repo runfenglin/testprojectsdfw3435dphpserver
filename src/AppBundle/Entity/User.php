@@ -92,9 +92,9 @@ class User implements AdvancedUserInterface, \Serializable
      * @var integer
      *
      * @ORM\Column(name="friend_count", type="integer")
-     */
+     *
     private $friendCount = 0;
-
+     */
     /**
      * @var \DateTime
      *
@@ -139,7 +139,10 @@ class User implements AdvancedUserInterface, \Serializable
      **/
     private $socialAccounts;
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="user")
+     **/
+    private $activities;    
     
     public function getRoles()
     {
@@ -399,24 +402,24 @@ class User implements AdvancedUserInterface, \Serializable
      *
      * @param integer $friendCount
      * @return User
-     */
+     *
     public function setFriendCount($friendCount)
     {
         $this->friendCount = $friendCount;
 
         return $this;
     }
-
+     
     /**
      * Get friendCount
      *
      * @return integer 
-     */
+     *
     public function getFriendCount()
     {
         return $this->friendCount;
     }
-
+     */
     /**
      * Set loginAt
      *
@@ -470,6 +473,7 @@ class User implements AdvancedUserInterface, \Serializable
         $this->socialAccounts = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->activities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = TRUE;
         $this->salt = md5(uniqid(null, true));
     }
@@ -693,5 +697,38 @@ class User implements AdvancedUserInterface, \Serializable
     public function getMyFriends()
     {
         return $this->myFriends;
+    }
+
+    /**
+     * Add activities
+     *
+     * @param \AppBundle\Entity\Activity $activities
+     * @return User
+     */
+    public function addActivity(\AppBundle\Entity\Activity $activities)
+    {
+        $this->activities[] = $activities;
+
+        return $this;
+    }
+
+    /**
+     * Remove activities
+     *
+     * @param \AppBundle\Entity\Activity $activities
+     */
+    public function removeActivity(\AppBundle\Entity\Activity $activities)
+    {
+        $this->activities->removeElement($activities);
+    }
+
+    /**
+     * Get activities
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActivities()
+    {
+        return $this->activities;
     }
 }
