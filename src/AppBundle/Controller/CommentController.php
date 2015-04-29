@@ -26,7 +26,7 @@ class CommentController extends FOSRestController
      *   resource = true,
      *   description = "Create user comment",
      *   requirements = {
-     *     {"name"="parent", "dataType"="integer", "required"=true, "description"="Target activity"},  	 
+     *     {"name"="parent", "dataType"="integer", "required"=true, "description"="Target activity"},    
      *     {"name"="comment", "dataType"="string", "requirement"="/.{3,255}/", "required"=true, "description"="Comment content"}
      *   },
      *   statusCodes = {
@@ -109,9 +109,9 @@ class CommentController extends FOSRestController
                                   ->setEntity($comment);
                            
             $comment = $activityModel->postComment(
-										$request->request->all(), 
-										$request->getMethod()
-									 );
+                                        $request->request->all(), 
+                                        $request->getMethod()
+                                     );
             
             if ($comment instanceof Comment) {
                 return $activityModel->expose($comment);

@@ -75,16 +75,16 @@ class CheckinController extends FOSRestController
      */
     public function getAction(Request $request, $id)
     {
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $checkin = $em->getRepository('AppBundle:Checkin')->find($id);
         
         if (!$checkin) {
             return new JsonResponse(array('message' => 'Invalid checkin'), Response::HTTP_NOT_FOUND);
         }
         
-		return $this->container
+        return $this->container
                     ->get('app.activity.model')
-				    ->exposeOne($checkin);
+                    ->exposeOne($checkin);
     }
     
     /**
@@ -198,7 +198,7 @@ class CheckinController extends FOSRestController
             return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
-    
+      
     /**
      * Delete Checkin.
      *
@@ -211,7 +211,7 @@ class CheckinController extends FOSRestController
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when failure",
-     *     403 = "Returned when Returned when token verification or permission failed",
+     *     403 = "Returned when Returned when permission failed",
      *     404 = "Returned when checkin does not exist"
      *   }
      * )
@@ -219,7 +219,7 @@ class CheckinController extends FOSRestController
      * @Rest\View()
      *
      * @return JSON
-     */     
+     */      
     public function deleteAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -235,6 +235,11 @@ class CheckinController extends FOSRestController
             return new JsonResponse(array('message' => 'Only creator can delete this checkin'), Response::HTTP_FORBIDDEN);
         }
         
+        //TODO: Strange!! I can't remove children rows by remove($checkin)
+        foreach($checkin->getChildren() as $child) {
+            $em->remove($child);
+            $em->flush();
+        }
         $em->remove($checkin);
         $em->flush();
         
