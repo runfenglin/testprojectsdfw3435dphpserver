@@ -7,19 +7,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 //Listener
-use AppBundle\Form\Listener\UserFormListener;
+use AppBundle\Form\Listener\ActivityFormListener;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-class UserType extends AbstractType
+class ActivityType extends AbstractType
 {
-    const FORM_NAME = 'usertype';
+    const FORM_NAME = 'activitytype';
     
     private $_formListener;
     
     private $_container;
     
-    public function __construct(UserFormListener $listener)
+    public function __construct(ActivityFormListener $listener)
     {
         $this->_formListener = $listener;
     }
@@ -32,8 +32,8 @@ class UserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\User',
-            'csrf_protection' => FALSE
+            'data_class' => 'AppBundle\Entity\Activity',
+			'csrf_protection' => FALSE
         ));
     }
 

@@ -30,10 +30,26 @@ class ExceptionListener
                     break;
                 }
                 default:{
+                    
                     break;
                 }
             }
-
         }
+        /*
+        if($this->_container->get('security.context')->getToken()) {
+        
+            //email body building
+            $body = $exception->getMessage() . PHP_EOL . nl2br($exception->getTraceAsString());
+            //display more debugging/tracking information
+            $body .= $this->_moreTrackingInfo();
+
+            //send exception message to email
+            $message = \Swift_Message::newInstance()
+                       ->setSubject('Fusion Exception: ' . $email_subject)
+                       ->setFrom($this->_default_from_email)
+                       ->setTo($this->_default_from_email)
+                       ->setBody($body, 'text/html');
+            $this->_container->get('mailer')->send($message);
+        }*/
     }
 }

@@ -8,6 +8,7 @@
         <parameter key="user.entity">AppBundle\Entity\User</parameter>
         <parameter key="app.exception.listener.class">AppBundle\EventListener\ExceptionListener</parameter>
         <parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
+        <parameter key="app.activity.model.class">AppBundle\Model\ActivityModel</parameter>
     </parameters>
     
     <services>
@@ -33,11 +34,15 @@
             <argument type="string">%kernel.environment%</argument>
         </service>
 
-		<service id="social.service" class="AppBundle\Service\SocialService">
+        <service id="social.service" class="AppBundle\Service\SocialService">
             <argument type="service" id="service_container" />
         </service>
         
         <service id="app.user.model" class="%app.user.model.class%">
+            <argument type='service' id="service_container" />
+        </service>
+        
+        <service id="app.activity.model" class="%app.activity.model.class%">
             <argument type='service' id="service_container" />
         </service>
         
@@ -47,6 +52,18 @@
         </service>
 
         <service id="app.user.form.listener" class="AppBundle\Form\Listener\UserFormListener">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+            <argument type='service' id="service_container" />
+        </service>
+
+        <service id="app.activity.form.type" class="AppBundle\Form\ActivityType">
+            <argument type="service" id="app.activity.form.listener" />
+            <tag name="form.type" alias="activitytype" />
+        </service>
+
+        <service id="app.activity.form.listener" class="AppBundle\Form\Listener\ActivityFormListener">
             <argument type="service" id="form.factory" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="security.context" />

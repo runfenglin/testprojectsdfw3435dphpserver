@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Checkin extends Activity
 {
-	/**
+    /**
      * @var string
      *
      * @ORM\Column(name="checkin_reference", type="string", length=255, nullable=TRUE)
@@ -23,8 +23,15 @@ class Checkin extends Activity
      * @ORM\Column(name="checkin_name", type="string", length=128, nullable=TRUE)
      */
     protected $checkinName;
-	
-	    /**
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=255, nullable=TRUE)
+     */
+    protected $comment;
+    
+    /**
      * Set checkinReference
      *
      * @param string $checkinReference
@@ -68,5 +75,28 @@ class Checkin extends Activity
     public function getCheckinName()
     {
         return $this->checkinName;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return Comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string 
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

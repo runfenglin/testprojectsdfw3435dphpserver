@@ -31,3 +31,15 @@ api_v1_friend:
     type: rest
     resource: "AppBundle\Controller\FriendController"
     name_prefix: api_v1_friend_
+
+api_v1_checkin:
+    prefix: /checkin
+    type: rest
+    resource: "AppBundle\Controller\CheckinController"
+    name_prefix: api_v1_checkin_
+
+api_v1_comment:
+    prefix: /comment
+    type: rest
+    resource: "AppBundle\Controller\CommentController"
+    name_prefix: api_v1_comment_

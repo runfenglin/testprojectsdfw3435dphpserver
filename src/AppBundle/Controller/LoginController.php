@@ -156,7 +156,7 @@ class LoginController extends FOSRestController
                 $socialAccount->setSmToken($token);
                 $socialAccount->setSmName($result->name);
                 $socialAccount->setSmId($result->id);
-			//	var_dump($user->getSocialAccounts()->first()->getSmToken());die;
+            //  var_dump($user->getSocialAccounts()->first()->getSmToken());die;
             }
             else {
                 //TODO, is it possible?

@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints;
 use AppBundle\Entity\Token;
 /**
@@ -14,7 +16,7 @@ use AppBundle\Entity\Token;
  * @Constraints\UniqueEntity(fields={"username"}, message="Username already exist")
  * @Constraints\UniqueEntity(fields={"phone", "country"}, message="Phone already exist")
  */
-class User implements AdvancedUserInterface, \Serializable
+class User implements AdvancedUserInterface, EquatableInterface, \Serializable
 {
     /**
      * @var integer
@@ -110,18 +112,18 @@ class User implements AdvancedUserInterface, \Serializable
     private $created;
 
     /**
-	 * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
-	 */
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
+     */
     private $friendsWithMe;
-	
-	/**
-	 * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
-	 * @ORM\JoinTable(name="tr_friend",
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
+     * @ORM\JoinTable(name="tr_friend",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="friend_user_id", referencedColumnName="id")}
      *      )
      */
-	private $myFriends; 
+    private $myFriends; 
     
     /**
      * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
@@ -167,6 +169,27 @@ class User implements AdvancedUserInterface, \Serializable
     public function isCredentialsNonExpired()
     {
     
+    }
+    
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof $this) {
+            return FALSE;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return FALSE;
+        }
+
+        if ($this->salt !== $user->getSalt()) {
+            return FALSE;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return FALSE;
+        }
+
+        return true;
     }
     
     public function isEnabled()
@@ -471,9 +494,9 @@ class User implements AdvancedUserInterface, \Serializable
     public function __construct()
     {
         $this->socialAccounts = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->activities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = TRUE;
         $this->salt = md5(uniqid(null, true));
     }

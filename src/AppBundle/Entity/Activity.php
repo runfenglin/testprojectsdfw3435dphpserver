@@ -15,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Activity
 {
+    const CHECKIN = 'checkin';
+    const COMMENT = 'commment';
     /**
      * @var integer
      *
@@ -34,10 +36,10 @@ class Activity
     /**
      * @var integer
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @ORM\Column(name="parent_id", type="integer", nullable=TRUE)
      */
     protected $parentId;
-
+    
     /**
      * @var \DateTime
      *
@@ -49,17 +51,28 @@ class Activity
      * @ORM\ManyToOne(targetEntity="User", inversedBy="activities")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
-	protected $user;
-	
+    protected $user;
+    
     /**
-     * @ORM\ManyToMany(targetEntity="Media")
+     * @ORM\ManyToMany(targetEntity="Media", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinTable(name="tr_activity_media",
      *      joinColumns={@ORM\JoinColumn(name="activity_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="media_id", referencedColumnName="id", unique=true)}
      *      )
      **/
-	protected $medias;
-	
+    protected $medias;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
+     **/
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Activity", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     **/
+    private $parent;
+    
     /**
      * Get id
      *
@@ -144,6 +157,7 @@ class Activity
     public function __construct()
     {
         $this->medias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -200,5 +214,61 @@ class Activity
     public function getMedias()
     {
         return $this->medias;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \AppBundle\Entity\Activity $children
+     * @return Activity
+     */
+    public function addChild(\AppBundle\Entity\Activity $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \AppBundle\Entity\Activity $children
+     */
+    public function removeChild(\AppBundle\Entity\Activity $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \AppBundle\Entity\Activity $parent
+     * @return Activity
+     */
+    public function setParent(\AppBundle\Entity\Activity $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \AppBundle\Entity\Activity 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

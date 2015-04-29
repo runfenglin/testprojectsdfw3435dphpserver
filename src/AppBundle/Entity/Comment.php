@@ -10,14 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment extends Activity
 {
-	/**
+    /**
      * @var string
      *
      * @ORM\Column(name="comment", type="string", length=255, nullable=TRUE)
      */
     protected $comment;
-	
-	/**
+    
+    /**
      * Set comment
      *
      * @param string $comment
