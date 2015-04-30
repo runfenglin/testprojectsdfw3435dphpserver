@@ -143,6 +143,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Activity", mappedBy="user")
+	 * @ORM\OrderBy({"created"="DESC"})
      **/
     private $activities;    
     
