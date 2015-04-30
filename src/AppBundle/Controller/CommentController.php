@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Exception\InvalidFormException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,8 @@ class CommentController extends FOSRestController
      *   resource = true,
      *   description = "Create user comment",
      *   requirements = {
-     *     {"name"="parent", "dataType"="integer", "required"=true, "description"="Target activity"},    
+     *     {"name"="parent", "dataType"="integer", "required"=true, "description"="Top activity ID"},    
+     *     {"name"="toUser", "dataType"="integer", "required"=false, "description"="Reply to user ID"},
      *     {"name"="comment", "dataType"="string", "requirement"="/.{3,255}/", "required"=true, "description"="Comment content"}
      *   },
      *   statusCodes = {

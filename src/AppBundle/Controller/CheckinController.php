@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Exception\InvalidFormException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -223,7 +224,7 @@ class CheckinController extends FOSRestController
     public function deleteAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $checkin = $em->getRepository('AppBundle:Checkin')->find($id);
+        $checkin = $em->getRepository('AppBundle:Activity')->find($id);
         
         if (!$checkin) {
             return new JsonResponse(array('message' => 'Invalid checkin'), Response::HTTP_NOT_FOUND);
@@ -236,10 +237,11 @@ class CheckinController extends FOSRestController
         }
         
         //TODO: Strange!! I can't remove children rows by remove($checkin)
+
         foreach($checkin->getChildren() as $child) {
             $em->remove($child);
-            $em->flush();
-        }
+			$em->flush();
+        } 
         $em->remove($checkin);
         $em->flush();
         

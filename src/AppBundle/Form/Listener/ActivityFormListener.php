@@ -102,6 +102,16 @@ class ActivityFormListener implements EventSubscriberInterface
                         new Constraint\NotBlank(array('message'=>'comment is required'))
                     )
                 )
+            )->add(
+                'toUser',
+                'entity',
+                array(
+					'class' => 'AppBundle:User',
+					'query_builder' => function(EntityRepository $er) {
+						return $er->createQueryBuilder('u');      
+					},
+					'required' => FALSE
+				)
             );
         }
         elseif ($this->_activityEntity instanceof Checkin) {
