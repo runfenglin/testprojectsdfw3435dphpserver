@@ -44,7 +44,7 @@ class CheckinController extends FOSRestController
         try{
             $em = $this->getDoctrine()->getManager();
             $checkins = $em->getRepository('AppBundle:Checkin')
-                           ->findBy(array('user' => $user));
+                           ->findBy(array('user' => $user), array('created' => 'DESC'));
             
             return $this->container->get('app.activity.model')->expose($checkins);
             
@@ -236,12 +236,6 @@ class CheckinController extends FOSRestController
             return new JsonResponse(array('message' => 'Only creator can delete this checkin'), Response::HTTP_FORBIDDEN);
         }
         
-        //TODO: Strange!! I can't remove children rows by remove($checkin)
-
-        foreach($checkin->getChildren() as $child) {
-            $em->remove($child);
-			$em->flush();
-        } 
         $em->remove($checkin);
         $em->flush();
         

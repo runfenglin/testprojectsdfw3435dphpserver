@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 
 
@@ -19,16 +19,20 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
 {
     protected $userProvider;
     
-    public function __construct(ApiKeyUserProvider $userProvider)
+    protected $container;
+    
+    public function __construct(ApiKeyUserProvider $userProvider, Container $container)
     {
         $this->userProvider = $userProvider;
+        
+        $this->container = $container;
     }
     
     public function createToken(Request $request, $providerKey)
     {
         //$apiKey = $request->query->get('apikey');
         if(!$apiKey = $request->headers->get('apikey', NULL)) {
-            $apiKey = $request->get('apikey');
+            $apiKey = $request->query->get('apikey');
         }
 
         if (!$apiKey) {
@@ -71,6 +75,11 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return new JsonResponse(array("error" => "Authentication Failed"), Response::HTTP_FORBIDDEN);
+        return new JsonResponse(
+            array(
+                "error" => $this->container->get('translator')->trans("authentication_fail")
+            ), 
+            Response::HTTP_FORBIDDEN
+        );
     }
 }
