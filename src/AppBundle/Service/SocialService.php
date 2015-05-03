@@ -9,9 +9,9 @@ use AppBundle\Entity\SocialType;
 
 class SocialService
 {
-	CONST FACEBOOK_TOKEN_VERIFICATION = '/me';
-	CONST FACEBOOK_FRIENDS_ENTRYPOINT = '/v2.3/me/friends';
-	
+    CONST FACEBOOK_TOKEN_VERIFICATION = '/me';
+    CONST FACEBOOK_FRIENDS_ENTRYPOINT = '/v2.3/me/friends';
+    
     protected $_container;
     
     public function __construct(Container $container) {
@@ -41,49 +41,49 @@ class SocialService
         
         return json_decode($curlService->getResult());
     }
-	
-	public function getFacebookFriendIds($token)
-	{
-		$friendId = array();
-		
-		while ($friends = $this->getFacebookFriendList($token, FALSE)) {
-			if (empty($friends->data)) {
-				return $friendId;
-			}
-			
-			foreach($friends->data as $friend) {
-				$friendId[] = $friend->id;
-			}
-			
-			// Now, $token become a paging URL 
-			$token = $friends->paging->next;
-		}
-	}
-	
-	/**
-	 * @param $facebookToken, either a token string, or a paging URL address
-	 * @return array|object
-	 */
+    
+    public function getFacebookFriendIds($token)
+    {
+        $friendId = array();
+        
+        while ($friends = $this->getFacebookFriendList($token, FALSE)) {
+            if (empty($friends->data)) {
+                return $friendId;
+            }
+            
+            foreach($friends->data as $friend) {
+                $friendId[] = $friend->id;
+            }
+            
+            // Now, $token become a paging URL 
+            $token = $friends->paging->next;
+        }
+    }
+    
+    /**
+     * @param $facebookToken, either a token string, or a paging URL address
+     * @return array|object
+     */
     public function getFacebookFriendList($facebookToken, $array = TRUE)
     {
-		$curlService = $this->_container->get('curl.service');
-		
-		//$facebookToken can be a paging URL
-		$entryPoint = $facebookToken;
-		$data = array();
-		
-		$urlConstraint = new Constraint\Url();
-        $urlConstraint->message = 'Invalid email url';
+        $curlService = $this->_container->get('curl.service');
+        
+        //$facebookToken can be a paging URL
+        $entryPoint = $facebookToken;
+        $data = array();
+        
+        $urlConstraint = new Constraint\Url();
+        $urlConstraint->message = 'Invalid url';
         if($this->_container->get('validator')->validateValue($entryPoint, $urlConstraint)->count()) 
         {
             // token, but not url
-			$entryPoint = $this->_container->getParameter(SocialType::FACEBOOK);
+            $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK);
    
-			$entryPoint .= self::FACEBOOK_FRIENDS_ENTRYPOINT;
-			$data['access_token'] = $facebookToken;
+            $entryPoint .= self::FACEBOOK_FRIENDS_ENTRYPOINT;
+            $data['access_token'] = $facebookToken;
         }
-	
-		$code = $curlService->curlGet($entryPoint, $data);
+    
+        $code = $curlService->curlGet($entryPoint, $data);
 
         if (200 != $code)
         {

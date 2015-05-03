@@ -39,6 +39,7 @@ class ActivityFormListener implements EventSubscriberInterface
         $this->_em = $em;
         $this->_security = $security;
         $this->_container = $container;
+        $this->_translator = $container->get('translator');
     }
     
     public static function getSubscribedEvents()
@@ -53,7 +54,7 @@ class ActivityFormListener implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {   
         $this->_activityEntity = $event->getData();
-			  
+              
         $user = $this->_security->getToken()->getUser();
         if(!$this->_activityEntity->getUser() 
             || !$user->isEqualTo($this->_activityEntity->getUser())) {
@@ -99,19 +100,19 @@ class ActivityFormListener implements EventSubscriberInterface
                 'text',
                 array(
                     'constraints' => array(
-                        new Constraint\NotBlank(array('message'=>'comment is required'))
+                        new Constraint\NotBlank(array('message'=>$this->_translator->trans('activity.comment.required')))
                     )
                 )
             )->add(
                 'toUser',
                 'entity',
                 array(
-					'class' => 'AppBundle:User',
-					'query_builder' => function(EntityRepository $er) {
-						return $er->createQueryBuilder('u');      
-					},
-					'required' => FALSE
-				)
+                    'class' => 'AppBundle:User',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('u');      
+                    },
+                    'required' => FALSE
+                )
             );
         }
         elseif ($this->_activityEntity instanceof Checkin) {
@@ -122,12 +123,12 @@ class ActivityFormListener implements EventSubscriberInterface
                 array(
                     'constraints' => array(
                         new Constraint\NotBlank(
-                            array('message'=>'checkin reference is required')
+                            array('message'=>$this->_translator->trans('activity.checkin.reference.required'))
                         ),
                         new Constraint\Regex(
                             array(
                                 'pattern' => '/[a-z0-9\-\_]+/i',
-                                'message' => 'Invalid checkin reference'
+                                'message' => $this->_translator->trans('activity.checkin.reference.invalid')
                             )
                         )
                     )
@@ -138,7 +139,9 @@ class ActivityFormListener implements EventSubscriberInterface
                 array(
                     'constraints' => array(
                         new Constraint\NotBlank(
-                            array('message'=>'checkin name is required')
+                            array(
+                                'message'=>$this->_translator->trans('activity.checkin.name.required')
+                            )
                         )
                     )
                 )
@@ -151,15 +154,17 @@ class ActivityFormListener implements EventSubscriberInterface
             );
         }
         else {
-            throw new \Exception('Invalid activity type to create');
+            throw new \Exception(
+                $this->_translator->trans('activity.type.invalid')
+            );
         }
-		
-		
+        
+        
     }
     
     public function preBind(FormEvent $event)
     {  
-		 
+         
     }
     
     public function postBind(FormEvent $event) 

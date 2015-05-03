@@ -63,7 +63,7 @@ class CommentController extends FOSRestController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
         }
         catch (\Exception $exception) {
-            return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
     
@@ -95,13 +95,15 @@ class CommentController extends FOSRestController
         $comment = $em->getRepository('AppBundle:Comment')->find($id);
         
         if (!$comment) {
-            return new JsonResponse(array('message' => 'Invalid comment'), Response::HTTP_NOT_FOUND);
+            $error = $this->get('translator')->trans('activity.comment.invalid');
+            return new JsonResponse(array('error' => $error), Response::HTTP_NOT_FOUND);
         }
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         
         if(!$user->isEqualTo($comment->getUser())) {
-            return new JsonResponse(array('message' => 'Only creator can update this comment'), Response::HTTP_FORBIDDEN);
+            $error = $this->get('translator')->trans('activity.comment.update.deny');
+            return new JsonResponse(array('error' => $error), Response::HTTP_FORBIDDEN);
         }
 
         try {
@@ -159,13 +161,15 @@ class CommentController extends FOSRestController
         $comment = $em->getRepository('AppBundle:Comment')->find($id);
         
         if (!$comment) {
-            return new JsonResponse(array('message' => 'Invalid comment'), Response::HTTP_NOT_FOUND);
+            $error = $this->get('translator')->trans('activity.comment.invalid');
+            return new JsonResponse(array('error' => $error), Response::HTTP_NOT_FOUND);
         }
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         
         if(!$user->isEqualTo($comment->getUser())) {
-            return new JsonResponse(array('message' => 'Only creator can delete this comment'), Response::HTTP_FORBIDDEN);
+            $error = $this->get('translator')->trans('activity.comment.update.deny');
+            return new JsonResponse(array('error' => $error), Response::HTTP_FORBIDDEN);
         }
         
         $em->remove($comment);

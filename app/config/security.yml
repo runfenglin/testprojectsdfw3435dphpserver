@@ -43,14 +43,14 @@ security:
             pattern: ^/api/doc
             security: false  
         api_login:
-            pattern: ^/api/v1/login/
+            pattern: ^/[a-z]{2}/api/v1/login/
             security: false
         api_register:
-            pattern: ^/api/v1/register
+            pattern: ^/[a-z]{2}/api/v1/register
             security: false
         # secures part of the application
         secured_area:
-            pattern: ^/api/
+            pattern: ^/[a-z]{2}/api/
             stateless: true
             simple_preauth:
                 authenticator: api_key_authenticator

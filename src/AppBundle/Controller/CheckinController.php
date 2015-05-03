@@ -80,7 +80,8 @@ class CheckinController extends FOSRestController
         $checkin = $em->getRepository('AppBundle:Checkin')->find($id);
         
         if (!$checkin) {
-            return new JsonResponse(array('message' => 'Invalid checkin'), Response::HTTP_NOT_FOUND);
+            $error = $this->get('translator')->trans('activity.checkin.not.found');
+            return new JsonResponse(array('error' => $error), Response::HTTP_NOT_FOUND);
         }
         
         return $this->container
@@ -131,7 +132,7 @@ class CheckinController extends FOSRestController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
         }
         catch (\Exception $exception) {
-            return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
     
@@ -165,13 +166,15 @@ class CheckinController extends FOSRestController
         $checkin = $em->getRepository('AppBundle:Checkin')->find($id);
         
         if (!$checkin) {
-            return new JsonResponse(array('message' => 'Invalid checkin'), Response::HTTP_NOT_FOUND);
+            $error = $this->get('translator')->trans('activity.checkin.invalid');
+            return new JsonResponse(array('error' => $error), Response::HTTP_BAD_REQUEST);
         }
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         
         if(!$user->isEqualTo($checkin->getUser())) {
-            return new JsonResponse(array('message' => 'Only creator can update this checkin'), Response::HTTP_FORBIDDEN);
+            $error = $this->get('translator')->trans('activity.checkin.update.deny');
+            return new JsonResponse(array('error' => $error), Response::HTTP_FORBIDDEN);
         }
         
         try {
@@ -196,7 +199,7 @@ class CheckinController extends FOSRestController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
         }
         catch (\Exception $exception) {
-            return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
       
@@ -227,13 +230,15 @@ class CheckinController extends FOSRestController
         $checkin = $em->getRepository('AppBundle:Activity')->find($id);
         
         if (!$checkin) {
-            return new JsonResponse(array('message' => 'Invalid checkin'), Response::HTTP_NOT_FOUND);
+            $error = $this->get('translator')->trans('activity.checkin.invalid');
+            return new JsonResponse(array('error' => $error), Response::HTTP_NOT_FOUND);
         }
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         
         if(!$user->isEqualTo($checkin->getUser())) {
-            return new JsonResponse(array('message' => 'Only creator can delete this checkin'), Response::HTTP_FORBIDDEN);
+            $error = $this->get('translator')->trans('activity.checkin.update.deny');
+            return new JsonResponse(array('error' => $error), Response::HTTP_FORBIDDEN);
         }
         
         $em->remove($checkin);

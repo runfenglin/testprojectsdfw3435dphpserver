@@ -69,7 +69,7 @@ class ActivityModel
             $expose[$k]['id'] = $act->getId(); 
             $expose[$k]['parent_id'] = $act->getParent() ? $act->getParent()->getId() : NULL;
             $expose[$k]['user'] = array(
-				'id' => $act->getUser()->getId(),
+                'id' => $act->getUser()->getId(),
                 'username' => $act->getUser()->getUsername(),
                 'name' => $act->getUser()->getName()
             );
@@ -82,13 +82,13 @@ class ActivityModel
             elseif ($act instanceof Comment){
                 $expose[$k]['type'] = Activity::COMMENT;
                 $expose[$k]['comment'] = $act->getComment();
-				if($act->getToUser()) {
-					$expose[$k]['to_user'] = array(
-						'id' => $act->getToUser()->getId(),
-						'username' => $act->getToUser()->getUsername(),
-						'name' => $act->getToUser()->getName()
-					);
-				}
+                if($act->getToUser()) {
+                    $expose[$k]['to_user'] = array(
+                        'id' => $act->getToUser()->getId(),
+                        'username' => $act->getToUser()->getUsername(),
+                        'name' => $act->getToUser()->getName()
+                    );
+                }
             }
 
             $expose[$k]['children'] = $this->expose($act->getChildren());

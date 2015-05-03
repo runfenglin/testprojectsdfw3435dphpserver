@@ -1,2 +1,26 @@
 #messages.en.yml
-authentication_fail: Authentication Failed
+auth.fail: Authentication Failed
+auth.apikey.not.found: No API key is found
+auth.invalid.apikey: Invalid API key is found
+http.method.not.allowed: This request method is not allowed
+url.not.found: URL address not found
+locale.not.found: Locale setting not found
+
+login.country.invalid: Invalid country
+login.mobile.number.invalid: Invalid mobile number
+login.bad.credential: Bad Credential
+login.missing.parameter: You must pass country code, phone number and password
+
+activity.checkin.invalid: Invalid checkin data
+activity.checkin.not.found: Checkin data not found
+activity.checkin.reference.required: Checkin reference is required
+activity.checkin.reference.invalid: Checkin reference is invalid
+activity.checkin.name.required: Checkin address name is required
+activity.checkin.update.deny: Only creator can update this checkin
+activity.comment.invalid: Invalid comment data
+activity.comment.not.found: Comment data not found
+activity.comment.required: Comment is required
+activity.comment.update.deny: Only creator can update this comment
+activity.type.invalid: Activity type is invalid
+
+friend.facebook.nonexist: No facebook account is bound to this account

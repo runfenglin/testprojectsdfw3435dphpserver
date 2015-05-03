@@ -36,7 +36,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
         }
 
         if (!$apiKey) {
-            throw new BadCredentialsException('No API key found');
+            throw new BadCredentialsException('no_apikey_found');
         }
         
         return new PreAuthenticatedToken(
@@ -52,13 +52,14 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     //    $username = $this->userProvider->getUsernameForApiKey($apiKey);
         
         if (!$apiKey) {
-            throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
+            throw new AuthenticationException('auth.apikey.not.found');
         }
         
         $user = $this->userProvider->loadUserByApiKey($apiKey);
         
         if (!$user) {
-            throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
+        //    throw new AuthenticationException(sprintf('API Key "%s" does not exist.', $apiKey));
+            throw new AuthenticationException('auth.invalid.apikey');
         }
         
         return new PreAuthenticatedToken($user, $apiKey, $providerKey, $user->getRoles());
@@ -75,9 +76,23 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface, Authentica
     
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+        switch ($exception->getMessage()) {
+            case 'auth.apikey.not.found': {
+                $error = $this->container->get('translator')->trans("auth.apikey.not.found");
+                break;
+            }
+            case 'auth.invalid.apikey': {
+                $error = $this->container->get('translator')->trans("auth.invalid.apikey");
+                break;          
+            }
+            default: {
+                $error = $this->container->get('translator')->trans("auth.fail");
+                break;          
+            }
+        }
         return new JsonResponse(
             array(
-                "error" => $this->container->get('translator')->trans("authentication_fail")
+                "error" => $error
             ), 
             Response::HTTP_FORBIDDEN
         );

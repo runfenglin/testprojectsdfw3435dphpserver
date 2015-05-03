@@ -2,8 +2,9 @@
 namespace AppBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionevent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -15,17 +16,43 @@ class ExceptionListener
     {
         $this->_container = $container;
     }
-    public function onKernelException(GetResponseForExceptionevent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
         
         if ($exception instanceof HttpException) {
         
             switch($exception->getStatusCode()) {
-                case 404:
-                case 405:{
+                case 404:{
                     
-                    $response = new JsonResponse(array('error' => 'Invalid URL Address'), Response::HTTP_NOT_FOUND);                 
+                    $request = $event->getRequest();
+                    
+                    if (!$request->attributes->get('_locale', NULL)) {
+                    //  $locale = $request->getPreferredLanguage($this->_container->getParameter('preferred_locale'));
+                         
+                    //  $localizedUrl = $request->getBaseUrl() . '/' . $locale . $request->getPathInfo();
+                    //  $event->setResponse(new RedirectResponse($localizedUrl));
+                    
+                        $error = $this->_container->get('translator')->trans('locale.not.found');
+                        
+                        $response = new JsonResponse(array('error' => $error), Response::HTTP_BAD_REQUEST);  
+                        
+                        $event->setResponse($response);
+                    }
+                    else {
+                        $error = $this->_container->get('translator')->trans('url.not.found');
+                        
+                        $response = new JsonResponse(array('error' => $error), Response::HTTP_NOT_FOUND);  
+                        
+                        $event->setResponse($response);
+                    }
+                    break;
+                }
+                case 405:{
+                    $error = $this->_container->get('translator')->trans('http.method.not.allowed');
+
+                    $response = new JsonResponse(array('error' => $error), Response::HTTP_METHOD_NOT_ALLOWED);
+                    
                     $event->setResponse($response);
                     break;
                 }
@@ -35,7 +62,7 @@ class ExceptionListener
                 }
             }
         }
-        /*
+    /*    
         if($this->_container->get('security.context')->getToken()) {
         
             //email body building
@@ -50,6 +77,7 @@ class ExceptionListener
                        ->setTo($this->_default_from_email)
                        ->setBody($body, 'text/html');
             $this->_container->get('mailer')->send($message);
-        }*/
+        }
+    */
     }
 }

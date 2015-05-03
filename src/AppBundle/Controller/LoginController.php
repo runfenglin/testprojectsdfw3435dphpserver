@@ -60,7 +60,8 @@ class LoginController extends FOSRestController
             
             if ($this->get('validator')->validateValue($country, $regexConstraint)->count())
             {
-                return new JsonResponse(array("error" => "Invalid country code"), Response::HTTP_BAD_REQUEST);
+                $error = $this->get('translator')->trans('login.country.invalid');
+                return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
             }
             
             // verfiy phone
@@ -70,7 +71,8 @@ class LoginController extends FOSRestController
             
             if ($this->get('validator')->validateValue($phone, $regexConstraint)->count())
             {
-                return new JsonResponse(array("error" => "Invalid phone number"), Response::HTTP_BAD_REQUEST);
+                $error = $this->get('translator')->trans('login.mobile.number.invalid');
+                return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
             }
              
             $em = $this->getDoctrine()->getManager();
@@ -78,7 +80,8 @@ class LoginController extends FOSRestController
                        ->getUserByPhoneLogin($phone, $country);
             
             if (!$user instanceof User) {
-                return new JsonResponse(array("error" => "Bad Credential"), Response::HTTP_FORBIDDEN);
+                $error = $this->get('translator')->trans('login.bad.credential');
+                return new JsonResponse(array("error" => $error), Response::HTTP_FORBIDDEN);
             }
             
             $encoder = $this->get('security.encoder_factory')
@@ -87,8 +90,8 @@ class LoginController extends FOSRestController
             $encodedPass = $encoder->encodePassword($password, $user->getSalt());
             
             if($encodedPass != $user->getPassword()) {
-
-                return new JsonResponse(array("error" => "Bad Credential"), Response::HTTP_FORBIDDEN);
+                $error = $this->get('translator')->trans('login.bad.credential');
+                return new JsonResponse(array("error" => $error), Response::HTTP_FORBIDDEN);
             }
         
             $user->updateToken();
@@ -99,7 +102,8 @@ class LoginController extends FOSRestController
             return array('apikey' => $user->getToken()->getKey());
         }
         else {
-            return new JsonResponse(array("error" => "You must pass country code, phone number and password"), Response::HTTP_BAD_REQUEST);
+            $error = $this->get('translator')->trans('login.missing.parameter');
+            return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
         }
     }
     

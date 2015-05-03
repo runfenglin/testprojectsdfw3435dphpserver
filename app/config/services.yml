@@ -15,6 +15,6 @@ services:
     api_key_authenticator:
         class: AppBundle\Security\ApiKeyAuthenticator
         arguments: ["@api_key_user_provider", "@service_container"]
-
+        
 imports:
-    - { resource: '@AppBundle/Resources/config/services.xml' }
+    - { resource: "@AppBundle/Resources/config/services.xml" }

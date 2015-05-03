@@ -45,7 +45,8 @@ class FriendController extends FOSRestController
         $socialAccount = $user->getSocialAccountByType($type);
         
         if (!$socialAccount) {
-            return new JsonResponse(array("error" => "No facebook account is bound to this account"), Response::HTTP_BAD_REQUEST);
+            $error = $this->get('translator')->trans('friend.facebook.nonexist');
+            return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
         }
         
         try{

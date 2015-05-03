@@ -1,2 +1,15 @@
 #messages.cn.yml
-authentication_fail: 验证失败
+auth.fail: 验证失败
+auth.apikey.not.found: 无法找到API密钥
+auth.invalid.apikey: 无效的API密钥
+http.method.not.allowed: 请求方法不被允许
+url.not.found: 网址不存在
+locale.not.found: 语言设置没有找到
+activity.checkin.invalid: 无效的Checkin数据
+activity.checkin.not.found: Checkin数据没有找到
+activity.comment.required: 请输入评论的内容
+activity.checkin.reference.required: 请输入Checkin参考ID
+activity.checkin.reference.invalid: 无效的Checkin参考ID
+activity.checkin.name.required: 请输入Checkin参考地址
+activity.checkin.update.deny: 只有创建者可以修改自己的Checkin信息
+activity.type.invalid: 无效的活动类型
