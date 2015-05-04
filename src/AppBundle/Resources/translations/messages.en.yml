@@ -10,7 +10,18 @@ login.country.invalid: Invalid country
 login.mobile.number.invalid: Invalid mobile number
 login.bad.credential: Bad Credential
 login.missing.parameter: You must pass country code, phone number and password
+login.facebook.token.missing: Facebook access token not found
+login.facebook.tokin.invalid: Invalid Facebook access token
 
+register.name.required: Displayed name is required
+register.username.required: Username is required
+register.mobile.number.required: Mobile number is required
+register.mobile.number.invalid: Invalid mobile number
+register.country.required: Country code is required
+register.country.invalid: Invalid country code
+register.password.dismatch: Passwords do not match
+register.password.required: Initial password is required
+register.password.invalid: Password must be min 6 chars, contain only digits, characters, hyphen and underscore
 activity.checkin.invalid: Invalid checkin data
 activity.checkin.not.found: Checkin data not found
 activity.checkin.reference.required: Checkin reference is required

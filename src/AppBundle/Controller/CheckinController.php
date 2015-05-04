@@ -183,7 +183,10 @@ class CheckinController extends FOSRestController
                                   ->get('app.activity.model')
                                   ->setEntity($checkin);
                             
-            $checkin = $activityModel->postCheckin($request->request->all());
+            $checkin = $activityModel->postCheckin(
+                                           $request->request->all(),
+                                           $request->getMethod()
+                                       );
             
             if ($checkin instanceof Checkin) {
                 

@@ -37,6 +37,7 @@ class UserFormListener implements EventSubscriberInterface
         $this->_em = $em;
         $this->_security = $security;
         $this->_container = $container;
+        $this->_translator = $container->get('translator');
     }
     
     public static function getSubscribedEvents()
@@ -65,7 +66,7 @@ class UserFormListener implements EventSubscriberInterface
             'text',
             array(
                 'constraints' => array(
-                    new Constraint\NotBlank(array('message'=>'Please give a name'))
+                    new Constraint\NotBlank(array('message'=>$this->_translator->trans('register.name.required')))
                 )
             )
         )->add(
@@ -73,7 +74,7 @@ class UserFormListener implements EventSubscriberInterface
             'text',
             array(
                 'constraints' => array(
-                    new Constraint\NotBlank(array('message'=>'Please give a username'))
+                    new Constraint\NotBlank(array('message'=>$this->_translator->trans('register.username.required')))
                 )
             )
         )->add(
@@ -81,10 +82,15 @@ class UserFormListener implements EventSubscriberInterface
             'text',
             array(
                 'constraints' => array(
+                    new Constraint\NotBlank(
+                        array(
+                            'message'=>$this->_translator->trans('register.mobile.number.required')
+                        )
+                    ),
                     new Constraint\Regex(
                         array(
                             'pattern' => '/\d+/',
-                            'message' => 'Invalid phone number'
+                            'message' => $this->_translator->trans('register.mobile.number.invalid')
                         )
                     )
                 )
@@ -94,15 +100,15 @@ class UserFormListener implements EventSubscriberInterface
             'number',
             array(
                 'constraints' => array(
-                /*    new Constraint\Country(
+                    new Constraint\NotBlank(
                         array(
-                            'message' => 'Invalid country code'
+                            'message'=>$this->_translator->trans('register.country.required')
                         )
-                    )*/
+                    ),
                     new Constraint\Regex(
                         array(
                             'pattern' => '/[0-9\-]{2,5}/',
-                            'message' => 'Invalid phone number'
+                            'message' => $this->_translator->trans('register.country.invalid')
                         )
                     )
                 )
@@ -129,15 +135,17 @@ class UserFormListener implements EventSubscriberInterface
                 'first_name' => 'password',
                 'second_name' => 'confpass',
                 'type' => 'password',
-                'invalid_message' => 'Passwords do not match.',
+                'invalid_message' => $this->_translator->trans('register.password.dismatch'),
                 'constraints' => array(
                     new Constraint\NotBlank(
-                        array('message'=>'Please give an initial password.')
+                        array(
+                            'message'=>$this->_translator->trans('register.password.required')
+                        )
                     ), 
                     new Constraint\Regex(
                         array(
                             'pattern' => '/[0-9a-z\-\_]{6,20}/i',
-                            'message' => 'Invalid password'
+                            'message' => $this->_translator->trans('register.password.invalid')
                         )
                     )
                 ),

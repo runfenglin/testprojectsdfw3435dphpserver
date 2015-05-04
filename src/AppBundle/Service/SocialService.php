@@ -36,7 +36,8 @@ class SocialService
         $curlService = $this->_container->get('curl.service');
         if (200 != $curlService->curlGet($entryPoint, $data))
         {
-            throw new AccessDeniedException("Invalid Facebook Access Token");
+            $error = $this->_container->get('translator')->trans('login.facebook.tokin.invalid');
+            throw new AccessDeniedException($error);
         }
         
         return json_decode($curlService->getResult());

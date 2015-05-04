@@ -136,7 +136,8 @@ class LoginController extends FOSRestController
         
         if (!$token) 
         {
-            return new JsonResponse(array("error" => "Access token not found"), Response::HTTP_BAD_REQUEST);
+            $error = $this->get('translator')->trans('login.facebook.token.missing');
+            return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
         }
   
         try{
@@ -160,7 +161,7 @@ class LoginController extends FOSRestController
                 $socialAccount->setSmToken($token);
                 $socialAccount->setSmName($result->name);
                 $socialAccount->setSmId($result->id);
-            //  var_dump($user->getSocialAccounts()->first()->getSmToken());die;
+
             }
             else {
                 //TODO, is it possible?
