@@ -147,6 +147,22 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      **/
     private $activities;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="Trip", mappedBy="user")
+     **/
+    private $requests;
+	
+    /**
+     * @ORM\OneToMany(targetEntity="Trip", mappedBy="driver")
+     **/	
+	private $offers;
+	
+    /**
+     * @ORM\ManyToMany(targetEntity="Trip", inversedBy="rideOffers")
+     * @ORM\JoinTable(name="tr_ride_offer")
+     **/
+	private $acceptedRequests;
+	
     public function getRoles()
     {
         return array('ROLE_USER');
@@ -754,5 +770,104 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getActivities()
     {
         return $this->activities;
+    }
+
+    /**
+     * Add requests
+     *
+     * @param \AppBundle\Entity\Trip $requests
+     * @return User
+     */
+    public function addRequest(\AppBundle\Entity\Trip $requests)
+    {
+        $this->requests[] = $requests;
+
+        return $this;
+    }
+
+    /**
+     * Remove requests
+     *
+     * @param \AppBundle\Entity\Trip $requests
+     */
+    public function removeRequest(\AppBundle\Entity\Trip $requests)
+    {
+        $this->requests->removeElement($requests);
+    }
+
+    /**
+     * Get requests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRequests()
+    {
+        return $this->requests;
+    }
+
+    /**
+     * Add offers
+     *
+     * @param \AppBundle\Entity\Trip $offers
+     * @return User
+     */
+    public function addOffer(\AppBundle\Entity\Trip $offers)
+    {
+        $this->offers[] = $offers;
+
+        return $this;
+    }
+
+    /**
+     * Remove offers
+     *
+     * @param \AppBundle\Entity\Trip $offers
+     */
+    public function removeOffer(\AppBundle\Entity\Trip $offers)
+    {
+        $this->offers->removeElement($offers);
+    }
+
+    /**
+     * Get offers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOffers()
+    {
+        return $this->offers;
+    }
+
+    /**
+     * Add acceptedRequests
+     *
+     * @param \AppBundle\Entity\Trip $acceptedRequests
+     * @return User
+     */
+    public function addAcceptedRequest(\AppBundle\Entity\Trip $acceptedRequests)
+    {
+        $this->acceptedRequests[] = $acceptedRequests;
+
+        return $this;
+    }
+
+    /**
+     * Remove acceptedRequests
+     *
+     * @param \AppBundle\Entity\Trip $acceptedRequests
+     */
+    public function removeAcceptedRequest(\AppBundle\Entity\Trip $acceptedRequests)
+    {
+        $this->acceptedRequests->removeElement($acceptedRequests);
+    }
+
+    /**
+     * Get acceptedRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAcceptedRequests()
+    {
+        return $this->acceptedRequests;
     }
 }
