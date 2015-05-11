@@ -20,6 +20,34 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class UserController extends FOSRestController
 {
+	/**
+     * Get Latest Update
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get latest update",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/latest/update")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+	public function latestUpdateAction(Request $request)
+	{
+		$user = $this->container->get('security.context')->getToken()->getUser();
+		
+		return $this->container
+					->get('app.user.model')
+					->setEntity($user)
+					->getLatestUpdate();
+		
+		
+	}
+	
     /**
      * Get User Profile
      *

@@ -104,6 +104,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      */
     private $loginAt;
 
+	/**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_at", type="datetime", nullable=TRUE)
+     */
+    private $updateAt;
+	
     /**
      * @var \DateTime
      *
@@ -869,5 +876,28 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getAcceptedRequests()
     {
         return $this->acceptedRequests;
+    }
+
+    /**
+     * Set updateAt
+     *
+     * @param \DateTime $updateAt
+     * @return User
+     */
+    public function setUpdateAt($updateAt)
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updateAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
     }
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Comment
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\CommentRepository")
  */
 class Comment extends Activity
 {

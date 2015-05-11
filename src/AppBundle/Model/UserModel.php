@@ -34,6 +34,40 @@ class UserModel
     {
         return $this->_entity;
     }
+	
+	public function getLatestUpdate()
+	{
+		$updated = array();
+		// For latest comments
+		$updated['comment'] = $this->_getUpdatedComment($this->getEntity());
+		
+		return $updated;
+	}
+	
+	protected function _getUpdatedComment(User $user)
+	{
+		$items = array();
+		
+		$em = $this->_container->get('doctrine')->getManager();
+        $comments = $em->getRepository('AppBundle:Comment')
+		              ->getUpdatedComment($user);
+		
+		if (count($comments)) {
+			// changing last updating time
+			$user->setUpdateAt(new \DateTime());
+			$em->persist($user);
+			$em->flush();
+			
+			foreach($comments as $k => $c) {
+				$items[$k]['id'] = $c->getId();
+				$items[$k]['parent'] = $c->getParent()->getId();
+				$items[$k]['to_user'] = $c->getToUser() ? $c->getToUser()->getId() : NULL;
+				$items[$k]['comment'] = $c->getComment();
+			}
+		}
+		
+		return $items;
+	}
     
     public function post(array $parameters, $method = Request::METHOD_POST)
     {

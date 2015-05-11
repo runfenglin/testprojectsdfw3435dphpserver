@@ -130,7 +130,7 @@ class CommentController extends FOSRestController
             return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
         }
         catch (\Exception $exception) {
-            return new JsonResponse(array('message' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
     
