@@ -42,10 +42,10 @@ class EntityListener
             && !$entity->getCreated() 
             && method_exists($entity, 'setCreated')) {
             // setting created time
-            $entity->setCreated(new \DateTime('@' . time()));
+            $entity->setCreated(new \DateTime());
         }
         else if (method_exists($entity, 'setUpdated')) {
-            $entity->setUpdated(new \DateTime('@' . time()));
+            $entity->setUpdated(new \DateTime());
         }
      
     }
