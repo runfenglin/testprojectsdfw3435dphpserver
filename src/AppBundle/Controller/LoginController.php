@@ -140,10 +140,20 @@ class LoginController extends FOSRestController
             return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
         }
   
+        $socialService = $this->container->get('social.service');
+		
         try{
             //Verify token
-            $socialService = $this->container->get('social.service');
             $result = $socialService->verifyFacebookToken($token);
+			
+			if (!isset($result->email)) {
+				$error = $this->get('translator')->trans('login.facebook.email.missing');
+				throw new AccessDeniedException($error);
+			}
+			
+			$picture = $socialService->getFacebookProfilePicture($result->id);
+			
+			
         }
         catch(AccessDeniedException $e) {
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
@@ -153,6 +163,7 @@ class LoginController extends FOSRestController
         $user = $em->getRepository('AppBundle:User')
                    ->findOneBy(array('email' => $result->email));
         
+		//TODO -- move to user model
         if ($user) {
             $socialAccount = $user->getSocialAccountByType($type);
             
@@ -208,6 +219,7 @@ class LoginController extends FOSRestController
             $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
         }
         
+		
         $em->persist($user);
         $em->flush();
         

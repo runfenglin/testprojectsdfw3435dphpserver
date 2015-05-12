@@ -140,4 +140,36 @@ class DemoController extends Controller
 				   ->findAll();
         return array('tokens' => $tokens);
     }
+
+	/**
+     * @Route("/profile/picture", name="demo_profile_picture")
+     * @Template()
+     */	
+	public function profilePictureAction(Request $request)
+	{
+		if ($base64 = $request->request->get('base64', NULL)) {
+		
+			$data = base64_decode($base64);
+			
+			$tmp = tempnam(sys_get_temp_dir(), 'picture.jpg');
+			
+			$fp = fopen($tmp, "w+");
+			fwrite($fp, $data);
+			fclose($fp);
+                
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			
+			$mimeType = finfo_file($finfo, $tmp);
+			
+			header('Content-type: ' . $mimeType);
+			header('Content-length: ' . filesize($tmp));
+			header('Content-Disposition: filename="picture.jpg"');
+			header('X-Pad: avoid browser bug');
+			header('Cache-Control: no-cache');
+			readfile($tmp);
+			exit;
+		}
+		
+		return array();
+	}
 }

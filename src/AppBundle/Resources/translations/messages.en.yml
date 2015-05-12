@@ -12,6 +12,8 @@ login.bad.credential: Bad Credential
 login.missing.parameter: You must pass country code, phone number and password
 login.facebook.token.missing: Facebook access token not found
 login.facebook.tokin.invalid: Invalid Facebook access token
+login.facebook.email.missing: Facebook API failed to return email address
+login.facebook.profile.pic.invalid: Facebook profile picture is invalid
 
 register.name.required: Displayed name is required
 register.username.required: Username is required

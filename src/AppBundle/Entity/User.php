@@ -677,7 +677,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
             $this->setToken($token);
         }
         
-        $this->setLoginAt(new \DateTime('@' . time()));
+        $this->setLoginAt(new \DateTime());
     }
 
     /**

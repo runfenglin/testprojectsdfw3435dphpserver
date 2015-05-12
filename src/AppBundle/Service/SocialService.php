@@ -10,6 +10,7 @@ use AppBundle\Entity\SocialType;
 class SocialService
 {
     CONST FACEBOOK_TOKEN_VERIFICATION = '/me';
+	CONST FACEBOOK_PROFILE_PICTURE = '/%IDENTITY%/picture';
     CONST FACEBOOK_FRIENDS_ENTRYPOINT = '/v2.3/me/friends';
     
     protected $_container;
@@ -42,7 +43,29 @@ class SocialService
         
         return json_decode($curlService->getResult());
     }
-    
+
+   /** 
+    * get facebook profile picture
+    *
+    * @param string $identity (facebook id or nickname) 
+    * @return string 
+    */     
+	public function getFacebookProfilePicture($identity)
+	{
+		$entryPoint = $this->_container->getParameter(SocialType::FACEBOOK)
+		              . str_replace('%IDENTITY%', $identity, self::FACEBOOK_PROFILE_PICTURE);
+		
+		$curlService = $this->_container->get('curl.service');
+		
+		if (200 != $curlService->curlGet($entryPoint))
+		{
+			$error = $this->_container->get('translator')->trans('login.facebook.profile.pic.invalid');
+            throw new AccessDeniedException($error);
+		}
+		var_dump($curlService->getResult());die;
+		return $curlService->getResult();
+	}
+	
     public function getFacebookFriendIds($token)
     {
         $friendId = array();

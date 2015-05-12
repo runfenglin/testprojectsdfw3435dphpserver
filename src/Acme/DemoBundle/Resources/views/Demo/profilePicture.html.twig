@@ -1,0 +1,26 @@
+{% extends 'AcmeDemoBundle::layout.html.twig' %}
+
+{% block content %}
+    <h1 class="title">User Profile Picture</h1>
+
+
+    {% if error is defined %}
+        <div class="error">{{ error.message }}</div>
+    {% endif %}
+
+    <form action="{{ path("demo_profile_picture") }}" method="post" id="profile_picture">
+        
+		<div>
+            <label for="base64">Base64 Code</label>
+            <textarea id="base64" name="base64"></textarea>
+        </div>
+
+        <button type="submit" class="sf-button">
+            <span class="border-l">
+                <span class="border-r">
+                    <span class="btn-bg">Submit</span>
+                </span>
+            </span>
+        </button>
+    </form>
+{% endblock %}
