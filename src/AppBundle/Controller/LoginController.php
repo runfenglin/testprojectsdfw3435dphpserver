@@ -154,7 +154,7 @@ class LoginController extends FOSRestController
 				throw new AccessDeniedException($error);
 			}
 			
-			$picture = $socialService->getFacebookProfilePicture($result->id);
+			/* $picture = $socialService->getFacebookProfilePicture($result->id);
 			
 			$media = new Media();
 			$finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -164,7 +164,7 @@ class LoginController extends FOSRestController
 			$uploadeFile = new UploadedFile($picture, $fileName, $mimeType, $fileSize);
 			
 			$media->setFile($uploadeFile);
-			$media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d'));
+			$media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d')); */
 
         }
         catch(AccessDeniedException $e) {
@@ -231,7 +231,7 @@ class LoginController extends FOSRestController
             $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
         }
         
-		$user->setAvatar($media);
+	//	$user->setAvatar($media);
         $em->persist($user);
         $em->flush();
         
