@@ -65,7 +65,13 @@ class UserModel
                     'id' => $c->getUser()->getId(),
                     'name' => $c->getUser()->getName()
                 );
-                $items[$k]['comment'] = $c->getComment();
+                if ($c->getToUser()) {
+                    $items[$k]['to_user'] = array(
+                        'id' => $c->getToUser()->getId(),
+                        'name' => $c->getToUser()->getName()
+                    );
+                }
+                $items[$k]['content'] = $c->getComment();
             }
         }
         

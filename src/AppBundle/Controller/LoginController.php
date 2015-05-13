@@ -144,28 +144,16 @@ class LoginController extends FOSRestController
         }
   
         $socialService = $this->container->get('social.service');
-		
+        
         try{
             //Verify token
             $result = $socialService->verifyFacebookToken($token);
-	
-			if (!isset($result->email)) {
-				$error = $this->get('translator')->trans('login.facebook.email.missing');
-				throw new AccessDeniedException($error);
-			}
-			
-			/* $picture = $socialService->getFacebookProfilePicture($result->id);
-			
-			$media = new Media();
-			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			$mimeType = finfo_file($finfo, $picture);
-			$fileSize = filesize($picture);
-			$fileName = pathinfo($picture, PATHINFO_BASENAME);
-			$uploadeFile = new UploadedFile($picture, $fileName, $mimeType, $fileSize);
-			
-			$media->setFile($uploadeFile);
-			$media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d')); */
-
+    
+            if (!isset($result->email)) {
+                $error = $this->get('translator')->trans('login.facebook.email.missing');
+                throw new AccessDeniedException($error);
+            }
+            
         }
         catch(AccessDeniedException $e) {
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
@@ -175,7 +163,7 @@ class LoginController extends FOSRestController
         $user = $em->getRepository('AppBundle:User')
                    ->findOneBy(array('email' => $result->email));
         
-		//TODO -- move to user model
+        //TODO -- move to user model
         if ($user) {
             $socialAccount = $user->getSocialAccountByType($type);
             
@@ -191,6 +179,7 @@ class LoginController extends FOSRestController
                 // It should not be possible in normal operation. 
                 
             }
+            
             // Should we update name to this social account name?
             $user->setName($result->name);
             $user->updateToken();
@@ -231,10 +220,24 @@ class LoginController extends FOSRestController
             $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
         }
         
-	//	$user->setAvatar($media);
+        // set avatar
+        $picture = $socialService->getFacebookProfilePicture($result->id);
+
+        if(!$media = $user->getAvatar()) {
+            $media = new Media();
+        }
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $picture);
+        $fileSize = filesize($picture);
+        $fileName = 'fb_pic_' . $result->id;
+        $uploadeFile = new UploadedFile(realpath($picture), $fileName, $mimeType, $fileSize, NULL, TRUE);
+        
+        $media->setFile($uploadeFile);
+        $media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d'));
+        $user->setAvatar($media);
         $em->persist($user);
         $em->flush();
-        
+
         $resData['apikey'] = $user->getToken()->getKey();
         return $resData;
 

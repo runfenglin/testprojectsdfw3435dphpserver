@@ -10,7 +10,7 @@ use AppBundle\Entity\SocialType;
 class SocialService
 {
     CONST FACEBOOK_TOKEN_VERIFICATION = '/me';
-	CONST FACEBOOK_PROFILE_PICTURE = '/%IDENTITY%/picture';
+    CONST FACEBOOK_PROFILE_PICTURE = '/%IDENTITY%/picture';
     CONST FACEBOOK_FRIENDS_ENTRYPOINT = '/v2.3/me/friends';
     
     protected $_container;
@@ -50,29 +50,28 @@ class SocialService
     * @param string $identity (facebook id or nickname) 
     * @return string 
     */     
-	public function getFacebookProfilePicture($identity)
-	{
-		$entryPoint = $this->_container->getParameter(SocialType::FACEBOOK)
-		              . str_replace('%IDENTITY%', $identity, self::FACEBOOK_PROFILE_PICTURE);
-		
-		$curlService = $this->_container->get('curl.service');
-		
-		if (200 != $curlService->curlGet($entryPoint))
-		{
-			$error = $this->_container->get('translator')->trans('login.facebook.profile.pic.invalid');
+    public function getFacebookProfilePicture($identity)
+    {
+        $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK)
+                      . str_replace('%IDENTITY%', $identity, self::FACEBOOK_PROFILE_PICTURE);
+        
+        $curlService = $this->_container->get('curl.service');
+        
+        if (200 != $curlService->curlGet($entryPoint))
+        {
+            $error = $this->_container->get('translator')->trans('login.facebook.profile.pic.invalid');
             throw new AccessDeniedException($error);
-		}
-		
-		$name = 'fb_pic_' . str_replace(' ', '-', $identity);
-		$tmpFile = tempnam(sys_get_temp_dir(), $name);
-		$fp = fopen($tmpFile, "w+");
-		if ($fp) {
-			fwrite($fp, $curlService->getResult());
-			fclose($fp);
-		}
-		return $tmpFile;
-	}
-	
+        }
+        
+        $tmpFile = tempnam(sys_get_temp_dir(), 'fb_profile_picture');
+        $fp = fopen($tmpFile, "w+");
+        if ($fp) {
+            fwrite($fp, $curlService->getResult());
+            fclose($fp);
+        }
+        return $tmpFile;
+    }
+    
     public function getFacebookFriendIds($token)
     {
         $friendId = array();

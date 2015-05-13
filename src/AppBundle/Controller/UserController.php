@@ -19,7 +19,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class UserController extends FOSRestController
 {
-	/**
+    /**
      * Get Latest Update
      *
      * @ApiDoc(
@@ -35,18 +35,18 @@ class UserController extends FOSRestController
      *
      * @return JSON
      */
-	public function latestUpdateAction(Request $request)
-	{
-		$user = $this->container->get('security.context')->getToken()->getUser();
-		
-		return $this->container
-					->get('app.user.model')
-					->setEntity($user)
-					->getLatestUpdate();
-		
-		
-	}
-	
+    public function latestUpdateAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        
+        return $this->container
+                    ->get('app.user.model')
+                    ->setEntity($user)
+                    ->getLatestUpdate();
+        
+        
+    }
+    
     /**
      * Get User Profile
      *
@@ -69,7 +69,7 @@ class UserController extends FOSRestController
 
         $socialAccounts = array();
         $friends = array();
-		
+        
         $socialAccounts['count'] = $user->getSocialAccounts()->count();
         $socialAccounts['data'] = array();
         
@@ -84,10 +84,10 @@ class UserController extends FOSRestController
             $socialAccounts['data'][] = $social;
         }
         
-		$friends['count'] = $user->getMyFriends()->count() + $user->getFriendsWithMe()->count();
-		$friends['data'] = array();
-		
-		foreach($user->getMyFriends() as $key => $friend) {
+        $friends['count'] = $user->getMyFriends()->count() + $user->getFriendsWithMe()->count();
+        $friends['data'] = array();
+        
+        foreach($user->getMyFriends() as $key => $friend) {
             $item = array(
                 'name' => $friend->getName(),
                 'username' => $friend->getUsername(),
@@ -96,16 +96,16 @@ class UserController extends FOSRestController
             ); 
             $friends['data'][] = $item;
         }
-		
-		foreach($user->getFriendsWithMe() as $key => $friend) {
-			$item = array(
+        
+        foreach($user->getFriendsWithMe() as $key => $friend) {
+            $item = array(
                 'name' => $friend->getName(),
                 'username' => $friend->getUsername(),
                 'avatar' => '',
                 'created' => $friend->getCreated()->getTimestamp(),
             ); 
             $friends['data'][] = $item;
-		}
+        }
         $data = array(
             'apikey' => $user->getToken()->getKey(),
             'username' => $user->getUsername(),
@@ -114,7 +114,7 @@ class UserController extends FOSRestController
             'email' => $user->getEmail(),
             'created' => $user->getCreated()->getTimestamp(),
             'socialAcccounts' => $socialAccounts,
-			'friends' => $friends
+            'friends' => $friends
         );
         
         return array('result' => $data);
