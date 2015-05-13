@@ -62,8 +62,15 @@ class SocialService
 			$error = $this->_container->get('translator')->trans('login.facebook.profile.pic.invalid');
             throw new AccessDeniedException($error);
 		}
-		var_dump($curlService->getResult());die;
-		return $curlService->getResult();
+		
+		$name = 'fb_pic_' . str_replace(' ', '-', $identity);
+		$tmpFile = tempnam(sys_get_temp_dir(), $name);
+		$fp = fopen($tmpFile, "w+");
+		if ($fp) {
+			fwrite($fp, $curlService->getResult());
+			fclose($fp);
+		}
+		return $tmpFile;
 	}
 	
     public function getFacebookFriendIds($token)

@@ -18,6 +18,7 @@ use AppBundle\Entity\Token;
  */
 class User implements AdvancedUserInterface, EquatableInterface, \Serializable
 {
+	const AVATAR_UPLOAD_PATH = 'user/avatar';
     /**
      * @var integer
      *

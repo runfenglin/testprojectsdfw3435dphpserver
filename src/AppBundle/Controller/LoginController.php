@@ -15,10 +15,13 @@ use FOS\RestBundle\Controller\Annotations AS Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 use AppBundle\Entity\User;
 use AppBundle\Entity\Token;
 use AppBundle\Entity\SocialType;
 use AppBundle\Entity\SocialLogin;
+use AppBundle\Entity\Media;
 
 use Symfony\Component\Validator\Constraints as Constraint;
 class LoginController extends FOSRestController
@@ -111,7 +114,7 @@ class LoginController extends FOSRestController
      * Login with Facebook.
      *
      * @ApiDoc(
-     *   resource = false,
+     *   resource = true,
      *   requirements = {
      *     {"name"="token", "dataType"="string", "requirement"="/[0-9a-zA-Z]+/", "required"=true, "description"="access token"},
      *   },
@@ -145,7 +148,7 @@ class LoginController extends FOSRestController
         try{
             //Verify token
             $result = $socialService->verifyFacebookToken($token);
-			
+	
 			if (!isset($result->email)) {
 				$error = $this->get('translator')->trans('login.facebook.email.missing');
 				throw new AccessDeniedException($error);
@@ -153,7 +156,16 @@ class LoginController extends FOSRestController
 			
 			$picture = $socialService->getFacebookProfilePicture($result->id);
 			
+			$media = new Media();
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$mimeType = finfo_file($finfo, $picture);
+			$fileSize = filesize($picture);
+			$fileName = pathinfo($picture, PATHINFO_BASENAME);
+			$uploadeFile = new UploadedFile($picture, $fileName, $mimeType, $fileSize);
 			
+			$media->setFile($uploadeFile);
+			$media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d'));
+
         }
         catch(AccessDeniedException $e) {
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
@@ -219,7 +231,7 @@ class LoginController extends FOSRestController
             $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
         }
         
-		
+		$user->setAvatar($media);
         $em->persist($user);
         $em->flush();
         

@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Doctrine;
+namespace AppBundle\Doctrine\Listener;
 
 use AppBundle\Entity AS Entity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
