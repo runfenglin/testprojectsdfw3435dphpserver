@@ -57,15 +57,15 @@ class CurlService
     */ 
     public function curlGet($url, array $get = array(), array $options = array()) 
     {   
-		if (count($get)) {
-			$url .= (strpos($url, '?') === FALSE ? '?' : '') . http_build_query($get);
-		}
-		
+        if (count($get)) {
+            $url .= (strpos($url, '?') === FALSE ? '?' : '') . http_build_query($get);
+        }
+        
         $defaults = array( 
             CURLOPT_URL => $url, 
             CURLOPT_HEADER => 0, 
             CURLOPT_RETURNTRANSFER => TRUE, 
-			CURLOPT_FOLLOWLOCATION => TRUE,
+            CURLOPT_FOLLOWLOCATION => TRUE,
             CURLOPT_TIMEOUT => 10 
         ); 
 
@@ -87,22 +87,22 @@ class CurlService
         return $status;
     } 
     
-	public function curlGetImage($url, array $get = array(), array $options = array())
-	{
-		$status = $this->curlGet($url, $get, $options);
-		
-		if (200 == $status) {
+    public function curlGetImage($url, array $get = array(), array $options = array())
+    {
+        $status = $this->curlGet($url, $get, $options);
+        
+        if (200 == $status) {
 
-			$finfo = new \finfo(FILEINFO_MIME);
-			$mimeType = $finfo->buffer($this->_result);
-			
-		//	$this->_result = 'data:' . $mimeType . ':base64,' . base64_encode($this->_result);
-			$this->_result = base64_encode($this->_result);
-		}	
-		
-		return $status;
-	}
-	
+            $finfo = new \finfo(FILEINFO_MIME);
+            $mimeType = $finfo->buffer($this->_result);
+            
+        //  $this->_result = 'data:' . $mimeType . ':base64,' . base64_encode($this->_result);
+            $this->_result = base64_encode($this->_result);
+        }   
+        
+        return $status;
+    }
+    
     public function getResult()
     {
         return $this->_result;

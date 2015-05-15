@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\Activity;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -45,6 +46,56 @@ class UserController extends FOSRestController
                     ->getLatestUpdate();
         
         
+    }
+    
+    /**
+     * User Likes Activity
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "User likes activity",
+     *   requirements = {
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Activity ID"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/like/{id}")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function likeAction(Request $request, $id)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $activity = $em->getRepository('AppBundle:Activity')->find($id);
+        
+        // Only like activity, but not comment
+        if ($activity 
+            && $user->getId() != $activity->getUserId() 
+                && !$activity->getParent()) {
+            
+            $alreadyLike = $user->getLikes()->filter(function($e) use($id) {
+                return $e->getId() == $id;
+            });
+            
+            if (!$alreadyLike->count()){
+                $user->addLike($activity);
+            }
+            $em->persist($user);
+            $em->flush();
+        }
+        
+        return array(
+            'user_id' => $user->getId(),
+            'activity_id' => $id,
+            'count' => $activity->getLikeByUsers()->count() 
+        );
     }
     
     /**
@@ -91,7 +142,7 @@ class UserController extends FOSRestController
             $item = array(
                 'name' => $friend->getName(),
                 'username' => $friend->getUsername(),
-                'avatar' => '',
+                'avatar' => $friend->base64EncodedAvatar(),
                 'created' => $friend->getCreated()->getTimestamp(),
             ); 
             $friends['data'][] = $item;
@@ -101,17 +152,17 @@ class UserController extends FOSRestController
             $item = array(
                 'name' => $friend->getName(),
                 'username' => $friend->getUsername(),
-                'avatar' => '',
+                'avatar' => $friend->base64EncodedAvatar(),
                 'created' => $friend->getCreated()->getTimestamp(),
             ); 
             $friends['data'][] = $item;
         }
         $data = array(
-            'apikey' => $user->getToken()->getKey(),
             'username' => $user->getUsername(),
             'name' => $user->getName(),
             'phone' => $user->getPhone(),
             'email' => $user->getEmail(),
+            'avatar' => $user->base64EncodedAvatar(),
             'created' => $user->getCreated()->getTimestamp(),
             'socialAcccounts' => $socialAccounts,
             'friends' => $friends

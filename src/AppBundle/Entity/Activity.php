@@ -74,6 +74,11 @@ class Activity
     private $parent;
     
     /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="likes")
+     */
+    private $likeByUsers;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -158,6 +163,7 @@ class Activity
     {
         $this->medias = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likeByUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -270,5 +276,38 @@ class Activity
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Add likeByUsers
+     *
+     * @param \AppBundle\Entity\User $likeByUsers
+     * @return Activity
+     */
+    public function addLikeByUser(\AppBundle\Entity\User $likeByUsers)
+    {
+        $this->likeByUsers[] = $likeByUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove likeByUsers
+     *
+     * @param \AppBundle\Entity\User $likeByUsers
+     */
+    public function removeLikeByUser(\AppBundle\Entity\User $likeByUsers)
+    {
+        $this->likeByUsers->removeElement($likeByUsers);
+    }
+
+    /**
+     * Get likeByUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLikeByUsers()
+    {
+        return $this->likeByUsers;
     }
 }

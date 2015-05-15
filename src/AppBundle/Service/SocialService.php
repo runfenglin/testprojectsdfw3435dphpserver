@@ -21,7 +21,7 @@ class SocialService
     
     /** 
     * Verify facebook access token
-    *
+    * FB_API: https://graph.facebook.com/me?fields=name,email,picture&access_token=[token]
     * @param string $token (facebook access token) 
     * @return string 
     */ 
@@ -30,7 +30,7 @@ class SocialService
         $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK) . self::FACEBOOK_TOKEN_VERIFICATION;
 
         $data = array(
-            'fields' => 'name,email',
+            'fields' => 'name,email,picture',
             'access_token' => $token
         );
         
@@ -111,6 +111,7 @@ class SocialService
    
             $entryPoint .= self::FACEBOOK_FRIENDS_ENTRYPOINT;
             $data['access_token'] = $facebookToken;
+            $data['fields'] = 'name,picture';
         }
     
         $code = $curlService->curlGet($entryPoint, $data);

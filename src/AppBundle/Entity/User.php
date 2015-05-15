@@ -18,7 +18,7 @@ use AppBundle\Entity\Token;
  */
 class User implements AdvancedUserInterface, EquatableInterface, \Serializable
 {
-	const AVATAR_UPLOAD_PATH = 'user/avatar';
+    const AVATAR_UPLOAD_PATH = 'user/avatar';
     /**
      * @var integer
      *
@@ -105,13 +105,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      */
     private $loginAt;
 
-	/**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="update_at", type="datetime", nullable=TRUE)
      */
     private $updateAt;
-	
+    
     /**
      * @var \DateTime
      *
@@ -134,6 +134,12 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     private $myFriends; 
     
     /**
+     * @ORM\ManyToMany(targetEntity="Activity", inversedBy="likeByUsers",cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="tr_user_like_activity")
+     */
+    private $likes;
+    
+    /**
      * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
      */
     private $token;
@@ -151,7 +157,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Activity", mappedBy="user")
-	 * @ORM\OrderBy({"created"="DESC"})
+     * @ORM\OrderBy({"created"="DESC"})
      **/
     private $activities;    
     
@@ -159,18 +165,18 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * @ORM\OneToMany(targetEntity="Trip", mappedBy="user")
      **/
     private $requests;
-	
+    
     /**
      * @ORM\OneToMany(targetEntity="Trip", mappedBy="driver")
-     **/	
-	private $offers;
-	
+     **/    
+    private $offers;
+    
     /**
      * @ORM\ManyToMany(targetEntity="Trip", inversedBy="rideOffers")
      * @ORM\JoinTable(name="tr_ride_offer")
      **/
-	private $acceptedRequests;
-	
+    private $acceptedRequests;
+    
     public function getRoles()
     {
         return array('ROLE_USER');
@@ -522,6 +528,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         $this->friendsWithMe = new \Doctrine\Common\Collections\ArrayCollection();
         $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = TRUE;
         $this->salt = md5(uniqid(null, true));
     }
@@ -900,5 +907,47 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getUpdateAt()
     {
         return $this->updateAt;
+    }
+    
+    public function base64EncodedAvatar()
+    {
+        if($this->getAvatar()) {
+            return $this->getAvatar()->base64Encoded();
+        }
+        
+        return NULL;
+    }
+
+    /**
+     * Add likes
+     *
+     * @param \AppBundle\Entity\Activity $likes
+     * @return User
+     */
+    public function addLike(\AppBundle\Entity\Activity $likes)
+    {
+        $this->likes[] = $likes;
+
+        return $this;
+    }
+
+    /**
+     * Remove likes
+     *
+     * @param \AppBundle\Entity\Activity $likes
+     */
+    public function removeLike(\AppBundle\Entity\Activity $likes)
+    {
+        $this->likes->removeElement($likes);
+    }
+
+    /**
+     * Get likes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLikes()
+    {
+        return $this->likes;
     }
 }

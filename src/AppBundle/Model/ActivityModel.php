@@ -78,6 +78,7 @@ class ActivityModel
                 $expose[$k]['checkin_reference'] = $act->getCheckinReference();
                 $expose[$k]['checkin_name'] = $act->getCheckinName();
                 $expose[$k]['comment'] = $act->getComment();
+                $expose[$k]['likes'] = $act->getLikeByUsers()->count();
             }
             elseif ($act instanceof Comment){
                 $expose[$k]['type'] = Activity::COMMENT;

@@ -166,6 +166,15 @@ class Media
     {
         return $this->created;
     }
+	
+	public function base64Encoded()
+	{
+		$pullPath = $this->getAbsolutePath();
+		if (file_exists($pullPath)) {
+			return base64_encode(file_get_contents($pullPath));
+		}
+		return NULL;
+	}
     
     public function getAbsolutePath()
     {
@@ -183,7 +192,7 @@ class Media
     
     protected function _getUploadRootDir()
     {
-        return __DIR__ . '/../../../../web';
+        return realpath(__DIR__ . '/../../../web');
     }
     
     public function setUploadDir($path)
@@ -247,9 +256,13 @@ class Media
                         . '/' . $filename . '.' 
                         . $ext;
             
-            if (!$this->temp || $fullPath != $this->temp) {
+            $uniqueName = $filename;
+			
+			if ($this->temp && $fullPath == $this->temp) {
+				$this->temp = NULL;
+			}
+            else {
                 $i = 1;
-                $uniqueName = $filename;
                 
                 while(file_exists($fullPath)) {
                     
@@ -280,8 +293,10 @@ class Media
         if (null === $this->getFile()) {
             return;
         }
-        
-        $this->getFile()->move($this->getAbsolutePath());
+        $fullPath = $this->getAbsolutePath();
+        $dir = pathinfo($fullPath, PATHINFO_DIRNAME);
+        $name = pathinfo($fullPath, PATHINFO_BASENAME);
+        $this->getFile()->move($dir, $name);
         
         if (isset($this->temp)) {
             // delete old image
