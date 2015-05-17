@@ -21,6 +21,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class CheckinController extends FOSRestController
 {
     /**
+	 * This Action has been moved to User::CheckinAction
+	 *
      * Get Checkin List
      *
      * @ApiDoc(
@@ -36,7 +38,7 @@ class CheckinController extends FOSRestController
      * @Rest\View()
      *
      * @return JSON
-     */
+     *
     public function listAction(Request $request)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -53,7 +55,8 @@ class CheckinController extends FOSRestController
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
-
+     */
+	 
     /**
      * Get Specific Checkin
      *

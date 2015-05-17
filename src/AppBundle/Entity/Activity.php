@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use AppBundle\Entity\User;
 /**
  * Activity
  *
@@ -309,5 +309,12 @@ class Activity
     public function getLikeByUsers()
     {
         return $this->likeByUsers;
+    }
+    
+    public function doILike(User $user)
+    {
+        return (boolean) $this->likeByUsers->filter(function($e) use($user){
+            return $e->isEqualTo($user);
+        })->count();
     }
 }

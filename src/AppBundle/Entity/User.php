@@ -164,18 +164,22 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     /**
      * @ORM\OneToMany(targetEntity="Trip", mappedBy="user")
      **/
-    private $requests;
-    
+    private $trips;
+   
     /**
      * @ORM\OneToMany(targetEntity="Trip", mappedBy="driver")
-     **/    
+     **/
     private $offers;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Trip", inversedBy="rideOffers")
-     * @ORM\JoinTable(name="tr_ride_offer")
+     * @ORM\OneToMany(targetEntity="RideOffer", mappedBy="user")
      **/
-    private $acceptedRequests;
+    private $rideOffers;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="GroupUser", mappedBy="user")
+     **/
+    private $groupTrips;
     
     public function getRoles()
     {
@@ -529,6 +533,10 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         $this->myFriends = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->likes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trips = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->offers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rideOffers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupTrips = new \Doctrine\Common\Collections\ArrayCollection();
         $this->enabled = TRUE;
         $this->salt = md5(uniqid(null, true));
     }
@@ -786,13 +794,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     {
         return $this->activities;
     }
-
+/*
     /**
      * Add requests
      *
      * @param \AppBundle\Entity\Trip $requests
      * @return User
-     */
+     *
     public function addRequest(\AppBundle\Entity\Trip $requests)
     {
         $this->requests[] = $requests;
@@ -804,7 +812,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * Remove requests
      *
      * @param \AppBundle\Entity\Trip $requests
-     */
+     *
     public function removeRequest(\AppBundle\Entity\Trip $requests)
     {
         $this->requests->removeElement($requests);
@@ -814,12 +822,12 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * Get requests
      *
      * @return \Doctrine\Common\Collections\Collection 
-     */
+     *
     public function getRequests()
     {
         return $this->requests;
     }
-
+*/
     /**
      * Add offers
      *
@@ -852,13 +860,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     {
         return $this->offers;
     }
-
+/*
     /**
      * Add acceptedRequests
      *
      * @param \AppBundle\Entity\Trip $acceptedRequests
      * @return User
-     */
+     *
     public function addAcceptedRequest(\AppBundle\Entity\Trip $acceptedRequests)
     {
         $this->acceptedRequests[] = $acceptedRequests;
@@ -870,7 +878,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * Remove acceptedRequests
      *
      * @param \AppBundle\Entity\Trip $acceptedRequests
-     */
+     *
     public function removeAcceptedRequest(\AppBundle\Entity\Trip $acceptedRequests)
     {
         $this->acceptedRequests->removeElement($acceptedRequests);
@@ -880,12 +888,12 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      * Get acceptedRequests
      *
      * @return \Doctrine\Common\Collections\Collection 
-     */
+     *
     public function getAcceptedRequests()
     {
         return $this->acceptedRequests;
     }
-
+*/
     /**
      * Set updateAt
      *
@@ -949,5 +957,104 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getLikes()
     {
         return $this->likes;
+    }
+
+    /**
+     * Add trips
+     *
+     * @param \AppBundle\Entity\Trip $trips
+     * @return User
+     */
+    public function addTrip(\AppBundle\Entity\Trip $trips)
+    {
+        $this->trips[] = $trips;
+
+        return $this;
+    }
+
+    /**
+     * Remove trips
+     *
+     * @param \AppBundle\Entity\Trip $trips
+     */
+    public function removeTrip(\AppBundle\Entity\Trip $trips)
+    {
+        $this->trips->removeElement($trips);
+    }
+
+    /**
+     * Get trips
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTrips()
+    {
+        return $this->trips;
+    }
+
+    /**
+     * Add rideOffers
+     *
+     * @param \AppBundle\Entity\RideOffer $rideOffers
+     * @return User
+     */
+    public function addRideOffer(\AppBundle\Entity\RideOffer $rideOffers)
+    {
+        $this->rideOffers[] = $rideOffers;
+
+        return $this;
+    }
+
+    /**
+     * Remove rideOffers
+     *
+     * @param \AppBundle\Entity\RideOffer $rideOffers
+     */
+    public function removeRideOffer(\AppBundle\Entity\RideOffer $rideOffers)
+    {
+        $this->rideOffers->removeElement($rideOffers);
+    }
+
+    /**
+     * Get rideOffers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRideOffers()
+    {
+        return $this->rideOffers;
+    }
+
+    /**
+     * Add groupTrips
+     *
+     * @param \AppBundle\Entity\GroupUser $groupTrips
+     * @return User
+     */
+    public function addGroupTrip(\AppBundle\Entity\GroupUser $groupTrips)
+    {
+        $this->groupTrips[] = $groupTrips;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupTrips
+     *
+     * @param \AppBundle\Entity\GroupUser $groupTrips
+     */
+    public function removeGroupTrip(\AppBundle\Entity\GroupUser $groupTrips)
+    {
+        $this->groupTrips->removeElement($groupTrips);
+    }
+
+    /**
+     * Get groupTrips
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroupTrips()
+    {
+        return $this->groupTrips;
     }
 }

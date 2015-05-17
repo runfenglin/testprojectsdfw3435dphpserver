@@ -37,3 +37,15 @@ activity.comment.update.deny: Only creator can update this comment
 activity.type.invalid: Activity type is invalid
 
 friend.facebook.nonexist: No facebook account is bound to this account
+
+trip.departure.required: Departure is required
+trip.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more
+trip.departure.maxlength.invalid: Departure is too long. It should have {{ limit }} characters or less
+trip.destination.required: Destination is required
+trip.destination.minlength.invalid: Destination is too short. It should have {{ limit }} characters or more
+trip.destination.maxlength.invalid: Destination is too long. It should have {{ limit }} characters or less
+trip.time.required: Time is required
+trip.time.passed: Time can not be a passed time
+trip.time.invalid: Time is not valid
+
+trip.visibility.invalid: Visibility is not valid

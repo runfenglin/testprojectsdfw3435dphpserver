@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Checkin
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\CheckinRepository")
  */
 class Checkin extends Activity
 {

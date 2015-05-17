@@ -70,32 +70,12 @@ class UserController extends FOSRestController
     public function likeAction(Request $request, $id)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
+
+        return $this->container->get('app.user.model')
+                               ->setEntity($user)
+                               ->likeActivity($id);
         
-        $em = $this->getDoctrine()->getManager();
-        
-        $activity = $em->getRepository('AppBundle:Activity')->find($id);
-        
-        // Only like activity, but not comment
-        if ($activity 
-            && $user->getId() != $activity->getUserId() 
-                && !$activity->getParent()) {
-            
-            $alreadyLike = $user->getLikes()->filter(function($e) use($id) {
-                return $e->getId() == $id;
-            });
-            
-            if (!$alreadyLike->count()){
-                $user->addLike($activity);
-            }
-            $em->persist($user);
-            $em->flush();
-        }
-        
-        return array(
-            'user_id' => $user->getId(),
-            'activity_id' => $id,
-            'count' => $activity->getLikeByUsers()->count() 
-        );
+
     }
     
     /**
@@ -118,57 +98,42 @@ class UserController extends FOSRestController
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $socialAccounts = array();
-        $friends = array();
-        
-        $socialAccounts['count'] = $user->getSocialAccounts()->count();
-        $socialAccounts['data'] = array();
-        
-        foreach($user->getSocialAccounts() as $key => $account) {
-            $social = array(
-                'type' => $account->getType()->getName(),
-                'sm_name' => $account->getSmName(),
-                'sm_email' => $account->getSmEmail(),
-                'sm_token' => $account->getSmToken(),
-                'created' => $account->getCreated()->getTimestamp(),
-            ); 
-            $socialAccounts['data'][] = $social;
+        return $this->container->get('app.user.model')
+                               ->exposeOne($user);
+    }
+    
+    /**
+     * Get User Checkin
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get user checkin",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure"
+     *   }
+     * )
+     * @Rest\Get("/checkin")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function checkinAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        try{
+            $em = $this->getDoctrine()->getManager();
+            $checkins = $em->getRepository('AppBundle:Checkin')
+                           ->findBy(array('user' => $user), array('created' => 'DESC'));
+            
+            return $this->container->get('app.activity.model')->expose($checkins);
+            
         }
-        
-        $friends['count'] = $user->getMyFriends()->count() + $user->getFriendsWithMe()->count();
-        $friends['data'] = array();
-        
-        foreach($user->getMyFriends() as $key => $friend) {
-            $item = array(
-                'name' => $friend->getName(),
-                'username' => $friend->getUsername(),
-                'avatar' => $friend->base64EncodedAvatar(),
-                'created' => $friend->getCreated()->getTimestamp(),
-            ); 
-            $friends['data'][] = $item;
+        catch(\Exception $e) {
+            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_BAD_REQUEST);
         }
-        
-        foreach($user->getFriendsWithMe() as $key => $friend) {
-            $item = array(
-                'name' => $friend->getName(),
-                'username' => $friend->getUsername(),
-                'avatar' => $friend->base64EncodedAvatar(),
-                'created' => $friend->getCreated()->getTimestamp(),
-            ); 
-            $friends['data'][] = $item;
-        }
-        $data = array(
-            'username' => $user->getUsername(),
-            'name' => $user->getName(),
-            'phone' => $user->getPhone(),
-            'email' => $user->getEmail(),
-            'avatar' => $user->base64EncodedAvatar(),
-            'created' => $user->getCreated()->getTimestamp(),
-            'socialAcccounts' => $socialAccounts,
-            'friends' => $friends
-        );
-        
-        return array('result' => $data);
     }
     
 }

@@ -43,3 +43,9 @@ api_v1_comment:
     type: rest
     resource: "AppBundle\Controller\CommentController"
     name_prefix: api_v1_comment_
+
+api_v1_trip:
+    prefix: /trip
+    type: rest
+    resource: "AppBundle\Controller\TripController"
+    name_prefix: api_v1_trip_

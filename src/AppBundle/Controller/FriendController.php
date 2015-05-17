@@ -62,4 +62,38 @@ class FriendController extends FOSRestController
         }
     }
     
+    /**
+     * Get User's Friend Checkin
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get user's friend checkin",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure"
+     *   }
+     * )
+     * @Rest\Get("/checkin")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+	public function checkinAction(Request $request)
+	{
+		$user = $this->container->get('security.context')->getToken()->getUser();
+		
+		try{
+            $em = $this->getDoctrine()->getManager();
+            $checkins = $em->getRepository('AppBundle:Checkin')
+                           ->getFriendCheckins($user);
+            
+            return $this->container->get('app.activity.model')->expose($checkins);
+            
+        }
+        catch(\Exception $e) {
+            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_BAD_REQUEST);
+        }
+		
+	}
 }

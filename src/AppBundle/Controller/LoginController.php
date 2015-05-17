@@ -142,105 +142,14 @@ class LoginController extends FOSRestController
             $error = $this->get('translator')->trans('login.facebook.token.missing');
             return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
         }
-  
-        $socialService = $this->container->get('social.service');
         
         try{
-            //Verify token
-            $result = $socialService->verifyFacebookToken($token);
-    
-            if (!isset($result->email)) {
-                $error = $this->get('translator')->trans('login.facebook.email.missing');
-                throw new AccessDeniedException($error);
-            }
-            
+			return $this->container->get('app.user.model')
+			                       ->facebookLogin($token);
         }
-        catch(AccessDeniedException $e) {
+        catch(\Exception $e) {
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);
         }
-        
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AppBundle:User')
-                   ->findOneBy(array('email' => $result->email));
-        
-        //TODO -- move to user model
-        if ($user) {
-            $socialAccount = $user->getSocialAccountByType($type);
-            
-            if ($socialAccount) {
-                $socialAccount->setSmEmail($result->email);
-                $socialAccount->setSmToken($token);
-                $socialAccount->setSmName($result->name);
-                $socialAccount->setSmId($result->id);
-
-            }
-            else {
-                //TODO, is it possible?
-                // It should not be possible in normal operation. 
-                
-            }
-            
-            // Should we update name to this social account name?
-            $user->setName($result->name);
-            $user->updateToken();
-
-        }
-        else {
-            $user = new User();
-            $user->setEmail($result->email);
-            $user->setName($result->name);
-            $user->generateUsername();
-            $user->updateToken();
-            
-            $socialType = $em->getRepository('AppBundle:SocialType')
-                             ->findOneBy(array('code' => $type));
-
-            // Also add this social account to social login table
-            $socialAccount = new SocialLogin();
-            $socialAccount->setSmName($result->name);
-            $socialAccount->setSmToken($token);
-            $socialAccount->setSmEmail($result->email);
-            $socialAccount->setSmId($result->id);
-            $socialAccount->setType($socialType);
-            $socialAccount->setCreated(new \DateTime('@' . time()));
-            $socialAccount->setUser($user);
-            $user->addSocialAccount($socialAccount);
-            
-            // First login to bind friendship automatically
-            $friendIds = $socialService->getFacebookFriendIds($token);
-            if (!empty($friendIds)) {
-                $friendUserAccounts = $em->getRepository('AppBundle:User')
-                                         ->fbAutoLinkUsers($friendIds);
-                foreach($friendUserAccounts as $u)
-                {
-                    $user->addMyFriend($u);
-                }
-            }
-            
-            $resData['friend_count'] = isset($friendUserAccounts) ? count($friendUserAccounts) : 0;
-        }
-        
-        // set avatar
-        $picture = $socialService->getFacebookProfilePicture($result->id);
-
-        if(!$media = $user->getAvatar()) {
-            $media = new Media();
-        }
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_file($finfo, $picture);
-        $fileSize = filesize($picture);
-        $fileName = 'fb_pic_' . $result->id;
-        $uploadeFile = new UploadedFile(realpath($picture), $fileName, $mimeType, $fileSize, NULL, TRUE);
-        
-        $media->setFile($uploadeFile);
-        $media->setUploadDir(User::AVATAR_UPLOAD_PATH . '/' . date('Y/m/d'));
-        $user->setAvatar($media);
-        $em->persist($user);
-        $em->flush();
-
-        $resData['apikey'] = $user->getToken()->getKey();
-        return $resData;
-
     }
     
 }

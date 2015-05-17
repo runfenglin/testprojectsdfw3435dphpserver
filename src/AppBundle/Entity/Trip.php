@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Trip
 {
-	const CIRCLE_FRIEND = 1;
-	const CIRCLE_FRIEND_OF_FRIEND = 2;
-	const CIRCLE_PUBLIC = 4;
+    const CIRCLE_FRIEND = 1;
+    const CIRCLE_FRIEND_OF_FRIEND = 2;
+    const CIRCLE_PUBLIC = 4;
     /**
      * @var integer
      *
@@ -48,16 +48,16 @@ class Trip
     /**
      * @var integer
      *
-     * @ORM\Column(name="return_id", type="integer", nullable=TRUE)
+     * @ORM\Column(name="parent_id", type="integer", nullable=TRUE)
      */
-    private $returnId;
+    private $parentId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="group_id", type="integer", nullable=TRUE)
+     * @ORM\Column(name="is_group", type="boolean")
      */
-    private $groupId;
+    private $group = FALSE;
 
     /**
      * @var integer
@@ -76,10 +76,10 @@ class Trip
     /**
      * @var integer
      *
-     * @ORM\Column(name="driver_id", type="integer")
+     * @ORM\Column(name="driver_id", type="integer", nullable=TRUE)
      */
     private $driverId;
-	
+    
     /**
      * @var string
      *
@@ -95,27 +95,47 @@ class Trip
     private $created;
 
     /**
-     * @ORM\OneToOne(targetEntity="Trip")
-     * @ORM\JoinColumn(name="return_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Trip", mappedBy="parent", cascade={"persist", "remove"}, orphanRemoval=true)
      **/
-	private $returnTrip;
-	
-	/**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="requests")
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Trip", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     **/
+    private $parent;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="trips")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
-	private $user;
-	
-	/**
+    private $user;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="offers")
      * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
-     **/	
-	private $driver;
-	
-	/**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="acceptedRequests")
+     **/    
+    private $driver;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="RideOffer", mappedBy="trip")
      **/
-	private $rideOffers;
+    private $rideOffers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="GroupUser", mappedBy="trip")
+     **/
+    private $groupUsers;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rideOffers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupUsers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -197,49 +217,49 @@ class Trip
     }
 
     /**
-     * Set returnId
+     * Set parentId
      *
-     * @param integer $returnId
+     * @param integer $parentId
      * @return Trip
      */
-    public function setReturnId($returnId)
+    public function setParentId($parentId)
     {
-        $this->returnId = $returnId;
+        $this->parentId = $parentId;
 
         return $this;
     }
 
     /**
-     * Get returnId
+     * Get parentId
      *
      * @return integer 
      */
-    public function getReturnId()
+    public function getParentId()
     {
-        return $this->returnId;
+        return $this->parentId;
     }
 
     /**
-     * Set groupId
+     * Set group
      *
-     * @param integer $groupId
+     * @param boolean $group
      * @return Trip
      */
-    public function setGroupId($groupId)
+    public function setGroup($group)
     {
-        $this->groupId = $groupId;
+        $this->group = $group;
 
         return $this;
     }
 
     /**
-     * Get groupId
+     * Get group
      *
-     * @return integer 
+     * @return boolean 
      */
-    public function getGroupId()
+    public function getGroup()
     {
-        return $this->groupId;
+        return $this->group;
     }
 
     /**
@@ -310,7 +330,7 @@ class Trip
     {
         return $this->driverId;
     }
-	
+
     /**
      * Set comment
      *
@@ -356,35 +376,61 @@ class Trip
     {
         return $this->created;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->rideOffers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Set returnTrip
+     * Add children
      *
-     * @param \AppBundle\Entity\Trip $returnTrip
+     * @param \AppBundle\Entity\Trip $children
      * @return Trip
      */
-    public function setReturnTrip(\AppBundle\Entity\Trip $returnTrip = null)
+    public function addChild(\AppBundle\Entity\Trip $children)
     {
-        $this->returnTrip = $returnTrip;
+        $this->children[] = $children;
 
         return $this;
     }
 
     /**
-     * Get returnTrip
+     * Remove children
+     *
+     * @param \AppBundle\Entity\Trip $children
+     */
+    public function removeChild(\AppBundle\Entity\Trip $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \AppBundle\Entity\Trip $parent
+     * @return Trip
+     */
+    public function setParent(\AppBundle\Entity\Trip $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
      *
      * @return \AppBundle\Entity\Trip 
      */
-    public function getReturnTrip()
+    public function getParent()
     {
-        return $this->returnTrip;
+        return $this->parent;
     }
 
     /**
@@ -436,10 +482,10 @@ class Trip
     /**
      * Add rideOffers
      *
-     * @param \AppBundle\Entity\User $rideOffers
+     * @param \AppBundle\Entity\RideOffer $rideOffers
      * @return Trip
      */
-    public function addRideOffer(\AppBundle\Entity\User $rideOffers)
+    public function addRideOffer(\AppBundle\Entity\RideOffer $rideOffers)
     {
         $this->rideOffers[] = $rideOffers;
 
@@ -449,9 +495,9 @@ class Trip
     /**
      * Remove rideOffers
      *
-     * @param \AppBundle\Entity\User $rideOffers
+     * @param \AppBundle\Entity\RideOffer $rideOffers
      */
-    public function removeRideOffer(\AppBundle\Entity\User $rideOffers)
+    public function removeRideOffer(\AppBundle\Entity\RideOffer $rideOffers)
     {
         $this->rideOffers->removeElement($rideOffers);
     }
@@ -464,5 +510,38 @@ class Trip
     public function getRideOffers()
     {
         return $this->rideOffers;
+    }
+
+    /**
+     * Add groupUsers
+     *
+     * @param \AppBundle\Entity\GroupUser $groupUsers
+     * @return Trip
+     */
+    public function addGroupUser(\AppBundle\Entity\GroupUser $groupUsers)
+    {
+        $this->groupUsers[] = $groupUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupUsers
+     *
+     * @param \AppBundle\Entity\GroupUser $groupUsers
+     */
+    public function removeGroupUser(\AppBundle\Entity\GroupUser $groupUsers)
+    {
+        $this->groupUsers->removeElement($groupUsers);
+    }
+
+    /**
+     * Get groupUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroupUsers()
+    {
+        return $this->groupUsers;
     }
 }
