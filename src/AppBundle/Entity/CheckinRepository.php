@@ -14,14 +14,37 @@ use AppBundle\Entity\User;
  */
 class CheckinRepository extends EntityRepository
 {
-	public function getFriendCheckin(User $user)
-	{
-	/*	$qb = $this->_em
+    public function getFriendCheckins(User $user)
+    {
+        $query = $entityManager->createNativeQuery(
+            'SELECT c.* 
+             FROM tr_activity c 
+             JOIN tr_user u ON c.user_id = u.id
+			 JOIN tr_friend f ON 
+             JOIN ', $rsm);
+$query->setParameter(1, 'romanb'); 
+        
+        /* $qb = $this->_em
+                   ->createQueryBuilder()
+                   ->select('c')
+                   ->from($this->_entityName, 'c')
+                   ->join('c.user', 'u')
+                   ->join('u.myFriends', 'um', 'WITH', 'um.id = :userId') */
+        //    ->setParameter('superCategoryName', $superCategoryName);
+        //           ->where('um.id = :userId')
+        //           ->orWhere('uf.id = :userId')
+         //          ->setParameter('userId', $user->getId())
+         //          ->setParameter('userId', $user->getId())
+		//		   ->getQuery();
+		//		var_dump($qb->getSQL());
+				//   ->getQuery()
+                //   ->getResult();
+    /*  $qb = $this->_em
                    ->createQueryBuilder()
                    ->select('c')
                    ->from($this->_entityName, 'c')
                    ->join('c.user', 'cu')
-				   ->join('cu.myFriends');
+                   ->join('cu.myFriends');
 
         if($user->getUpdateAt() instanceof \DateTime) {
             $qb->where('c.created > :datetime')
@@ -35,5 +58,5 @@ class CheckinRepository extends EntityRepository
                   ->setParameter('user', $user)
                   ->getQuery()
                   ->getResult();*/
-	}
+    }
 }

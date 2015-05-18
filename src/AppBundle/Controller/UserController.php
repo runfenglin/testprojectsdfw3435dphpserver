@@ -125,9 +125,10 @@ class UserController extends FOSRestController
 
         try{
             $em = $this->getDoctrine()->getManager();
-            $checkins = $em->getRepository('AppBundle:Checkin')
-                           ->findBy(array('user' => $user), array('created' => 'DESC'));
-            
+        //    $checkins = $em->getRepository('AppBundle:Checkin')
+        //                   ->findBy(array('user' => $user), array('created' => 'DESC'));
+            $checkins = $em->getRepository('AppBundle:Checkin')->getFriendCheckins($user);
+	
             return $this->container->get('app.activity.model')->expose($checkins);
             
         }

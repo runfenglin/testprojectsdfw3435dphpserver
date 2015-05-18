@@ -97,4 +97,19 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         return $this->getEntityName() === $class
             || is_subclass_of($class, $this->getEntityName());
     }
+	
+	public function getFriendActivities($user)
+	{
+		return $this->_em
+		           ->createQueryBuilder()
+		           ->select('u.activities')
+				   ->from($this->_entityName, 'u')
+				   ->join('u.myFriends', 'uf')
+				   ->join('u.friendsWithMe', 'um')
+				   ->where('um.id = :userId')
+				   ->orWhere('uf.id = :userId')
+				   ->setParameter('userId', $user->getId())
+				   ->setParameter('userId', $user->getId())
+				   ->getResult();
+	}
 }
