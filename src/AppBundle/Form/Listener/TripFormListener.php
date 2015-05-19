@@ -120,8 +120,8 @@ class TripFormListener implements EventSubscriberInterface
             array(
                 'input' => 'datetime',
                 'widget' => 'single_text',
-				'format' => 'yyyy-MM-dd HH:mm:ss',
-				'invalid_message' => $this->_translator->trans('trip.time.invalid'),
+                'format' => 'yyyy-MM-dd HH:mm:ss',
+                'invalid_message' => $this->_translator->trans('trip.time.invalid'),
                 'data' => new \DateTime(),
                 'constraints' => array(
                     new Constraint\NotBlank(
@@ -129,10 +129,10 @@ class TripFormListener implements EventSubscriberInterface
                             'message' => $this->_translator->trans('trip.time.required')
                         )
                     ),
-					new Constraint\GreaterThan(
+                    new Constraint\GreaterThan(
                         array(
                             'message' => $this->_translator->trans('trip.time.passed'),
-							'value' => date('Y-m-d H:i:s')
+                            'value' => date('Y-m-d H:i:s')
                         )
                     )
                 )
@@ -152,7 +152,7 @@ class TripFormListener implements EventSubscriberInterface
                     Trip::CIRCLE_FRIEND_OF_FRIEND => 'Friends of Friend', 
                     Trip::CIRCLE_PUBLIC => 'Public'
                 ),
-				'invalid_message' => $this->_translator->trans('trip.visibility.invalid')
+                'invalid_message' => $this->_translator->trans('trip.visibility.invalid')
             )
         );
         

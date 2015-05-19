@@ -38,6 +38,7 @@ activity.type.invalid: Activity type is invalid
 
 friend.facebook.nonexist: No facebook account is bound to this account
 friend.checkin.user.invalid: Friend user is not found
+friend.checkin.forbidden: Only friend's checkin is allowed to access
 trip.departure.required: Departure is required
 trip.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more
 trip.departure.maxlength.invalid: Departure is too long. It should have {{ limit }} characters or less

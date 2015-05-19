@@ -21,8 +21,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class CheckinController extends FOSRestController
 {
     /**
-	 * This Action has been moved to User::CheckinAction
-	 *
+     * This Action has been moved to User::CheckinAction
+     *
      * Get Checkin List
      *
      * @ApiDoc(
@@ -56,7 +56,7 @@ class CheckinController extends FOSRestController
         }
     }
      */
-	 
+     
     /**
      * Get Specific Checkin
      *

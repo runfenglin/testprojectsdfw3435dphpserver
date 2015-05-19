@@ -144,8 +144,8 @@ class LoginController extends FOSRestController
         }
         
         try{
-			return $this->container->get('app.user.model')
-			                       ->facebookLogin($token);
+            return $this->container->get('app.user.model')
+                                   ->facebookLogin($token);
         }
         catch(\Exception $e) {
             return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_FORBIDDEN);

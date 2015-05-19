@@ -82,31 +82,38 @@ class FriendController extends FOSRestController
      *
      * @return JSON
      */
-	public function checkinAction(Request $request, $id)
-	{
-		$self = $this->container->get('security.context')->getToken()->getUser();
+    public function checkinAction(Request $request, $id)
+    {
+        $self = $this->container->get('security.context')->getToken()->getUser();
 
         try{
-			
+            
             $em = $this->getDoctrine()->getManager();
-			$user = $em->getRepository('AppBundle:User')
-			           ->find($id);
-			
-			if (!$user) {
-				$error = $this->get('translator')->trans('friend.checkin.user.invalid');
-				throw new \Exception($error);
-			}
-			//TODO verify friend relationship
-			
+            $user = $em->getRepository('AppBundle:User')
+                       ->find($id);
+            
+            if (!$user) {
+                $error = $this->get('translator')->trans('friend.checkin.user.invalid');
+                throw new \Exception($error);
+            }
+            
+            if(!$self->isFriendWith($user)) {
+                $error = $this->get('translator')->trans('friend.checkin.forbidden');
+                throw new AccessDeniedException($error);
+            }
+            
             $checkins = $em->getRepository('AppBundle:Checkin')
                            ->findBy(array('user' => $user), array('created' => 'DESC'));
-	
+    
             return $this->container->get('app.activity.model')->expose($checkins);
             
         }
         catch(\Exception $e) {
-            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_BAD_REQUEST);
+            $errorCode = $e->getCode() == Response::HTTP_FORBIDDEN 
+                         ? Response::HTTP_FORBIDDEN 
+                         : Response::HTTP_BAD_REQUEST;
+            return new JsonResponse(array("error" => $e->getMessage()), $errorCode);
         }
-		
-	}
+        
+    }
 }

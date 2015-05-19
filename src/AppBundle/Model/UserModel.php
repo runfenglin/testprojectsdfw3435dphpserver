@@ -303,6 +303,6 @@ class UserModel extends AbstractModel
         $resData['apikey'] = $user->getToken()->getKey();
         return $resData;
     }
-	
+    
 }   
     

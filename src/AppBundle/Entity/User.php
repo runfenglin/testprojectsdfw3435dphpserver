@@ -227,6 +227,23 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
         return true;
     }
     
+    public function isFriendWith(UserInterface $user)
+    {
+        foreach ($this->getMyFriends() as $f) {
+            if ($f->isEqualTo($user)) {
+                return TRUE;
+            }
+        }
+        
+        foreach ($this->getFriendsWithMe() as $f) {
+            if ($f->isEqualTo($user)) {
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
+    
     public function isEnabled()
     {
         return (boolean) $this->enabled;

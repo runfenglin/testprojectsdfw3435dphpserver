@@ -10,26 +10,26 @@ use Doctrine\Common\Collections\Collection;
 use AppBundle\Entity as Entity;
 
 class TripModel extends AbstractModel
-{	
-	public function __construct(Container $container)
-	{	
-		$this->_entity = new Entity\Trip();
-		parent::__construct($container);
-	}
-	
-	public function expose($trip = NULL) 
-	{
-		$expose = array();
-		
-		return $expose;
-	}
-	
-	public function post(array $parameters, $method = Request::METHOD_POST)
+{   
+    public function __construct(Container $container)
+    {   
+        $this->_entity = new Entity\Trip();
+        parent::__construct($container);
+    }
+    
+    public function expose($trip = NULL) 
+    {
+        $expose = array();
+        
+        return $expose;
+    }
+    
+    public function post(array $parameters, $method = Request::METHOD_POST)
     {
         return $this->_processForm($this->_entity, $parameters, $method);
     }
-	
-	private function _processForm(Entity\Trip $trip, array $parameters, $method = "PUT")
+    
+    private function _processForm(Entity\Trip $trip, array $parameters, $method = "PUT")
     {
 
         $form = $this->_container
@@ -39,7 +39,7 @@ class TripModel extends AbstractModel
                         $trip, 
                         array('method' => $method)
                     );
-					
+                    
         $form->submit($parameters, Request::METHOD_PUT !== $method);
         if ($form->isValid()) {
 

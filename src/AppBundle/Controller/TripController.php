@@ -47,7 +47,7 @@ class TripController extends FOSRestController
      */
     public function createAction(Request $request)
     {
-		try {
+        try {
             $tripModel = $this->container
                               ->get('app.trip.model');
                             

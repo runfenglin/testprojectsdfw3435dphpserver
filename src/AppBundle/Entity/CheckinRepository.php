@@ -17,13 +17,9 @@ class CheckinRepository extends EntityRepository
     public function getFriendCheckins(User $user)
     {
         $query = $entityManager->createNativeQuery(
-            'SELECT c.* 
-             FROM tr_activity c 
-             JOIN tr_user u ON c.user_id = u.id
-			 JOIN tr_friend f ON 
-             JOIN ', $rsm);
+            'SELECT a.* FROM `tr_activity` as a join `tr_user` as u on a.user_id = u.id join `tr_friend` as f where (a.user_id = 18 or u.id = f.user_id and f.friend_user_id = 18 or u.id = f.friend_user_id and f.user_id = 18) and a.type = 'checkin' order by a.created desc');
 $query->setParameter(1, 'romanb'); 
-        
+     //   SELECT a.* FROM `tr_activity` as a join `tr_user` as u on a.user_id = u.id join `tr_friend` as f on u.id = f.user_id or u.id = f.friend_user_id where (f.friend_user_id = 18 or f.user_id = 18) and a.type = 'checkin' order by a.created desc
         /* $qb = $this->_em
                    ->createQueryBuilder()
                    ->select('c')

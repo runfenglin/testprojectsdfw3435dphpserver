@@ -19,8 +19,8 @@ class ActivityModel extends AbstractModel
     public function __construct(Container $container)
     {   
         $this->_entity = new Entity\Activity();
-		
-		$this->_user = $container->get('security.context')->getToken()->getUser();
+        
+        $this->_user = $container->get('security.context')->getToken()->getUser();
         
         parent::__construct($container);
     }
@@ -57,7 +57,7 @@ class ActivityModel extends AbstractModel
                 $expose[$k]['checkin_name'] = $act->getCheckinName();
                 $expose[$k]['comment'] = $act->getComment();
                 $expose[$k]['like_count'] = $act->getLikeByUsers()->count();
-				$expose[$k]['like'] = $act->doILike($this->_user);
+                $expose[$k]['like'] = $act->doILike($this->_user);
             }
             elseif ($act instanceof Entity\Comment){
                 $expose[$k]['type'] = Entity\Activity::COMMENT;
