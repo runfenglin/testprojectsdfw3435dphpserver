@@ -285,7 +285,7 @@ class UserModel extends AbstractModel
         // set avatar
         $picture = $socialService->getFacebookProfilePicture($result->id);
 
-        if(!$media = $user->getAvatar()) {
+/*         if(!$media = $user->getAvatar()) {
             $media = new Entity\Media();
         }
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -295,8 +295,8 @@ class UserModel extends AbstractModel
         $uploadeFile = new UploadedFile(realpath($picture), $fileName, $mimeType, $fileSize, NULL, TRUE);
         
         $media->setFile($uploadeFile);
-        $media->setUploadDir(Entity\User::AVATAR_UPLOAD_PATH . '/' . date('Y/m'));
-        $user->setAvatar($media);
+        $media->setUploadDir(Entity\User::AVATAR_UPLOAD_PATH . '/' . date('Y/m')); */
+        $user->setAvatar($picture);
         $em->persist($user);
         $em->flush();
 
