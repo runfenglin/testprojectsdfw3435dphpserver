@@ -114,22 +114,23 @@ class UserController extends FOSRestController
      *     403 = "Returned when token verification failure"
      *   }
      * )
-     * @Rest\Get("/checkin")
+     * @Rest\Get("/activity")
      * @Rest\View()
      *
      * @return JSON
      */
-    public function checkinAction(Request $request)
+    public function activityAction(Request $request)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         try{
             $em = $this->getDoctrine()->getManager();
-        //    $checkins = $em->getRepository('AppBundle:Checkin')
-        //                   ->findBy(array('user' => $user), array('created' => 'DESC'));
-            $checkins = $em->getRepository('AppBundle:Checkin')->getFriendCheckins($user);
-	
-            return $this->container->get('app.activity.model')->expose($checkins);
+        
+        //  $checkins = $em->getRepository('AppBundle:Checkin')->getCheckinsByUser($user);
+        
+            $activities = $em->getRepository('AppBundle:Activity')->getActivitiesByUser($user);
+    
+            return $this->container->get('app.activity.model')->expose($activities);
             
         }
         catch(\Exception $e) {

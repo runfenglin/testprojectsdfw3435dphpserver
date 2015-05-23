@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-
+use Doctrine\ORM\Query\Expr;
 use AppBundle\Entity\User;
 
 /**
@@ -14,45 +14,21 @@ use AppBundle\Entity\User;
  */
 class CheckinRepository extends EntityRepository
 {
-    public function getFriendCheckins(User $user)
+    public function getCheckinsByUser(User $user)
     {
-        $query = $entityManager->createNativeQuery(
-            'SELECT a.* FROM `tr_activity` as a join `tr_user` as u on a.user_id = u.id join `tr_friend` as f where (a.user_id = 18 or u.id = f.user_id and f.friend_user_id = 18 or u.id = f.friend_user_id and f.user_id = 18) and a.type = 'checkin' order by a.created desc');
-$query->setParameter(1, 'romanb'); 
-     //   SELECT a.* FROM `tr_activity` as a join `tr_user` as u on a.user_id = u.id join `tr_friend` as f on u.id = f.user_id or u.id = f.friend_user_id where (f.friend_user_id = 18 or f.user_id = 18) and a.type = 'checkin' order by a.created desc
-        /* $qb = $this->_em
-                   ->createQueryBuilder()
-                   ->select('c')
-                   ->from($this->_entityName, 'c')
-                   ->join('c.user', 'u')
-                   ->join('u.myFriends', 'um', 'WITH', 'um.id = :userId') */
-        //    ->setParameter('superCategoryName', $superCategoryName);
-        //           ->where('um.id = :userId')
-        //           ->orWhere('uf.id = :userId')
-         //          ->setParameter('userId', $user->getId())
-         //          ->setParameter('userId', $user->getId())
-		//		   ->getQuery();
-		//		var_dump($qb->getSQL());
-				//   ->getQuery()
-                //   ->getResult();
-    /*  $qb = $this->_em
-                   ->createQueryBuilder()
-                   ->select('c')
-                   ->from($this->_entityName, 'c')
-                   ->join('c.user', 'cu')
-                   ->join('cu.myFriends');
-
-        if($user->getUpdateAt() instanceof \DateTime) {
-            $qb->where('c.created > :datetime')
-               ->setParameter('datetime', $user->getUpdateAt())
-               ->andWhere('c.toUser = :toUser OR cp.user = :user');
-        }
-        else {
-            $qb->where('c.toUser = :toUser OR cp.user = :user');
-        }
-        return $qb->setParameter('toUser', $user)
-                  ->setParameter('user', $user)
-                  ->getQuery()
-                  ->getResult();*/
+        $qb = $this->_em
+                    ->createQueryBuilder()
+                    ->select('a')
+                    ->from($this->_entityName, 'a')
+                    ->join('a.user', 'u')
+                    ->leftJoin('u.myFriends', 'mf', 'with', 'mf.id = :userId')
+                    ->setParameter('userId', $user->getId())
+                    ->groupBy('a.id')
+                    ->orderBy('a.created', 'DESC')
+                    ->getQuery()
+                //    ->getQuery()->getSQL();
+                    ->getResult();
+        return $qb;
+                //var_dump($qb);die;
     }
 }
