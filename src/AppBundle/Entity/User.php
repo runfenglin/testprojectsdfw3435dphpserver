@@ -112,6 +112,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     private $created;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="device_token", type="string", length=64)
+     */
+    private $deviceToken;
+    
+    /**
      * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
      */
     private $friendsWithMe;
@@ -969,5 +976,28 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getGroupTrips()
     {
         return $this->groupTrips;
+    }
+
+    /**
+     * Set deviceToken
+     *
+     * @param string $deviceToken
+     * @return User
+     */
+    public function setDeviceToken($deviceToken)
+    {
+        $this->deviceToken = $deviceToken;
+
+        return $this;
+    }
+
+    /**
+     * Get deviceToken
+     *
+     * @return string 
+     */
+    public function getDeviceToken()
+    {
+        return $this->deviceToken;
     }
 }

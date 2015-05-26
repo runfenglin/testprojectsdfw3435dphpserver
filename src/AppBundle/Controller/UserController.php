@@ -138,4 +138,35 @@ class UserController extends FOSRestController
         }
     }
     
+    /**
+     * Update Device Token
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Update device token",
+     *   requirements = {
+     *     {"name"="device_token", "dataType"="string", "requirement"="/.{64}/", "required"=true, "description"="Device Token"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Post("/device/token")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function updateDeviceTokenAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $dToken = $request->request->get('device_token');
+        $user->setDeviceToken($dToken);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        
+        return new JsonResponse(array('success' => TRUE), Response::HTTP_OK);
+    }
+    
 }

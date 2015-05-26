@@ -11,7 +11,7 @@ class SocialService
 {
     CONST FACEBOOK_TOKEN_VERIFICATION = '/me';
     CONST FACEBOOK_PROFILE_PICTURE = '/%IDENTITY%/picture';
-    CONST FACEBOOK_FRIENDS_ENTRYPOINT = '/v2.3/me/friends';
+    CONST FACEBOOK_FRIENDS_ENDPOINT = '/v2.3/me/friends';
     
     protected $_container;
     
@@ -27,7 +27,7 @@ class SocialService
     */ 
     public function verifyFacebookToken($token)
     {
-        $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK) . self::FACEBOOK_TOKEN_VERIFICATION;
+        $endPoint = $this->_container->getParameter(SocialType::FACEBOOK) . self::FACEBOOK_TOKEN_VERIFICATION;
 
         $data = array(
             'fields' => 'name,email,picture',
@@ -35,7 +35,7 @@ class SocialService
         );
         
         $curlService = $this->_container->get('curl.service');
-        if (200 != $curlService->curlGet($entryPoint, $data))
+        if (200 != $curlService->curlGet($endPoint, $data))
         {
             $error = $this->_container->get('translator')->trans('login.facebook.tokin.invalid');
             throw new AccessDeniedException($error);
@@ -52,12 +52,12 @@ class SocialService
     */     
     public function getFacebookProfilePicture($identity)
     {
-        $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK)
+        $endPoint = $this->_container->getParameter(SocialType::FACEBOOK)
                       . str_replace('%IDENTITY%', $identity, self::FACEBOOK_PROFILE_PICTURE);
         
         $curlService = $this->_container->get('curl.service');
         
-        if (200 != $curlService->curlGet($entryPoint))
+        if (200 != $curlService->curlGet($endPoint))
         {
             $error = $this->_container->get('translator')->trans('login.facebook.profile.pic.invalid');
             throw new AccessDeniedException($error);
@@ -99,22 +99,22 @@ class SocialService
         $curlService = $this->_container->get('curl.service');
         
         //$facebookToken can be a paging URL
-        $entryPoint = $facebookToken;
+        $endPoint = $facebookToken;
         $data = array();
         
         $urlConstraint = new Constraint\Url();
         $urlConstraint->message = 'Invalid url';
-        if($this->_container->get('validator')->validateValue($entryPoint, $urlConstraint)->count()) 
+        if($this->_container->get('validator')->validateValue($endPoint, $urlConstraint)->count()) 
         {
             // token, but not url
-            $entryPoint = $this->_container->getParameter(SocialType::FACEBOOK);
+            $endPoint = $this->_container->getParameter(SocialType::FACEBOOK);
    
-            $entryPoint .= self::FACEBOOK_FRIENDS_ENTRYPOINT;
+            $endPoint .= self::FACEBOOK_FRIENDS_ENDPOINT;
             $data['access_token'] = $facebookToken;
             $data['fields'] = 'name,picture';
         }
     
-        $code = $curlService->curlGet($entryPoint, $data);
+        $code = $curlService->curlGet($endPoint, $data);
 
         if (200 != $code)
         {
