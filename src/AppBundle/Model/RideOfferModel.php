@@ -9,43 +9,39 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\Collection;
 use AppBundle\Entity as Entity;
 
-class TripModel extends AbstractModel
+class RideOfferModel extends AbstractModel
 {   
     public function __construct(Container $container)
     {   
-        $this->_entity = new Entity\Trip();
+        $this->_entity = new Entity\RideOffer();
         parent::__construct($container);
     }
     
-    public function expose($trips = NULL) 
+    public function expose($rideOffers = NULL) 
     {
         $expose = array();
         
-        if (NULL == $trips) {
-            $trips = $this->_entity;
+        if (NULL == $rideOffers) {
+            $rideOffers = $this->_entity;
         } 
         
-        if($trips instanceof Entity\Trip && $trips->getId()) {
-            $trips = array($trips);
+        if($rideOffers instanceof Entity\RideOffer && $rideOffers->getId()) {
+            $rideOffers = array($rideOffers);
         }
-        else if ($trips instanceof Collection) {
-            $trips = $trips->toArray();
+        else if ($rideOffers instanceof Collection) {
+            $rideOffers = $rideOffers->toArray();
         }
-        else if(!is_array($trips)) {
+        else if(!is_array($rideOffers)) {
             return $expose;
         }
         
-        foreach($trips as $k => $t) {
+        foreach($rideOffers as $k => $t) {
         
             $expose[$k]['id'] = $t->getId();
-            $expose[$k]['time'] = $t->getTime()->getTimestamp();
+            $expose[$k]['time'] = $t->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['destination'] = $t->getDestination();
-            $expose[$k]['group'] = $t->getGroup();
-            if ($t->getParent()) {
-                $expose[$k]['parent'] = $t->getParent()->getId();
-            }
-            $expose[$k]['offer_count'] = $t->getRideOffers()->count();
+            $expose[$k]['trip'] = $t->getTrip()->getId();
         }
         
         return $expose;
@@ -56,27 +52,27 @@ class TripModel extends AbstractModel
         return $this->_processForm($this->_entity, $parameters, $method);
     }
     
-    private function _processForm(Entity\Trip $trip, array $parameters, $method = "PUT")
+    private function _processForm(Entity\RideOffer $rideOffer, array $parameters, $method = "PUT")
     {
 
         $form = $this->_container
                      ->get('form.factory')
                      ->create(
-                        $this->_container->get('app.trip.form.type'), 
-                        $trip, 
+                        $this->_container->get('app.ride.offer.form.type'), 
+                        $rideOffer, 
                         array('method' => $method)
                     );
                     
         $form->submit($parameters, Request::METHOD_PUT !== $method);
         if ($form->isValid()) {
 
-            $trip = $form->getData();
+            $rideOffer = $form->getData();
             $em = $this->_container->get('doctrine')->getManager();
             
-            $em->persist($trip);
+            $em->persist($rideOffer);
             $em->flush();
             
-            return $trip;
+            return $rideOffer;
         }
         else{
             throw new InvalidFormException('Form validation failed', $form);

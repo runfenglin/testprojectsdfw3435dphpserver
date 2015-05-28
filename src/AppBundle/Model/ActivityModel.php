@@ -52,7 +52,7 @@ class ActivityModel extends AbstractModel
                 'name' => $act->getUser()->getName()
             );
             if ($act instanceof Entity\Checkin) {
-				$expose[$k]['user']['avatar'] = $act->getUser()->base64EncodedAvatar();
+                $expose[$k]['user']['avatar'] = $act->getUser()->base64EncodedAvatar();
                 $expose[$k]['type'] = Entity\Activity::CHECKIN;
                 $expose[$k]['checkin_reference'] = $act->getCheckinReference();
                 $expose[$k]['checkin_name'] = $act->getCheckinName();

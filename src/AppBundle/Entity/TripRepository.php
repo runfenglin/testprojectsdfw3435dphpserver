@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use AppBundle\Entity as Entity;
 
 /**
  * TripRepository
@@ -12,4 +13,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class TripRepository extends EntityRepository
 {
+
+    public function getRideRequestByUser(Entity\User $user)
+    {
+        return $this->_em
+                    ->createQueryBuilder()
+                    ->select('t')
+                    ->from($this->_entityName, 't')
+                    ->where('t.user = :User')
+                    ->andWhere('t.driver IS NULL')
+                    ->setParameter('User', $user)
+                    ->getQuery()
+                    ->getResult();
+    }
 }

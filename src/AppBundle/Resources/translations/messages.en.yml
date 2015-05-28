@@ -50,3 +50,14 @@ trip.time.passed: Time can not be a passed time
 trip.time.invalid: Time is not valid
 
 trip.visibility.invalid: Visibility is not valid
+
+rideOffer.departure.required: Departure is required
+rideOffer.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more
+rideOffer.departure.maxlength.invalid: Departure is too long. It should have {{ limit }} characters or less
+rideOffer.destination.required: Destination is required
+rideOffer.destination.minlength.invalid: Destination is too short. It should have {{ limit }} characters or more
+rideOffer.destination.maxlength.invalid: Destination is too long. It should have {{ limit }} characters or less
+rideOffer.time.required: Time is required
+rideOffer.time.passed: Time can not be a passed time
+rideOffer.time.invalid: Time is not valid
+rideOffer.accept.duplicate: You have already accepted this request

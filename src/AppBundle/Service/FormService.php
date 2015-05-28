@@ -1,12 +1,17 @@
 <?php
 namespace AppBundle\Service;
 
+use Symfony\Component\DependencyInjection\Container;
+
 class FormService
 {
     private $_environment;
+    
+    private $_container;
 
-    public function __construct($env) {
+    public function __construct($env, Container $container) {
         $this->_environment = $env;
+        $this->_container = $container;
     }
     
     public function getErrorMessages(\Symfony\Component\Form\Form $form)
@@ -20,7 +25,13 @@ class FormService
             foreach ($parameters as $var => $value) {
                 $template = str_replace($var, $value, $template);
             }
-
+            
+            if (0 === strpos($template, '@')) {
+                
+                $template = $this->_container
+                                 ->get('translator')
+                                 ->trans(substr($template, 1));
+            }
             $errors[$key] = $template;
         }
         if (count($form)) {

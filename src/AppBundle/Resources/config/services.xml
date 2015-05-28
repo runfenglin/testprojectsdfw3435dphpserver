@@ -10,6 +10,7 @@
         <parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
         <parameter key="app.activity.model.class">AppBundle\Model\ActivityModel</parameter>
         <parameter key="app.trip.model.class">AppBundle\Model\TripModel</parameter>
+        <parameter key="app.ride.offer.model.class">AppBundle\Model\RideOfferModel</parameter>
     </parameters>
     
     <services>
@@ -29,6 +30,7 @@
         
         <service id="form.service" class="AppBundle\Service\FormService">
             <argument type="string">%kernel.environment%</argument>
+            <argument type='service' id="service_container" />
         </service>
     
         <service id="curl.service" class="AppBundle\Service\CurlService">
@@ -48,6 +50,10 @@
         </service>
         
         <service id="app.trip.model" class="%app.trip.model.class%">
+            <argument type='service' id="service_container" />
+        </service>
+
+        <service id="app.ride.offer.model" class="%app.ride.offer.model.class%">
             <argument type='service' id="service_container" />
         </service>
         
@@ -81,6 +87,18 @@
         </service>
 
         <service id="app.trip.form.listener" class="AppBundle\Form\Listener\TripFormListener">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="security.context" />
+            <argument type='service' id="service_container" />
+        </service>
+
+        <service id="app.ride.offer.form.type" class="AppBundle\Form\RideOfferType">
+            <argument type="service" id="app.ride.offer.form.listener" />
+            <tag name="form.type" alias="triptype" />
+        </service>
+
+        <service id="app.ride.offer.form.listener" class="AppBundle\Form\Listener\RideOfferFormListener">
             <argument type="service" id="form.factory" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="security.context" />

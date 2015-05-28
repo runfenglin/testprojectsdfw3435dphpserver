@@ -2,11 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
-use AppBundle\Entity\Activity;
+use AppBundle\Entity;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use AppBundle\Exception\InvalidFormException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -167,6 +167,81 @@ class UserController extends FOSRestController
         $em->flush();
         
         return new JsonResponse(array('success' => TRUE), Response::HTTP_OK);
+    }
+    
+    /**
+     * Get User Request
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get user request",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/request")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function getRequestAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $tripRequests = $em->getRepository('AppBundle:Trip')
+                           ->getRideRequestByUser($user);
+        
+        return $this->get('app.trip.model')->expose($tripRequests);
+    }
+    
+    /**
+     * Accept Ride Requests
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Accept ride request",
+     *   requirements = {
+     *     {"name"="trip", "dataType"="integer", "required"=true, "description"="Request ID"},
+     *     {"name"="departure", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Pickup location"},
+     *     {"name"="destination", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Drop-off location"},
+     *     {"name"="time", "dataType"="string", "requirement"="/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/", "required"=true, "description"="Dropup time"},
+     *     {"name"="comment", "dataType"="string", "description"="More detail"},
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Post("/accept/request")
+     * @Rest\View()
+     *
+     * @return JSON
+     */ 
+    public function acceptRequestAction(Request $request)
+    {
+        try {
+            $rideOfferModel = $this->container
+                              ->get('app.ride.offer.model');
+                            
+            $rideOffer = $rideOfferModel->post($request->request->all());
+            
+            if ($rideOffer instanceof Entity\RideOffer) {
+                
+                return $rideOfferModel->exposeOne($rideOffer);
+            }
+        }
+        catch (InvalidFormException $exception) {
+            $errors = $this->container
+                           ->get('form.service')
+                           ->getErrorMessages($exception->getForm());
+            
+            return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
+        }
+        catch (\Exception $exception) {
+            return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
+        }
     }
     
 }

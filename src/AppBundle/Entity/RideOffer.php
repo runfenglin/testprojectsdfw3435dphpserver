@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints;
 
 /**
  * RideOffer
  *
  * @ORM\Table(name="tr_ride_offer")
  * @ORM\Entity(repositoryClass="AppBundle\Entity\RideOfferRepository")
+ * @Constraints\UniqueEntity(fields={"trip", "user"}, message="@rideOffer.accept.duplicate")
  */
 class RideOffer
 {
@@ -31,23 +33,30 @@ class RideOffer
     /**
      * @var string
      *
-     * @ORM\Column(name="departure", type="string", length=128)
+     * @ORM\Column(name="departure", type="string", length=128, nullable=TRUE)
      */
     private $departure;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="destination", type="string", length=128)
+     * @ORM\Column(name="destination", type="string", length=128, nullable=TRUE)
      */
     private $destination;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time", type="datetime")
+     * @ORM\Column(name="time", type="datetime", nullable=TRUE)
      */
     private $time;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=255, nullable=TRUE)
+     */
+    private $comment;
     
     /**
      * @var integer
@@ -267,5 +276,36 @@ class RideOffer
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return RideOffer
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string 
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+    
+    public function getTimestamp()
+    {
+        if ($this->getTime()) {
+            return $this->getTime()->getTimestamp();
+        }
+        return NULL;
     }
 }
