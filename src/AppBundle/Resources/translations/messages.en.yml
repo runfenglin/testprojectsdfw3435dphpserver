@@ -61,3 +61,4 @@ rideOffer.time.required: Time is required
 rideOffer.time.passed: Time can not be a passed time
 rideOffer.time.invalid: Time is not valid
 rideOffer.accept.duplicate: You have already accepted this request
+rideOffer.own.request: You can not accept your own request

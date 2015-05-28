@@ -154,8 +154,19 @@ class RideOfferFormListener implements EventSubscriberInterface
     
     public function postBind(FormEvent $event) 
     {
-
-            
+        $form = $event->getForm();
+        
+        $trip = $form->get('trip')->getData();
+         
+        if ($trip->getUser()->isEqualTo($this->_rideOfferEntity->getUser())) {
+            $form['trip']->addError(
+                new FormError(
+                    $this->_container
+                         ->get('translator')
+                         ->trans('rideOffer.own.request')
+                )
+            );
+        }
     }
 
 }
