@@ -66,3 +66,6 @@ rideOffer.time.passed: Time can not be a passed time
 rideOffer.time.invalid: Time is not valid
 rideOffer.accept.duplicate: You have already accepted this request
 rideOffer.own.request: You can not accept your own request
+
+rideOffer.departure.reference.invalid: Departure Google place ID is invalid
+rideOffer.destination.reference.invalid: Destination Google place ID is invalid

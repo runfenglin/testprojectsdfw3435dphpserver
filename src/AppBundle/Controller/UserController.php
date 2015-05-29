@@ -205,7 +205,9 @@ class UserController extends FOSRestController
      *   requirements = {
      *     {"name"="trip", "dataType"="integer", "required"=true, "description"="Request ID"},
      *     {"name"="departure", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Pickup location"},
+     *     {"name"="departureReference", "dataType"="string", "requirement"="/.{,255}/", "required"=true, "description"="Departure Google Place ID"},
      *     {"name"="destination", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Drop-off location"},
+     *     {"name"="destinationReference", "dataType"="string", "requirement"="/.{,255}/", "required"=true, "description"="Destination Google Place ID"},
      *     {"name"="time", "dataType"="string", "requirement"="/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/", "required"=true, "description"="Dropup time"},
      *     {"name"="comment", "dataType"="string", "description"="More detail"},
      *   },

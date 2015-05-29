@@ -143,6 +143,34 @@ class RideOfferFormListener implements EventSubscriberInterface
                 ),
                 'required' => TRUE
             )
+        )->add(
+            'departureReference',
+            'text',
+            array(
+                'constraints' => array(
+
+                    new Constraint\Regex(
+                        array(
+                            'pattern' => '/[a-z0-9\-\_]{3,255}/i',
+                            'message' => $this->_translator->trans('rideOffer.departure.reference.invalid')
+                        )
+                    )
+                )
+            )
+        )->add(
+            'destinationReference',
+            'text',
+            array(
+                'constraints' => array(
+
+                    new Constraint\Regex(
+                        array(
+                            'pattern' => '/[a-z0-9\-\_]{3,255}/i',
+                            'message' => $this->_translator->trans('rideOffer.destination.reference.invalid')
+                        )
+                    )
+                )
+            )
         );
         
     }

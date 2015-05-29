@@ -40,7 +40,9 @@ class RideOfferModel extends AbstractModel
             $expose[$k]['id'] = $t->getId();
             $expose[$k]['time'] = $t->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
+            $expose[$k]['departure_reference'] = $t->getDepartureReference();
             $expose[$k]['destination'] = $t->getDestination();
+			$expose[$k]['destination_reference'] = $t->getDestinationReference();
             $expose[$k]['trip'] = $t->getTrip()->getId();
         }
         

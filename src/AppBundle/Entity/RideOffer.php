@@ -37,12 +37,26 @@ class RideOffer
      */
     private $departure;
 
+	    /**
+     * @var string
+     *
+     * @ORM\Column(name="departure_reference", type="string", length=255, nullable=TRUE)
+     */
+    private $departureReference;
+	
     /**
      * @var string
      *
      * @ORM\Column(name="destination", type="string", length=128, nullable=TRUE)
      */
     private $destination;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="destination_reference", type="string", length=255, nullable=TRUE)
+     */
+    private $destinationReference;
 
     /**
      * @var \DateTime
@@ -307,5 +321,51 @@ class RideOffer
             return $this->getTime()->getTimestamp();
         }
         return NULL;
+    }
+
+    /**
+     * Set departureReference
+     *
+     * @param string $departureReference
+     * @return RideOffer
+     */
+    public function setDepartureReference($departureReference)
+    {
+        $this->departureReference = $departureReference;
+
+        return $this;
+    }
+
+    /**
+     * Get departureReference
+     *
+     * @return string 
+     */
+    public function getDepartureReference()
+    {
+        return $this->departureReference;
+    }
+
+    /**
+     * Set destinationReference
+     *
+     * @param string $destinationReference
+     * @return RideOffer
+     */
+    public function setDestinationReference($destinationReference)
+    {
+        $this->destinationReference = $destinationReference;
+
+        return $this;
+    }
+
+    /**
+     * Get destinationReference
+     *
+     * @return string 
+     */
+    public function getDestinationReference()
+    {
+        return $this->destinationReference;
     }
 }
