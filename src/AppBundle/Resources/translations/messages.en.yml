@@ -50,6 +50,10 @@ trip.time.passed: Time can not be a passed time
 trip.time.invalid: Time is not valid
 
 trip.visibility.invalid: Visibility is not valid
+trip.departure.reference.required: Departure Google place ID is required
+trip.destination.reference.required: Destination Google place ID is required
+trip.departure.reference.invalid: Departure Google place ID is invalid
+trip.destination.reference.invalid: Destination Google place ID is invalid
 
 rideOffer.departure.required: Departure is required
 rideOffer.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more

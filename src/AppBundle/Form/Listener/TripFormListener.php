@@ -154,6 +154,38 @@ class TripFormListener implements EventSubscriberInterface
                 ),
                 'invalid_message' => $this->_translator->trans('trip.visibility.invalid')
             )
+        )->add(
+            'departureReference',
+            'text',
+            array(
+                'constraints' => array(
+                    new Constraint\NotBlank(
+                        array('message'=>$this->_translator->trans('trip.departure.reference.required'))
+                    ),
+                    new Constraint\Regex(
+                        array(
+                            'pattern' => '/[a-z0-9\-\_]{3,255}/i',
+                            'message' => $this->_translator->trans('trip.departure.reference.invalid')
+                        )
+                    )
+                )
+            )
+        )->add(
+            'destinationReference',
+            'text',
+            array(
+                'constraints' => array(
+                    new Constraint\NotBlank(
+                        array('message'=>$this->_translator->trans('trip.destination.reference.required'))
+                    ),
+                    new Constraint\Regex(
+                        array(
+                            'pattern' => '/[a-z0-9\-\_]{3,255}/i',
+                            'message' => $this->_translator->trans('trip.destination.reference.invalid')
+                        )
+                    )
+                )
+            )
         );
         
     }

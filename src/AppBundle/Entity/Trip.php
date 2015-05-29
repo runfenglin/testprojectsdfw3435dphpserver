@@ -34,10 +34,24 @@ class Trip
     /**
      * @var string
      *
+     * @ORM\Column(name="departure_reference", type="string", length=255)
+     */
+    private $departureReference;
+	
+    /**
+     * @var string
+     *
      * @ORM\Column(name="destination", type="string", length=128)
      */
     private $destination;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="destination_reference", type="string", length=255)
+     */
+    private $destinationReference;
+	
     /**
      * @var \DateTime
      *
@@ -543,5 +557,51 @@ class Trip
     public function getGroupUsers()
     {
         return $this->groupUsers;
+    }
+
+    /**
+     * Set departureReference
+     *
+     * @param string $departureReference
+     * @return Trip
+     */
+    public function setDepartureReference($departureReference)
+    {
+        $this->departureReference = $departureReference;
+
+        return $this;
+    }
+
+    /**
+     * Get departureReference
+     *
+     * @return string 
+     */
+    public function getDepartureReference()
+    {
+        return $this->departureReference;
+    }
+
+    /**
+     * Set destinationReference
+     *
+     * @param string $destinationReference
+     * @return Trip
+     */
+    public function setDestinationReference($destinationReference)
+    {
+        $this->destinationReference = $destinationReference;
+
+        return $this;
+    }
+
+    /**
+     * Get destinationReference
+     *
+     * @return string 
+     */
+    public function getDestinationReference()
+    {
+        return $this->destinationReference;
     }
 }
