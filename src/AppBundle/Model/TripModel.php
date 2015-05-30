@@ -40,9 +40,9 @@ class TripModel extends AbstractModel
             $expose[$k]['id'] = $t->getId();
             $expose[$k]['time'] = $t->getTime()->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
-			$expose[$k]['departure_reference'] = $t->getDepartureReference();
+            $expose[$k]['departure_reference'] = $t->getDepartureReference();
             $expose[$k]['destination'] = $t->getDestination();
-			$expose[$k]['destination_reference'] = $t->getDestinationReference();
+            $expose[$k]['destination_reference'] = $t->getDestinationReference();
             $expose[$k]['group'] = $t->getGroup();
             if ($t->getParent()) {
                 $expose[$k]['parent'] = $t->getParent()->getId();

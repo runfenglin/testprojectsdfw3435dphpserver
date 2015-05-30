@@ -150,3 +150,10 @@ nelmio_api_doc:
             method: format_param
             
             default_format: json
+
+rms_push_notifications:
+    ios:
+        timeout: 60
+        sandbox: true
+        pem: "../src/AppBundle/Notifications/IOS/ck.pem"
+        passphrase: Glenfield

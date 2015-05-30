@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use RMS\PushNotificationsBundle\Message\iOSMessage;
+
 use AppBundle\Entity\Token;
 
 class DemoController extends Controller
@@ -171,5 +173,18 @@ class DemoController extends Controller
 		}
 		
 		return array();
+	}
+	
+	/**
+     * @Route("/ios/push", name="demo_ios_push")
+     * @Template()
+     */	
+	public function iosPushAction()
+	{
+		$message = new iOSMessage();
+		$message->setMessage('Oh my! A push notification!');
+		$message->setDeviceIdentifier('test012fasdf482asdfd63f6d7bc6d4293aedd5fb448fe505eb4asdfef8595a7');
+		$this->container->get('rms_push_notifications')->send($message);
+		return new Response('Push notification send!');
 	}
 }

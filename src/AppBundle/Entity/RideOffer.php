@@ -37,13 +37,13 @@ class RideOffer
      */
     private $departure;
 
-	    /**
+        /**
      * @var string
      *
      * @ORM\Column(name="departure_reference", type="string", length=255, nullable=TRUE)
      */
     private $departureReference;
-	
+    
     /**
      * @var string
      *

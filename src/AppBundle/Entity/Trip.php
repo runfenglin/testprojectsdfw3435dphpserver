@@ -37,7 +37,7 @@ class Trip
      * @ORM\Column(name="departure_reference", type="string", length=255)
      */
     private $departureReference;
-	
+    
     /**
      * @var string
      *
@@ -51,7 +51,7 @@ class Trip
      * @ORM\Column(name="destination_reference", type="string", length=255)
      */
     private $destinationReference;
-	
+    
     /**
      * @var \DateTime
      *
