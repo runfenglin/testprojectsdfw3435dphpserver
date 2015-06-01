@@ -20,42 +20,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class CheckinController extends FOSRestController
 {
-    /**
-     * This Action has been moved to User::CheckinAction
-     *
-     * Get Checkin List
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Get user checkin list",
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     400 = "Returned when failure",
-     *     403 = "Returned when token verification failure"
-     *   }
-     * )
-     * @Rest\Get("/list")
-     * @Rest\View()
-     *
-     * @return JSON
-     *
-    public function listAction(Request $request)
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        try{
-            $em = $this->getDoctrine()->getManager();
-            $checkins = $em->getRepository('AppBundle:Checkin')
-                           ->findBy(array('user' => $user), array('created' => 'DESC'));
-            
-            return $this->container->get('app.activity.model')->expose($checkins);
-            
-        }
-        catch(\Exception $e) {
-            return new JsonResponse(array("error" => $e->getMessage()), Response::HTTP_BAD_REQUEST);
-        }
-    }
-     */
      
     /**
      * Get Specific Checkin

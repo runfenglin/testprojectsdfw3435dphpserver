@@ -71,4 +71,33 @@ class TripController extends FOSRestController
             return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
+	
+    /**
+     * Get Trip Requests of Friends and Friends' Friends
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get trip requests of friends and friends' friends",   
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure"
+     *   }
+     * )
+     * @Rest\Get("/request")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+	public function requestAction(Request $request)
+	{
+		$user = $this->container->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $friendRequests = $em->getRepository('AppBundle:Trip')
+                           ->getFriendRequestByUser($user);
+        
+        return $this->get('app.trip.model')->expose($friendRequests);
+	}
+	
 }

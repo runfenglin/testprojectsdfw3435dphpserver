@@ -132,7 +132,7 @@ class Trip
     private $driver;
     
     /**
-     * @ORM\OneToMany(targetEntity="RideOffer", mappedBy="trip")
+     * @ORM\OneToMany(targetEntity="RideOffer", mappedBy="trip", cascade={"persist", "remove"}, orphanRemoval=true)
      **/
     private $rideOffers;
 

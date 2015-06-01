@@ -26,4 +26,27 @@ class TripRepository extends EntityRepository
                     ->getQuery()
                     ->getResult();
     }
+    
+    public function getFriendRequestByUser(Entity\User $user)
+    {
+        $ffriendReqs = $this->_em
+                           ->createQueryBuilder()
+                           ->select('t')
+                           ->from($this->_entityName, 't')
+                           ->join('t.user', 'u')
+                           ->leftJoin('u.myFriends', 'mf')
+                           ->leftJoin('u.friendsWithMe', 'fm')
+                           ->leftJoin('mf.myFriends', 'mfmf')
+                           ->leftJoin('mf.friendsWithMe', 'fmmf')
+                           ->leftJoin('fm.myFriends', 'mffm')
+                           ->leftJoin('fm.friendsWithMe', 'fmfm')
+                           ->where('t.driver IS NULL')
+                           ->andWhere('(mf = :User OR fm = :User) OR ((mfmf = :User OR fmmf = :User OR mffm = :User OR fmfm = :User) AND t.visibility = ' . Trip::CIRCLE_FRIEND_OF_FRIEND . ') OR t.visibility = ' . Trip::CIRCLE_PUBLIC)               
+                           ->andWhere('t.group = false')
+                           ->setParameter('User', $user)
+                           ->orderBy('t.created', 'DESC')
+                           ->getQuery()//->getSQL();var_dump($friendReqs);die;
+                           ->getResult();
+        return $ffriendReqs;
+    }
 }

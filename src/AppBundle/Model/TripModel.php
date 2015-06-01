@@ -38,6 +38,18 @@ class TripModel extends AbstractModel
         foreach($trips as $k => $t) {
         
             $expose[$k]['id'] = $t->getId();
+            $expose[$k]['user'] = array(
+                'id' => $t->getUser()->getId(),
+                'name' => $t->getUser()->getName(),
+                'avatar' => $t->getUser()->getAvatar()
+            );
+			if ($t->getDriver()){
+				$expose[$k]['driver'] = array(
+					'id' => $t->getDriver()->getId(),
+					'name' => $t->getDriver()->getName(),
+					'avatar' => $t->getDriver()->getAvatar()
+				);
+			}
             $expose[$k]['time'] = $t->getTime()->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['departure_reference'] = $t->getDepartureReference();
@@ -85,5 +97,34 @@ class TripModel extends AbstractModel
         }
 
         return FALSE;
+    }
+    
+    public function pickOffer(Entity\RideOffer $rideOffer)
+    {
+        $trip = $this->getEntity();
+        $mergeElements = array(
+            'Departure',
+            'DepartureReference',
+            'Destination',
+            'DestinationReference',
+            'Time',
+            'Comment'
+        );
+        
+        foreach($mergeElements as $key => $el) {
+            
+            if ($value = $rideOffer->{'get' . $el}()) {
+                $trip->{'set' . $el}($value);
+            }
+        }
+
+        $trip->setDriver($rideOffer->getUser());
+        $trip->getRideOffers()->clear(); 
+        
+        $em = $this->_container->get('doctrine')->getManager();
+        $em->persist($trip);
+        $em->flush();
+    
+        return $this;
     }
 }

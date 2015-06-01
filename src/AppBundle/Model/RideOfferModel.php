@@ -38,6 +38,11 @@ class RideOfferModel extends AbstractModel
         foreach($rideOffers as $k => $t) {
         
             $expose[$k]['id'] = $t->getId();
+			$expose[$k]['user'] = array(
+				'id' => $t->getUser()->getId(),
+				'name' => $t->getUser()->getName(),
+				'avatar' => $t->getUser()->getAvatar()
+			);
             $expose[$k]['time'] = $t->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['departure_reference'] = $t->getDepartureReference();

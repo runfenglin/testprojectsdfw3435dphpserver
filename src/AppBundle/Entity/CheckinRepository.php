@@ -21,14 +21,13 @@ class CheckinRepository extends EntityRepository
                     ->select('a')
                     ->from($this->_entityName, 'a')
                     ->join('a.user', 'u')
-                    ->leftJoin('u.myFriends', 'mf', 'with', 'mf.id = :userId')
+                    ->join('u.myFriends', 'mf', 'with', 'mf.id = :userId')
                     ->setParameter('userId', $user->getId())
                     ->groupBy('a.id')
                     ->orderBy('a.created', 'DESC')
-                    ->getQuery()
-                //    ->getQuery()->getSQL();
-                    ->getResult();
+                    ->getQuery()->getSQL();var_dump($qb);die;
+                //    ->getResult();
         return $qb;
-                //var_dump($qb);die;
+
     }
 }

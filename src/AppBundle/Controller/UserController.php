@@ -6,6 +6,7 @@ use AppBundle\Entity;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use AppBundle\Exception\InvalidFormException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -246,4 +247,114 @@ class UserController extends FOSRestController
         }
     }
     
+    /**
+     * Get Ride Offers on specific request
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get ride offers on specific request",
+     *   requirements = {
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Ride request ID"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure",
+     *     403 = "Returned when ride requess access deny"   
+     *   }
+     * )
+     * @Rest\Get("/request/{id}/offers")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function requestOfferAction(Request $request, $id)
+    {
+        try {
+            $id = (int) $id;
+            
+            $user = $this->container->get('security.context')->getToken()->getUser();
+
+            $em = $this->getDoctrine()->getManager();
+            $tripRequest = $em->getRepository('AppBundle:Trip')
+                           ->find($id);
+            
+            if (!$tripRequest) {
+                $error = $this->get('translator')->trans('rideRequest.notfound');
+                throw new NotFoundHttpException($error);
+            }
+
+            if (!$tripRequest->getUser()->isEqualTo($user)) {
+                $error = $this->get('translator')->trans('rideRequest.access.deny');
+                throw new AccessDeniedHttpException($error);
+            }
+            
+            return $this->get('app.ride.offer.model')
+                        ->expose($tripRequest->getRideOffers());
+        }
+        catch(\RuntimeException $exception) {
+            return new JsonResponse(array('error' => $exception->getMessage()), $exception->getStatusCode());
+        }
+        catch(\Exception $exception) {
+            return new JsonResponse(array('error' => $exception->getMessage()), $exception->getCode());
+        }
+        
+    }
+    
+    /**
+     * Pick Driver
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Pick driver",
+     *   requirements = {
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Ride offer ID"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure"
+     *   }
+     * )
+     * @Rest\Get("/pick/driver/{id}")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function pickDriverAction(Request $request, $id)
+    {
+        try {
+            $id = (int) $id;
+            
+            $user = $this->container->get('security.context')->getToken()->getUser();
+
+            $em = $this->getDoctrine()->getManager();
+            $rideOffer = $em->getRepository('AppBundle:RideOffer')
+                           ->find($id);
+            
+            if (!$rideOffer) {
+                $error = $this->get('translator')->trans('rideOffer.notfound');
+                throw new NotFoundHttpException($error);
+            }
+            
+            $rideRequest = $rideOffer->getTrip();
+            
+            if (!$rideRequest->getUser()->isEqualTo($user)) {
+                $error = $this->get('translator')->trans('rideOffer.access.deny');
+                throw new AccessDeniedHttpException($error);
+            }
+            
+            return $this->get('app.trip.model')
+                        ->setEntity($rideRequest)
+                        ->pickOffer($rideOffer)
+                        ->expose();
+        }
+        catch(\RuntimeException $exception) {
+            return new JsonResponse(array('error' => $exception->getMessage()), $exception->getStatusCode());
+        }
+        catch(\Exception $exception) {
+            return new JsonResponse(array('error' => $exception->getMessage()), $exception->getCode());
+        }
+        
+    }
 }
