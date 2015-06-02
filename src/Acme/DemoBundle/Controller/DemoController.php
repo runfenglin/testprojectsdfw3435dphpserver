@@ -4,6 +4,7 @@ namespace Acme\DemoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Acme\DemoBundle\Form\ContactType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -181,10 +182,18 @@ class DemoController extends Controller
      */	
 	public function iosPushAction()
 	{
-		$message = new iOSMessage();
-		$message->setMessage('Oh my! A push notification!');
-		$message->setDeviceIdentifier('test012fasdf482asdfd63f6d7bc6d4293aedd5fb448fe505eb4asdfef8595a7');
-		$this->container->get('rms_push_notifications')->send($message);
-		return new Response('Push notification send!');
+		try {
+			$message = new iOSMessage();
+			$message->setMessage('Oh my! A push notification!');
+			$message->setDeviceIdentifier('test012fasdf482asdfd63f6d7bc6d4293aedd5fb448fe505eb4asdfef8595a7');
+			$this->container->get('rms_push_notifications')->send($message);
+			return new Response('Push notification send!');
+		}
+		catch(\RuntimeException $e) {
+			return new Response($e->getMessage());
+		}
+		catch(\Exception $e) {
+			return new Response($e->getMessage());
+		}
 	}
 }
