@@ -38,9 +38,10 @@ class LogoutController extends FOSRestController
     public function logoutAction(Request $request)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
-
+        $user->setDeviceToken(NULL);
+		$user->setToken(NULL);
         $em = $this->getDoctrine()->getManager();
-        $em->remove($user->getToken());
+        $em->persist($user);
         $em->flush();
         
         return array('success' => true);

@@ -31,6 +31,20 @@ class UserModel extends AbstractModel
         return $updated;
     }
     
+    public function resetBadge(Entity\User $user = NULL)
+    {
+        if (!$user) {
+            $user = $this->getEntity();
+        }
+        
+        $user->setBadge(0);
+        $em = $this->_container->get('doctrine')->getManager();
+        $em->persist($user);
+        $em->flush();
+        
+        return $this;
+    }
+    
     protected function _getUpdatedComment(Entity\User $user)
     {
         $items = array();

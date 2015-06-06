@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Token
  *
- * @ORM\Table(name="tr_token", uniqueConstraints={@ORM\UniqueConstraint(name="user_idx", columns={"user_id"}), @ORM\UniqueConstraint(name="key_idx", columns={"api_key"})})
+ * @ORM\Table(name="tr_token", uniqueConstraints={ @ORM\UniqueConstraint(name="key_idx", columns={"api_key"})})
  * @ORM\Entity
  */
 class Token
@@ -22,13 +22,6 @@ class Token
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="api_key", type="string", length=32)
@@ -36,10 +29,9 @@ class Token
     private $key;
 
 
-	/**
-	 * @ORM\OneToOne(targetEntity="User", inversedBy="token", cascade={"persist"})
-	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-	 */
+    /**
+     * @ORM\OneToOne(targetEntity="User", mappedBy="token")
+     */
 	private $user;
 
     /**
@@ -50,29 +42,6 @@ class Token
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return Token
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     /**

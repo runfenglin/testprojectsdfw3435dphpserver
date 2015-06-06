@@ -57,7 +57,7 @@ class TripController extends FOSRestController
             
             if ($trip instanceof Entity\Trip) {
                 
-                return $tripModel->expose($trip);
+                return $tripModel->pushCreateNotification($trip)->exposeOne($trip);
             }
         }
         catch (InvalidFormException $exception) {
@@ -71,7 +71,7 @@ class TripController extends FOSRestController
             return new JsonResponse(array('error' => $exception->getMessage()), Response::HTTP_BAD_REQUEST);
         }
     }
-	
+    
     /**
      * Get Trip Requests of Friends and Friends' Friends
      *
@@ -89,15 +89,15 @@ class TripController extends FOSRestController
      *
      * @return JSON
      */
-	public function requestAction(Request $request)
-	{
-		$user = $this->container->get('security.context')->getToken()->getUser();
+    public function requestAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
 
         $em = $this->getDoctrine()->getManager();
         $friendRequests = $em->getRepository('AppBundle:Trip')
                            ->getFriendRequestByUser($user);
         
         return $this->get('app.trip.model')->expose($friendRequests);
-	}
-	
+    }
+    
 }

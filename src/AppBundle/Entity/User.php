@@ -28,6 +28,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     private $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="token_id", type="integer", nullable=TRUE)
+     */
+    private $tokenId;	
+	
+    /**
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=40)
@@ -91,6 +98,13 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     private $phone;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="badge", type="integer", nullable=TRUE)
+     */
+    private $badge;
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_at", type="datetime")
@@ -114,7 +128,7 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="device_token", type="string", length=64)
+     * @ORM\Column(name="device_token", type="string", length=64, nullable=TRUE)
      */
     private $deviceToken;
     
@@ -138,9 +152,10 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      */
     private $likes;
     
-    /**
-     * @ORM\OneToOne(targetEntity="Token", mappedBy="user", cascade={"persist", "remove"})
-     */
+	/**
+	 * @ORM\OneToOne(targetEntity="Token", inversedBy="user", cascade={"persist", "remove"}, orphanRemoval=TRUE)
+	 * @ORM\JoinColumn(name="token_id", referencedColumnName="id")
+	 */
     private $token;
     
     /**
@@ -999,5 +1014,51 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
     public function getDeviceToken()
     {
         return $this->deviceToken;
+    }
+
+    /**
+     * Set badge
+     *
+     * @param integer $badge
+     * @return User
+     */
+    public function setBadge($badge)
+    {
+        $this->badge = $badge;
+
+        return $this;
+    }
+
+    /**
+     * Get badge
+     *
+     * @return integer 
+     */
+    public function getBadge()
+    {
+        return $this->badge;
+    }
+
+    /**
+     * Set tokenId
+     *
+     * @param integer $tokenId
+     * @return User
+     */
+    public function setTokenId($tokenId)
+    {
+        $this->tokenId = $tokenId;
+
+        return $this;
+    }
+
+    /**
+     * Get tokenId
+     *
+     * @return integer 
+     */
+    public function getTokenId()
+    {
+        return $this->tokenId;
     }
 }

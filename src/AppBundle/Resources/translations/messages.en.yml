@@ -54,6 +54,8 @@ trip.departure.reference.required: Departure Google place ID is required
 trip.destination.reference.required: Destination Google place ID is required
 trip.departure.reference.invalid: Departure Google place ID is invalid
 trip.destination.reference.invalid: Destination Google place ID is invalid
+trip.create.push.notification: %requester% requests a trip offer from %departure% to %destination%
+trip.pick.push.notification: %requester% has accepted your offer
 
 rideOffer.departure.required: Departure is required
 rideOffer.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more
@@ -70,6 +72,6 @@ rideOffer.departure.reference.invalid: Departure Google place ID is invalid
 rideOffer.destination.reference.invalid: Destination Google place ID is invalid
 rideOffer.notfound: The ride offer is not found
 rideOffer.access.deny: You can only pick driver for your own ride request
-
+rideOffer.push.notification: %driver% has accepted your ride request to %destination%
 rideRequest.notfound: The ride request is not found
 rideRequest.access.deny: User only access the ride offers to their own ride request

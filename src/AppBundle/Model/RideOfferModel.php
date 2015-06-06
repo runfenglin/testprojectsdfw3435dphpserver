@@ -87,4 +87,30 @@ class RideOfferModel extends AbstractModel
 
         return FALSE;
     }
+	
+	public function pushNotification(Entity\RideOffer $rideOffer)
+	{
+		if ($rideOffer->getUser() instanceof Entity\User
+		    && $rideOffer->getTrip() instanceof Entity\Trip) {
+
+            $em = $this->_container->get('doctrine')->getManager();
+            
+            $pushMessage = $this->_container
+                                ->get('translator')
+                                ->trans(
+                                    'rideOffer.push.notification', 
+                                    array(
+                                        '%driver%' => $rideOffer->getUser()
+                                                                ->getName(),
+                                        '%destination%' => $rideOffer->getTrip()->getDestination()
+                                    )
+                                );
+            $this->_container
+                         ->get('push.service')
+                         ->push(array($rideOffer->getTrip()->getUser()), $pushMessage);
+            
+        }
+        
+        return $this;
+	}
 }

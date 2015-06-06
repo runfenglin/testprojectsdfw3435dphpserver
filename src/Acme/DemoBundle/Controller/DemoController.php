@@ -15,6 +15,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use RMS\PushNotificationsBundle\Message\iOSMessage;
 
+use RMS\PushNotificationsBundle\Service\Notifications;
+use RMS\PushNotificationsBundle\Device\Types;
+
 use AppBundle\Entity\Token;
 
 class DemoController extends Controller
@@ -25,27 +28,27 @@ class DemoController extends Controller
      */
     public function indexAction()
     {
-		$router = $this->container->get('router');
-		$collection = $router->getRouteCollection();
-		$allRoutes = $collection->all();
-		
-		$routes = array();
+        $router = $this->container->get('router');
+        $collection = $router->getRouteCollection();
+        $allRoutes = $collection->all();
+        
+        $routes = array();
 
-		foreach ($allRoutes as $name => $params)
-		{
-			if (0 !== strpos($name, 'demo_')) {
-				continue;
-			}
-			
-			$defaults = $params->getDefaults();
+        foreach ($allRoutes as $name => $params)
+        {
+            if (0 !== strpos($name, 'demo_')) {
+                continue;
+            }
+            
+            $defaults = $params->getDefaults();
 
-			if (isset($defaults['_controller']))
-			{
-				$routes[$name]= $params->getPath();
-			}
-		}
-		
-	//	return new JsonResponse($routes);
+            if (isset($defaults['_controller']))
+            {
+                $routes[$name]= $params->getPath();
+            }
+        }
+        
+    //  return new JsonResponse($routes);
         return array('routes' => $routes);
     }
 
@@ -81,31 +84,31 @@ class DemoController extends Controller
         return array('form' => $form->createView());
     }
 
-	/**
+    /**
      * @Route("/friend/list", name="demo_facebook_friend_list")
      * @Template()
-     */	
-	public function friendListAction()
-	{
-		$em = $this->getDoctrine()->getManager();
-		$tokens = $em->getRepository('AppBundle:Token')
-				   ->findAll();
-		return array('tokens' => $tokens);
-	}
-	
-	/**
+     */ 
+    public function friendListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tokens = $em->getRepository('AppBundle:Token')
+                   ->findAll();
+        return array('tokens' => $tokens);
+    }
+    
+    /**
      * @Route("/profile", name="demo_profile")
      * @Template()
-     */	
-	public function profileAction()
-	{
-		$em = $this->getDoctrine()->getManager();
-		$tokens = $em->getRepository('AppBundle:Token')
-				   ->findAll();
-		return array('tokens' => $tokens);
-	}
-	
-	/**
+     */ 
+    public function profileAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tokens = $em->getRepository('AppBundle:Token')
+                   ->findAll();
+        return array('tokens' => $tokens);
+    }
+    
+    /**
      * @Route("/register", name="demo_registration")
      * @Template()
      */
@@ -114,7 +117,7 @@ class DemoController extends Controller
         return array();
     }
 
-	/**
+    /**
      * @Route("/login/facebook", name="demo_login_facebook")
      * @Template()
      */
@@ -122,8 +125,8 @@ class DemoController extends Controller
     {
         return array();
     }
-	
-	/**
+    
+    /**
      * @Route("/login/phone", name="demo_login_phone")
      * @Template()
      */
@@ -132,68 +135,85 @@ class DemoController extends Controller
         return array();
     }
 
-	/**
+    /**
      * @Route("/logout", name="demo_logout")
      * @Template()
      */
     public function logoutAction()
     {
-		$em = $this->getDoctrine()->getManager();
-		$tokens = $em->getRepository('AppBundle:Token')
-				   ->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $tokens = $em->getRepository('AppBundle:Token')
+                   ->findAll();
         return array('tokens' => $tokens);
     }
 
-	/**
+    /**
      * @Route("/profile/picture", name="demo_profile_picture")
      * @Template()
-     */	
-	public function profilePictureAction(Request $request)
-	{
-		if ($base64 = $request->request->get('base64', NULL)) {
-		
-			$data = base64_decode($base64);
-			
-			$tmp = tempnam(sys_get_temp_dir(), 'picture.jpg');
-			
-			$fp = fopen($tmp, "w+");
-			fwrite($fp, $data);
-			fclose($fp);
+     */ 
+    public function profilePictureAction(Request $request)
+    {
+        if ($base64 = $request->request->get('base64', NULL)) {
+        
+            $data = base64_decode($base64);
+            
+            $tmp = tempnam(sys_get_temp_dir(), 'picture.jpg');
+            
+            $fp = fopen($tmp, "w+");
+            fwrite($fp, $data);
+            fclose($fp);
                 
-			$finfo = finfo_open(FILEINFO_MIME_TYPE);
-			
-			$mimeType = finfo_file($finfo, $tmp);
-			
-			header('Content-type: ' . $mimeType);
-			header('Content-length: ' . filesize($tmp));
-			header('Content-Disposition: filename="picture.jpg"');
-			header('X-Pad: avoid browser bug');
-			header('Cache-Control: no-cache');
-			readfile($tmp);
-			exit;
-		}
-		
-		return array();
-	}
-	
-	/**
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            
+            $mimeType = finfo_file($finfo, $tmp);
+            
+            header('Content-type: ' . $mimeType);
+            header('Content-length: ' . filesize($tmp));
+            header('Content-Disposition: filename="picture.jpg"');
+            header('X-Pad: avoid browser bug');
+            header('Cache-Control: no-cache');
+            readfile($tmp);
+            exit;
+        }
+        
+        return array();
+    }
+    
+    /**
      * @Route("/ios/push", name="demo_ios_push")
      * @Template()
-     */	
-	public function iosPushAction()
-	{
-		try {
-			$message = new iOSMessage();
-			$message->setMessage('Oh my! A push notification!');
-			$message->setDeviceIdentifier('test012fasdf482asdfd63f6d7bc6d4293aedd5fb448fe505eb4asdfef8595a7');
-			$this->container->get('rms_push_notifications')->send($message);
-			return new Response('Push notification send!');
-		}
-		catch(\RuntimeException $e) {
-			return new Response($e->getMessage());
-		}
-		catch(\Exception $e) {
-			return new Response($e->getMessage());
-		}
-	}
+     */ 
+    public function iosPushAction()
+    {
+        try {
+        /*  $message = new iOSMessage();
+            $message->setMessage('Oh my! A push notification!');
+            $message->setAPSSound('default');
+            $message->setAPSBadge('1');
+            $message->setDeviceIdentifier('7ca220805c093f857bf94235dafc2718536180ecb9cd1196200163af7b673a5d');
+            $this->container->get('rms_push_notifications')->send($message);
+            return new Response('Push notification send!');*/
+            
+            $notifications = $this->container
+                                ->get('rms_push_notifications');
+            
+            for($i = 0; $i < 5; $i++){
+                $message = new iOSMessage();
+                $message->setMessage('TU Test User One requests a ride request from 659 east coast road browns bay to 12 Liverpool Stree Auckland city center');
+                $message->setAPSSound('default');
+                $message->setAPSBadge($i + 1);
+                $message->setDeviceIdentifier('7ca220805c093f857bf94235dafc2718536180ecb9cd1196200163af7b673a5d');
+                $notifications->queue($message);
+            }
+            
+            $notifications->flush();
+            return new Response('Push notification send!');
+        }
+        catch(\RuntimeException $e) {
+            return new Response($e->getMessage());
+        }
+        catch(\Exception $e) {
+            return new Response($e->getMessage());
+        }
+    }
 }

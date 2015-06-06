@@ -5,6 +5,10 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="push.service.class">AppBundle\Service\PushService</parameter>
+        <parameter key="form.service.class">AppBundle\Service\FormService</parameter>
+        <parameter key="curl.service.class">AppBundle\Service\CurlService</parameter>
+        <parameter key="social.service.class">AppBundle\Service\SocialService</parameter>
         <parameter key="user.entity">AppBundle\Entity\User</parameter>
         <parameter key="app.exception.listener.class">AppBundle\EventListener\ExceptionListener</parameter>
         <parameter key="app.user.model.class">AppBundle\Model\UserModel</parameter>
@@ -28,17 +32,22 @@
             <argument type="service" id="service_container" />
         </service>
         
-        <service id="form.service" class="AppBundle\Service\FormService">
+        <service id="form.service" class="%form.service.class%">
             <argument type="string">%kernel.environment%</argument>
             <argument type='service' id="service_container" />
         </service>
     
-        <service id="curl.service" class="AppBundle\Service\CurlService">
+        <service id="curl.service" class="%curl.service.class%">
             <argument type="string">%kernel.environment%</argument>
         </service>
 
-        <service id="social.service" class="AppBundle\Service\SocialService">
+        <service id="social.service" class="%social.service.class%">
             <argument type="service" id="service_container" />
+        </service>
+        
+        <service id="push.service" class="%push.service.class%">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="rms_push_notifications" />
         </service>
         
         <service id="app.user.model" class="%app.user.model.class%">

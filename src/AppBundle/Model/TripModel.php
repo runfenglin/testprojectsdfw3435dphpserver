@@ -43,13 +43,13 @@ class TripModel extends AbstractModel
                 'name' => $t->getUser()->getName(),
                 'avatar' => $t->getUser()->getAvatar()
             );
-			if ($t->getDriver()){
-				$expose[$k]['driver'] = array(
-					'id' => $t->getDriver()->getId(),
-					'name' => $t->getDriver()->getName(),
-					'avatar' => $t->getDriver()->getAvatar()
-				);
-			}
+            if ($t->getDriver()){
+                $expose[$k]['driver'] = array(
+                    'id' => $t->getDriver()->getId(),
+                    'name' => $t->getDriver()->getName(),
+                    'avatar' => $t->getDriver()->getAvatar()
+                );
+            }
             $expose[$k]['time'] = $t->getTime()->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['departure_reference'] = $t->getDepartureReference();
@@ -67,7 +67,7 @@ class TripModel extends AbstractModel
     
     public function post(array $parameters, $method = Request::METHOD_POST)
     {
-        return $this->_processForm($this->_entity, $parameters, $method);
+        return $this->_processForm($this->getEntity(), $parameters, $method);
     }
     
     private function _processForm(Entity\Trip $trip, array $parameters, $method = "PUT")
@@ -125,6 +125,80 @@ class TripModel extends AbstractModel
         $em->persist($trip);
         $em->flush();
     
+        return $this;
+    }
+    
+	public function pushPickNotification(Entity\Trip $trip = NULL)
+	{
+		if (!$trip){
+            $trip = $this->getEntity();
+        }
+        
+        if ($trip->getUser() instanceof Entity\User
+		    && $trip->getDriver() instanceof Entity\User) {
+		
+			$em = $this->_container->get('doctrine')->getManager();
+			
+			$pushMessage = $this->_container
+                                ->get('translator')
+                                ->trans(
+                                    'trip.pick.push.notification', 
+                                    array(
+                                        '%requester%' => $trip->getUser()
+                                                            ->getName()
+                                    )
+                                );
+            $this->_container
+                         ->get('push.service')
+                         ->push(array($trip->getDriver()), $pushMessage);
+		}
+		
+		return $this;
+	}
+	
+    public function pushCreateNotification(Entity\Trip $trip = NULL)
+    {
+        if (!$trip){
+            $trip = $this->getEntity();
+        }
+        
+        if ($trip->getUser() instanceof Entity\User) {
+
+            $em = $this->_container->get('doctrine')->getManager();
+            
+            switch($trip->getVisibility()) {
+                case Entity\Trip::CIRCLE_FRIEND: {
+                    $friends = $em->getRepository('AppBundle:User')
+                                  ->getUserFriends($trip->getUser());
+                    break;
+                }
+                case Entity\Trip::CIRCLE_FRIEND_OF_FRIEND: {
+                    $friends = $em->getRepository('AppBundle:User')
+                                  ->getUserFriendsOfFriends($trip->getUser());
+                    break;
+                }
+                default: {
+                    return;
+                }
+            }
+            
+            $pushMessage = $this->_container
+                                ->get('translator')
+                                ->trans(
+                                    'trip.create.push.notification', 
+                                    array(
+                                        '%requester%' => $trip->getUser()
+                                                            ->getName(),
+                                        '%departure%' => $trip->getDeparture(),
+                                        '%destination%' => $trip->getDestination()
+                                    )
+                                );
+            $this->_container
+                         ->get('push.service')
+                         ->push($friends, $pushMessage);
+            
+        }
+        
         return $this;
     }
 }

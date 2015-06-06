@@ -44,6 +44,7 @@ class UserController extends FOSRestController
         return $this->container
                     ->get('app.user.model')
                     ->setEntity($user)
+                    ->resetBadge()
                     ->getLatestUpdate();
         
         
@@ -232,7 +233,8 @@ class UserController extends FOSRestController
             
             if ($rideOffer instanceof Entity\RideOffer) {
                 
-                return $rideOfferModel->exposeOne($rideOffer);
+                return $rideOfferModel->pushNotification($rideOffer)
+				                      ->exposeOne($rideOffer);
             }
         }
         catch (InvalidFormException $exception) {
@@ -347,6 +349,7 @@ class UserController extends FOSRestController
             return $this->get('app.trip.model')
                         ->setEntity($rideRequest)
                         ->pickOffer($rideOffer)
+						->pushPickNotification()
                         ->expose();
         }
         catch(\RuntimeException $exception) {
