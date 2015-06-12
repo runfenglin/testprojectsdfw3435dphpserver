@@ -49,14 +49,16 @@ trip.time.required: Time is required
 trip.time.passed: Time can not be a passed time
 trip.time.invalid: Time is not valid
 
+trip.create.parent.invalid: You are not a member in this group trip
 trip.visibility.invalid: Visibility is not valid
 trip.departure.reference.required: Departure Google place ID is required
 trip.destination.reference.required: Destination Google place ID is required
 trip.departure.reference.invalid: Departure Google place ID is invalid
 trip.destination.reference.invalid: Destination Google place ID is invalid
 trip.create.push.notification: %requester% requests a trip offer from %departure% to %destination%
+trip.group.create.push.notification: You are invited to join %creator%'s group trip from %departure% to %destination%
 trip.pick.push.notification: %requester% has accepted your offer
-
+trip.invalid.group.setting: Group trip can not have parent trip
 rideOffer.departure.required: Departure is required
 rideOffer.departure.minlength.invalid: Departure is too short. It should have {{ limit }} characters or more
 rideOffer.departure.maxlength.invalid: Departure is too long. It should have {{ limit }} characters or less
@@ -75,3 +77,6 @@ rideOffer.access.deny: You can only pick driver for your own ride request
 rideOffer.push.notification: %driver% has accepted your ride request to %destination%
 rideRequest.notfound: The ride request is not found
 rideRequest.access.deny: User only access the ride offers to their own ride request
+rideOffer.not.group.member: Only group member accept this request
+user.join.trip.forbidden: Fail to join this group trip
+user.join.trip.already: You have already joined this group trip

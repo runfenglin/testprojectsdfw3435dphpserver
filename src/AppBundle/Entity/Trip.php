@@ -14,7 +14,8 @@ class Trip
 {
     const CIRCLE_FRIEND = 1;
     const CIRCLE_FRIEND_OF_FRIEND = 2;
-    const CIRCLE_PUBLIC = 4;
+    const CIRCLE_GROUP = 4;
+	const CIRCLE_PUBLIC = 8;
     /**
      * @var integer
      *
@@ -137,7 +138,7 @@ class Trip
     private $rideOffers;
 
     /**
-     * @ORM\OneToMany(targetEntity="GroupUser", mappedBy="trip")
+     * @ORM\OneToMany(targetEntity="GroupUser", mappedBy="trip", cascade={"persist", "remove"}, orphanRemoval=true)
      **/
     private $groupUsers;
     

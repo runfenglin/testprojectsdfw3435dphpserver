@@ -172,11 +172,11 @@ class UserController extends FOSRestController
     }
     
     /**
-     * Get User Request
+     * Get User Own Request
      *
      * @ApiDoc(
      *   resource = true,
-     *   description = "Get user request",
+     *   description = "Get user own request",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when failure"
@@ -193,7 +193,7 @@ class UserController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $tripRequests = $em->getRepository('AppBundle:Trip')
-                           ->getRideRequestByUser($user);
+                           ->getRideRequestsByUser($user);
         
         return $this->get('app.trip.model')->expose($tripRequests);
     }
@@ -332,7 +332,7 @@ class UserController extends FOSRestController
 
             $em = $this->getDoctrine()->getManager();
             $rideOffer = $em->getRepository('AppBundle:RideOffer')
-                           ->find($id);
+                            ->find($id);
             
             if (!$rideOffer) {
                 $error = $this->get('translator')->trans('rideOffer.notfound');
@@ -359,5 +359,141 @@ class UserController extends FOSRestController
             return new JsonResponse(array('error' => $exception->getMessage()), $exception->getCode());
         }
         
+    }
+	
+	/**
+     * Group Trips User Has Joined
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Group trip user has joined",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/grouptrip/joined")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+	public function getJoinedGroupTripAction(Request $request)
+	{
+		$user = $this->container->get('security.context')->getToken()->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$joinedGroupTrips = $em->getRepository('AppBundle:Trip')
+                               ->getJoinedGroupTrips($user);
+		
+		return $this->get('app.trip.model')->expose($joinedGroupTrips);
+	}
+	
+	/**
+     * Get Group Trips Created By User
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get group trips created by user",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/grouptrip")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function getMyGroupTripAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $groupTrips = $em->getRepository('AppBundle:Trip')
+                         ->getGroupTripsByUser($user);
+        
+        return $this->get('app.trip.model')->expose($groupTrips);
+    }
+	
+	/**
+     * Get Paired Trips Created By User
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get paired trips created by user",
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/trip")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function getTripAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $groupTrips = $em->getRepository('AppBundle:Trip')
+                         ->getTripsByUser($user);
+        
+        return $this->get('app.trip.model')->expose($groupTrips);
+    }
+	
+	/**
+     * Join Group Trip
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Join group trip",
+     *   requirements = {
+     *     {"name"="id", "dataType"="integer", "required"=true, "description"="Group Trip ID"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure"
+     *   }
+     * )
+     * @Rest\Get("/join/grouptrip/{id}")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function joinGroupTripAction(Request $request, $id)
+    {
+		$em = $this->getDoctrine()->getManager();
+		
+		$groupTrip = $em->getRepository('AppBundle:Trip')->find($id);
+		
+		$user = $this->container->get('security.context')->getToken()->getUser();
+		
+		// TODO: verify if user is qualified to join this group trip
+		if ($groupTrip 
+		    && $groupTrip->getGroup()) {
+
+			if (!$groupTrip->getGroupUsers()
+			              ->filter(function($e) use ($user) {
+			                  return $e->getUser()->isEqualTo($user);
+						  })->count()
+			){
+				$groupUser = new Entity\GroupUser();
+				$groupUser->setTrip($groupTrip);
+				$groupUser->setUser($user);
+				$groupUser->setRole(Entity\GroupUser::ROLE_MEMBER);
+				$groupTrip->addGroupUser($groupUser);
+				$em->persist($groupTrip);
+				$em->flush();
+				
+				return array('success' => true);
+			}
+			else {
+				return new JsonResponse(
+					array('error' => $this->get('translator')
+					                      ->trans('user.join.trip.already')
+					), Response::HTTP_BAD_REQUEST);
+			}
+        }
+        return new JsonResponse(array("error" => $this->get('translator')->trans('user.join.trip.forbidden')), Response::HTTP_FORBIDDEN);
     }
 }

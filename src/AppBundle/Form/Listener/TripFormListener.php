@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 // Entity
-use AppBundle\Entity\Trip;
+use AppBundle\Entity as Entity;
 
 // Constraints
 use Symfony\Component\Validator\Constraints AS Constraint;
@@ -54,9 +54,9 @@ class TripFormListener implements EventSubscriberInterface
     {   
         $this->_tripEntity = $event->getData();
         
-        if(!$this->_tripEntity instanceof Trip || !$this->_tripEntity->getId()) {
+        if(!$this->_tripEntity instanceof Entity\Trip || !$this->_tripEntity->getId()) {
             
-            $this->_tripEntity = new Trip();
+            $this->_tripEntity = new Entity\Trip();
             $this->_tripEntity->setUser($this->_security->getToken()->getUser());
             $event->setData($this->_tripEntity);
         }   
@@ -148,10 +148,10 @@ class TripFormListener implements EventSubscriberInterface
             'choice', 
             array(
                 'choices' => array(
-                    Trip::CIRCLE_FRIEND => 'Friends', 
-                    Trip::CIRCLE_FRIEND_OF_FRIEND => 'Friends of Friend', 
-                    Trip::CIRCLE_PUBLIC => 'Public'
+                    Entity\Trip::CIRCLE_FRIEND => 'Friends', 
+                    Entity\Trip::CIRCLE_FRIEND_OF_FRIEND => 'Friends of Friend', 
                 ),
+				'required' => FALSE,
                 'invalid_message' => $this->_translator->trans('trip.visibility.invalid')
             )
         )->add(
@@ -186,17 +186,48 @@ class TripFormListener implements EventSubscriberInterface
                     )
                 )
             )
-        );
+        )->add(
+			'parent', 
+            'entity', 
+            array(
+                'class' => 'AppBundle:Trip',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('t')
+							  ->join('t.groupUsers', 'gu')
+							  ->join('gu.user', 'u')
+							  ->where('t.group = true')
+							  ->andWhere('u = :User')
+							  ->setParameter('User', $this->_security->getToken()->getUser());      
+                },
+				'invalid_message' => $this->_translator->trans('trip.create.parent.invalid'),
+                'required' => FALSE
+            )
+		);
         
     }
     
     public function preBind(FormEvent $event)
     {
+	//	var_dump($event->getData());die;
     }
     
     public function postBind(FormEvent $event) 
     {
+        if ($parent = $event->getForm()->get('parent')->getData()) {
 
+			$this->_tripEntity->setVisibility(Entity\Trip::CIRCLE_GROUP);
+			$this->_tripEntity->setGroup(FALSE);			
+
+		}
+		else if ($event->getForm()->get('group')->getData()) {
+			$groupUser = new Entity\GroupUser();
+			
+			$groupUser->setUser($this->_security->getToken()->getUser());
+			$groupUser->setTrip($this->_tripEntity);
+			$groupUser->setRole(Entity\GroupUser::ROLE_CREATOR);
+			
+			$this->_tripEntity->addGroupUser($groupUser);
+		}
             
     }
 

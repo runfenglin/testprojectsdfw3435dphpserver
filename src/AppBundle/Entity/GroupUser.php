@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GroupUser
 {
+	const ROLE_MEMBER = 0;
+	const ROLE_CREATOR = 1;
+	const ROLE_DRIVER = 2;
+	const ROLE_REQUESTOR = 4;
     /**
      * @var integer
      *

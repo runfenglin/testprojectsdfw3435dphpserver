@@ -56,6 +56,14 @@ class TripModel extends AbstractModel
             $expose[$k]['destination'] = $t->getDestination();
             $expose[$k]['destination_reference'] = $t->getDestinationReference();
             $expose[$k]['group'] = $t->getGroup();
+			if ($t->getGroup()){
+				foreach($t->getGroupUsers() as $i => $gu){
+					
+					$expose[$k]['group_users'][$i]['name'] = $gu->getUser()->getName();
+					$expose[$k]['group_users'][$i]['id'] = $gu->getUser()->getId();
+					$expose[$k]['group_users'][$i]['role'] = $gu->getRole();
+				}
+			}
             if ($t->getParent()) {
                 $expose[$k]['parent'] = $t->getParent()->getId();
             }
@@ -86,7 +94,7 @@ class TripModel extends AbstractModel
 
             $trip = $form->getData();
             $em = $this->_container->get('doctrine')->getManager();
-            
+          
             $em->persist($trip);
             $em->flush();
             
@@ -161,38 +169,66 @@ class TripModel extends AbstractModel
         if (!$trip){
             $trip = $this->getEntity();
         }
-        
-        if ($trip->getUser() instanceof Entity\User) {
+        $requester = $trip->getUser();
+		
+        if ($requester instanceof Entity\User) {
 
             $em = $this->_container->get('doctrine')->getManager();
             
             switch($trip->getVisibility()) {
                 case Entity\Trip::CIRCLE_FRIEND: {
                     $friends = $em->getRepository('AppBundle:User')
-                                  ->getUserFriends($trip->getUser());
+                                  ->getUserFriends($requester);
                     break;
                 }
                 case Entity\Trip::CIRCLE_FRIEND_OF_FRIEND: {
                     $friends = $em->getRepository('AppBundle:User')
-                                  ->getUserFriendsOfFriends($trip->getUser());
+                                  ->getUserFriendsOfFriends($requester);
                     break;
                 }
+				case Entity\Trip::CIRCLE_GROUP: {
+					$friends = array();
+					
+					foreach($trip->getParent()->getGroupUsers() as $gu) {
+						if($gu->getUser()->isEqualTo($requester)) {
+							continue;
+						}
+						$friends[] = $gu->getUser();
+					}
+					break;
+				}
                 default: {
-                    return;
+					throw new \RuntimeException('Invalid trip visibility');
                 }
             }
-            
-            $pushMessage = $this->_container
+         
+			if ($trip->getGroup()) {
+			
+				$pushMessage = $this->_container
                                 ->get('translator')
                                 ->trans(
-                                    'trip.create.push.notification', 
+                                    'trip.group.create.push.notification', 
                                     array(
-                                        '%requester%' => $trip->getUser()
-                                                            ->getName(),
+                                        '%creator%' => $requester->getName(),
                                         '%departure%' => $trip->getDeparture(),
                                         '%destination%' => $trip->getDestination()
                                     )
                                 );
+			}
+			else {
+			
+				$pushMessage = $this->_container
+                                ->get('translator')
+                                ->trans(
+                                    'trip.create.push.notification', 
+                                    array(
+                                        '%requester%' => $requester->getName(),
+                                        '%departure%' => $trip->getDeparture(),
+                                        '%destination%' => $trip->getDestination()
+                                    )
+                                );
+			}
+			
             $this->_container
                          ->get('push.service')
                          ->push($friends, $pushMessage);

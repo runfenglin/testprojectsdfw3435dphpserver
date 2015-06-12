@@ -27,7 +27,8 @@ class TripController extends FOSRestController
      *   resource = true,
      *   description = "Create a trip",
      *   requirements = {
-     *     {"name"="group", "dataType"="boolean", "required"=true, "description"="Group trip or not"},    
+     *     {"name"="group", "dataType"="boolean", "required"=true, "description"="Group trip or not"},   
+     *     {"name"="parent", "dataType"="integer", "required"=false, "description"="Group trip ID"},	 
      *     {"name"="departure", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Pickup location"},
      *     {"name"="departureReference", "dataType"="string", "requirement"="/.{,255}/", "required"=true, "description"="Departure Google Place ID"},
      *     {"name"="destination", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Drop-off location"},
@@ -95,9 +96,36 @@ class TripController extends FOSRestController
 
         $em = $this->getDoctrine()->getManager();
         $friendRequests = $em->getRepository('AppBundle:Trip')
-                           ->getFriendRequestByUser($user);
+                           ->getFriendRequestsByUser($user);
         
         return $this->get('app.trip.model')->expose($friendRequests);
     }
     
+    /**
+     * Get Group Trip of Friends and Friends' Friends
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get group trip of friends and friends' friends",   
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     400 = "Returned when failure",
+     *     403 = "Returned when token verification failure"
+     *   }
+     * )
+     * @Rest\Get("/group")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function groupTripAction(Request $request)
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $groupTrips = $em->getRepository('AppBundle:Trip')
+                           ->getFriendGroupTripsByUser($user);
+        
+        return $this->get('app.trip.model')->expose($groupTrips);
+    }
 }
