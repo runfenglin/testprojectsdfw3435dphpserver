@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Token Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +35,7 @@ class Token
     /**
      * @ORM\OneToOne(targetEntity="User", mappedBy="token")
      */
-	private $user;
+    private $user;
 
     /**
      * Get id

@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Media Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -166,15 +169,15 @@ class Media
     {
         return $this->created;
     }
-	
-	public function base64Encoded()
-	{
-		$pullPath = $this->getAbsolutePath();
-		if (file_exists($pullPath)) {
-			return base64_encode(file_get_contents($pullPath));
-		}
-		return NULL;
-	}
+    
+    public function base64Encoded()
+    {
+        $pullPath = $this->getAbsolutePath();
+        if (file_exists($pullPath)) {
+            return base64_encode(file_get_contents($pullPath));
+        }
+        return NULL;
+    }
     
     public function getAbsolutePath()
     {
@@ -257,10 +260,10 @@ class Media
                         . $ext;
             
             $uniqueName = $filename;
-			
-			if ($this->temp && $fullPath == $this->temp) {
-				$this->temp = NULL;
-			}
+            
+            if ($this->temp && $fullPath == $this->temp) {
+                $this->temp = NULL;
+            }
             else {
                 $i = 1;
                 

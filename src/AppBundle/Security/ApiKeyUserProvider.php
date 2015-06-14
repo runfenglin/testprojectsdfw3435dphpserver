@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * ApiKey User Provider
+ * author: Haiping Lu
+ */
 namespace AppBundle\Security;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;

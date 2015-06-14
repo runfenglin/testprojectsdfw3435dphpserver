@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * RideOffer Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

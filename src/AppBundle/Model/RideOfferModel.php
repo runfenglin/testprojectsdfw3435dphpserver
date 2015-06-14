@@ -1,4 +1,8 @@
 <?php
+/**
+ * RideOffer Model
+ * author: Haiping Lu
+ */
 namespace AppBundle\Model;
 
 use Doctrine\ORM\EntityManager;
@@ -38,11 +42,11 @@ class RideOfferModel extends AbstractModel
         foreach($rideOffers as $k => $t) {
         
             $expose[$k]['id'] = $t->getId();
-			$expose[$k]['user'] = array(
-				'id' => $t->getUser()->getId(),
-				'name' => $t->getUser()->getName(),
-				'avatar' => $t->getUser()->getAvatar()
-			);
+            $expose[$k]['user'] = array(
+                'id' => $t->getUser()->getId(),
+                'name' => $t->getUser()->getName(),
+                'avatar' => $t->getUser()->getAvatar()
+            );
             $expose[$k]['time'] = $t->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['departure_reference'] = $t->getDepartureReference();
@@ -87,11 +91,11 @@ class RideOfferModel extends AbstractModel
 
         return FALSE;
     }
-	
-	public function pushNotification(Entity\RideOffer $rideOffer)
-	{
-		if ($rideOffer->getUser() instanceof Entity\User
-		    && $rideOffer->getTrip() instanceof Entity\Trip) {
+    
+    public function pushNotification(Entity\RideOffer $rideOffer)
+    {
+        if ($rideOffer->getUser() instanceof Entity\User
+            && $rideOffer->getTrip() instanceof Entity\Trip) {
 
             $em = $this->_container->get('doctrine')->getManager();
             
@@ -112,5 +116,5 @@ class RideOfferModel extends AbstractModel
         }
         
         return $this;
-	}
+    }
 }

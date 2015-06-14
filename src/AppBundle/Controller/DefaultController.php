@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Test APIs
+ * author: Haiping Lu
+ */
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +20,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class DefaultController extends FOSRestController
 {
-	/**
+    /**
      * Api Test.
      *
      * @ApiDoc(
@@ -32,10 +35,10 @@ class DefaultController extends FOSRestController
      */
     public function indexAction(Request $request)
     {
-		if (!$query = $request->query->all()) {
-			$query = array('All parameters will be returned as JSON format if you append some GET parameters to this URL'); 
-		}
-		return new JsonResponse($query);
+        if (!$query = $request->query->all()) {
+            $query = array('All parameters will be returned as JSON format if you append some GET parameters to this URL'); 
+        }
+        return new JsonResponse($query);
     //  return $this->render('default/index.html.twig');
     }
 }

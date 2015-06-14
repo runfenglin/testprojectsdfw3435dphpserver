@@ -1,4 +1,8 @@
 <?php
+/**
+ * Trip Model
+ * author: Haiping Lu
+ */
 namespace AppBundle\Model;
 
 use Doctrine\ORM\EntityManager;
@@ -56,14 +60,14 @@ class TripModel extends AbstractModel
             $expose[$k]['destination'] = $t->getDestination();
             $expose[$k]['destination_reference'] = $t->getDestinationReference();
             $expose[$k]['group'] = $t->getGroup();
-			if ($t->getGroup()){
-				foreach($t->getGroupUsers() as $i => $gu){
-					
-					$expose[$k]['group_users'][$i]['name'] = $gu->getUser()->getName();
-					$expose[$k]['group_users'][$i]['id'] = $gu->getUser()->getId();
-					$expose[$k]['group_users'][$i]['role'] = $gu->getRole();
-				}
-			}
+            if ($t->getGroup()){
+                foreach($t->getGroupUsers() as $i => $gu){
+                    
+                    $expose[$k]['group_users'][$i]['name'] = $gu->getUser()->getName();
+                    $expose[$k]['group_users'][$i]['id'] = $gu->getUser()->getId();
+                    $expose[$k]['group_users'][$i]['role'] = $gu->getRole();
+                }
+            }
             if ($t->getParent()) {
                 $expose[$k]['parent'] = $t->getParent()->getId();
             }
@@ -136,18 +140,18 @@ class TripModel extends AbstractModel
         return $this;
     }
     
-	public function pushPickNotification(Entity\Trip $trip = NULL)
-	{
-		if (!$trip){
+    public function pushPickNotification(Entity\Trip $trip = NULL)
+    {
+        if (!$trip){
             $trip = $this->getEntity();
         }
         
         if ($trip->getUser() instanceof Entity\User
-		    && $trip->getDriver() instanceof Entity\User) {
-		
-			$em = $this->_container->get('doctrine')->getManager();
-			
-			$pushMessage = $this->_container
+            && $trip->getDriver() instanceof Entity\User) {
+        
+            $em = $this->_container->get('doctrine')->getManager();
+            
+            $pushMessage = $this->_container
                                 ->get('translator')
                                 ->trans(
                                     'trip.pick.push.notification', 
@@ -159,18 +163,18 @@ class TripModel extends AbstractModel
             $this->_container
                          ->get('push.service')
                          ->push(array($trip->getDriver()), $pushMessage);
-		}
-		
-		return $this;
-	}
-	
+        }
+        
+        return $this;
+    }
+    
     public function pushCreateNotification(Entity\Trip $trip = NULL)
     {
         if (!$trip){
             $trip = $this->getEntity();
         }
         $requester = $trip->getUser();
-		
+        
         if ($requester instanceof Entity\User) {
 
             $em = $this->_container->get('doctrine')->getManager();
@@ -186,25 +190,25 @@ class TripModel extends AbstractModel
                                   ->getUserFriendsOfFriends($requester);
                     break;
                 }
-				case Entity\Trip::CIRCLE_GROUP: {
-					$friends = array();
-					
-					foreach($trip->getParent()->getGroupUsers() as $gu) {
-						if($gu->getUser()->isEqualTo($requester)) {
-							continue;
-						}
-						$friends[] = $gu->getUser();
-					}
-					break;
-				}
+                case Entity\Trip::CIRCLE_GROUP: {
+                    $friends = array();
+                    
+                    foreach($trip->getParent()->getGroupUsers() as $gu) {
+                        if($gu->getUser()->isEqualTo($requester)) {
+                            continue;
+                        }
+                        $friends[] = $gu->getUser();
+                    }
+                    break;
+                }
                 default: {
-					throw new \RuntimeException('Invalid trip visibility');
+                    throw new \RuntimeException('Invalid trip visibility');
                 }
             }
          
-			if ($trip->getGroup()) {
-			
-				$pushMessage = $this->_container
+            if ($trip->getGroup()) {
+            
+                $pushMessage = $this->_container
                                 ->get('translator')
                                 ->trans(
                                     'trip.group.create.push.notification', 
@@ -214,10 +218,10 @@ class TripModel extends AbstractModel
                                         '%destination%' => $trip->getDestination()
                                     )
                                 );
-			}
-			else {
-			
-				$pushMessage = $this->_container
+            }
+            else {
+            
+                $pushMessage = $this->_container
                                 ->get('translator')
                                 ->trans(
                                     'trip.create.push.notification', 
@@ -227,8 +231,8 @@ class TripModel extends AbstractModel
                                         '%destination%' => $trip->getDestination()
                                     )
                                 );
-			}
-			
+            }
+            
             $this->_container
                          ->get('push.service')
                          ->push($friends, $pushMessage);

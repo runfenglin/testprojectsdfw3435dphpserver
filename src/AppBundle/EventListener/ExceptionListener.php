@@ -1,4 +1,8 @@
 <?php
+/**
+ * Exception Listener
+ * author: Haiping Lu
+ */
 namespace AppBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +32,6 @@ class ExceptionListener
                     $request = $event->getRequest();
                     
                     if (!$request->attributes->get('_locale', NULL)) {
-                    //  $locale = $request->getPreferredLanguage($this->_container->getParameter('preferred_locale'));
-                         
-                    //  $localizedUrl = $request->getBaseUrl() . '/' . $locale . $request->getPathInfo();
-                    //  $event->setResponse(new RedirectResponse($localizedUrl));
                     
                         $error = $this->_container->get('translator')->trans('locale.not.found');
                         

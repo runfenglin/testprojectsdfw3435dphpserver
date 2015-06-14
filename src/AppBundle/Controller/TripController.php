@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Trip APIs
+ * author: Haiping Lu
+ */
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -28,7 +31,7 @@ class TripController extends FOSRestController
      *   description = "Create a trip",
      *   requirements = {
      *     {"name"="group", "dataType"="boolean", "required"=true, "description"="Group trip or not"},   
-     *     {"name"="parent", "dataType"="integer", "required"=false, "description"="Group trip ID"},	 
+     *     {"name"="parent", "dataType"="integer", "required"=false, "description"="Group trip ID"},     
      *     {"name"="departure", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Pickup location"},
      *     {"name"="departureReference", "dataType"="string", "requirement"="/.{,255}/", "required"=true, "description"="Departure Google Place ID"},
      *     {"name"="destination", "dataType"="string", "requirement"="/.{3,128}/", "required"=true, "description"="Drop-off location"},

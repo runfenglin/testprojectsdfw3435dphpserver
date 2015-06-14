@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Activity Type
+ * author: Haiping Lu
+ */
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -33,7 +36,7 @@ class ActivityType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Activity',
-			'csrf_protection' => FALSE
+            'csrf_protection' => FALSE
         ));
     }
 

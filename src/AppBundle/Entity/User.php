@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * User Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -32,8 +35,8 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      *
      * @ORM\Column(name="token_id", type="integer", nullable=TRUE)
      */
-    private $tokenId;	
-	
+    private $tokenId;   
+    
     /**
      * @var string
      *
@@ -152,10 +155,10 @@ class User implements AdvancedUserInterface, EquatableInterface, \Serializable
      */
     private $likes;
     
-	/**
-	 * @ORM\OneToOne(targetEntity="Token", inversedBy="user", cascade={"persist", "remove"}, orphanRemoval=TRUE)
-	 * @ORM\JoinColumn(name="token_id", referencedColumnName="id")
-	 */
+    /**
+     * @ORM\OneToOne(targetEntity="Token", inversedBy="user", cascade={"persist", "remove"}, orphanRemoval=TRUE)
+     * @ORM\JoinColumn(name="token_id", referencedColumnName="id")
+     */
     private $token;
     
     /**

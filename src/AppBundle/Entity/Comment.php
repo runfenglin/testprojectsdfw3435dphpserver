@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Comment Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -10,13 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment extends Activity
 {
-	/**
+    /**
      * @var integer
      *
      * @ORM\Column(name="to_user_id", type="integer", nullable=TRUE)
      */
-	protected $toUserId;
-	
+    protected $toUserId;
+    
     /**
      * @var string
      *
@@ -29,7 +32,7 @@ class Comment extends Activity
      * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      **/
     protected $toUser;
-	
+    
     /**
      * Set comment
      *
@@ -52,8 +55,8 @@ class Comment extends Activity
     {
         return $this->comment;
     }
-	
-	/**
+    
+    /**
      * Set toUserId
      *
      * @param integer $toUserId
@@ -75,8 +78,8 @@ class Comment extends Activity
     {
         return $this->toUserId;
     }
-	
-	/**
+    
+    /**
      * Set toUser
      *
      * @param \AppBundle\Entity\User $toUser

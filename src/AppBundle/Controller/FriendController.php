@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Friend APIs
+ * author: Haiping Lu
+ */
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;

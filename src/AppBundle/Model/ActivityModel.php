@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Activity Model
+ * author: Haiping Lu
+ */
 namespace AppBundle\Model;
 
 use Doctrine\ORM\EntityManager;
@@ -10,9 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\Collection;
 
 use AppBundle\Entity AS Entity;
-//use AppBundle\Entity\Activity;
-//use AppBundle\Entity\Comment;
-//use AppBundle\Entity\Checkin;
 
 class ActivityModel extends AbstractModel
 {

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Entity Listener
+ * author: Haiping Lu
+ */
 namespace AppBundle\Doctrine\Listener;
 
 use AppBundle\Entity AS Entity;

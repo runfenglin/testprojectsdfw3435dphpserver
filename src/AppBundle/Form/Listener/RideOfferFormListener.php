@@ -1,4 +1,8 @@
 <?php
+/**
+ * RideOffer Form Listener
+ * author: Haiping Lu
+ */
 namespace AppBundle\Form\Listener;
 
 use Symfony\Component\Form\FormFactoryInterface;
@@ -137,8 +141,8 @@ class RideOfferFormListener implements EventSubscriberInterface
                 'class' => 'AppBundle:Trip',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('t')
-					          ->where('t.group = :Group')
-							  ->setParameter('Group', FALSE);      
+                              ->where('t.group = :Group')
+                              ->setParameter('Group', FALSE);      
                 },
                 'attr' => array(
                     'property' => 'departure'
@@ -197,21 +201,21 @@ class RideOfferFormListener implements EventSubscriberInterface
                 )
             );
         }
-		else if ($parent = $trip->getParent()){
-			if(!$parent->getGroupUsers()->filter(function($e){
-				return $e->getUser()->isEqualTo($this->_security->getToken()->getUser());
-			})->count()) {
-			
-				$form['trip']->addError(
-					new FormError(
-						$this->_container
-							 ->get('translator')
-							 ->trans('rideOffer.not.group.member')
-					)
-				);
-			}
-			
-		}
+        else if ($parent = $trip->getParent()){
+            if(!$parent->getGroupUsers()->filter(function($e){
+                return $e->getUser()->isEqualTo($this->_security->getToken()->getUser());
+            })->count()) {
+            
+                $form['trip']->addError(
+                    new FormError(
+                        $this->_container
+                             ->get('translator')
+                             ->trans('rideOffer.not.group.member')
+                    )
+                );
+            }
+            
+        }
     }
 
 }

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Media Entity Listener
+ * author: Haiping Lu
+ */
 namespace AppBundle\Doctrine\Listener;
 
 use AppBundle\Entity AS Entity;
@@ -15,11 +19,11 @@ use Symfony\Component\HttpFoundation\Response;
 class MediaEntityListener
 {
     protected $_container;
-	
-	public function __construct(ConstainerInterface $container)
-	{
-		$this->_container = $container;
-	}
+    
+    public function __construct(ConstainerInterface $container)
+    {
+        $this->_container = $container;
+    }
     
     public function postRemove(LifecycleEventArgs $args)
     {

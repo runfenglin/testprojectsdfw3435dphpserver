@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Login APIs
+ * author: Haiping Lu
+ */
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

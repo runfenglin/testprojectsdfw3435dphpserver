@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * ApiKey Authenticator
+ * author: Haiping Lu
+ */
 namespace AppBundle\Security;
 
 use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;

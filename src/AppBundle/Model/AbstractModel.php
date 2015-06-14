@@ -1,4 +1,8 @@
 <?php
+/**
+ * Abstract Model
+ * author: Haiping Lu
+ */
 namespace AppBundle\Model;
 
 use Doctrine\ORM\EntityManager;

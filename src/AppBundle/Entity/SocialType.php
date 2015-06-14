@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * SocialType Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,11 +15,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SocialType
 {
-	const FACEBOOK = 'facebook';
-	const GOOGLE = 'google+';
-	const TWITTER = 'twitter';
-	const LINKEDIN = 'linkedin';
-	
+    const FACEBOOK = 'facebook';
+    const GOOGLE = 'google+';
+    const TWITTER = 'twitter';
+    const LINKEDIN = 'linkedin';
+    
     /**
      * @var integer
      *
@@ -40,11 +43,11 @@ class SocialType
      */
     private $code;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="SocialLogin", mappedBy="type")
-	 */
-	private $socialAccounts;
-	
+    /**
+     * @ORM\OneToMany(targetEntity="SocialLogin", mappedBy="type")
+     */
+    private $socialAccounts;
+    
     /**
      * Get id
      *

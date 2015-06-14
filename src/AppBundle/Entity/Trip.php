@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Trip Entity
+ * author: Haiping Lu
+ */
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +18,7 @@ class Trip
     const CIRCLE_FRIEND = 1;
     const CIRCLE_FRIEND_OF_FRIEND = 2;
     const CIRCLE_GROUP = 4;
-	const CIRCLE_PUBLIC = 8;
+    const CIRCLE_PUBLIC = 8;
     /**
      * @var integer
      *

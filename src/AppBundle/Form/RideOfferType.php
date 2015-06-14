@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * RideOffer Type
+ * author: Haiping Lu
+ */
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;

@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Logout APIs
+ * author: Haiping Lu
+ */
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +42,7 @@ class LogoutController extends FOSRestController
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $user->setDeviceToken(NULL);
-		$user->setToken(NULL);
+        $user->setToken(NULL);
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();

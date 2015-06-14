@@ -1,4 +1,8 @@
 <?php
+/**
+ * Trip Form Listener
+ * author: Haiping Lu
+ */
 namespace AppBundle\Form\Listener;
 
 use Symfony\Component\Form\FormFactoryInterface;
@@ -151,7 +155,7 @@ class TripFormListener implements EventSubscriberInterface
                     Entity\Trip::CIRCLE_FRIEND => 'Friends', 
                     Entity\Trip::CIRCLE_FRIEND_OF_FRIEND => 'Friends of Friend', 
                 ),
-				'required' => FALSE,
+                'required' => FALSE,
                 'invalid_message' => $this->_translator->trans('trip.visibility.invalid')
             )
         )->add(
@@ -187,47 +191,47 @@ class TripFormListener implements EventSubscriberInterface
                 )
             )
         )->add(
-			'parent', 
+            'parent', 
             'entity', 
             array(
                 'class' => 'AppBundle:Trip',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('t')
-							  ->join('t.groupUsers', 'gu')
-							  ->join('gu.user', 'u')
-							  ->where('t.group = true')
-							  ->andWhere('u = :User')
-							  ->setParameter('User', $this->_security->getToken()->getUser());      
+                              ->join('t.groupUsers', 'gu')
+                              ->join('gu.user', 'u')
+                              ->where('t.group = true')
+                              ->andWhere('u = :User')
+                              ->setParameter('User', $this->_security->getToken()->getUser());      
                 },
-				'invalid_message' => $this->_translator->trans('trip.create.parent.invalid'),
+                'invalid_message' => $this->_translator->trans('trip.create.parent.invalid'),
                 'required' => FALSE
             )
-		);
+        );
         
     }
     
     public function preBind(FormEvent $event)
     {
-	//	var_dump($event->getData());die;
+    //  var_dump($event->getData());die;
     }
     
     public function postBind(FormEvent $event) 
     {
         if ($parent = $event->getForm()->get('parent')->getData()) {
 
-			$this->_tripEntity->setVisibility(Entity\Trip::CIRCLE_GROUP);
-			$this->_tripEntity->setGroup(FALSE);			
+            $this->_tripEntity->setVisibility(Entity\Trip::CIRCLE_GROUP);
+            $this->_tripEntity->setGroup(FALSE);            
 
-		}
-		else if ($event->getForm()->get('group')->getData()) {
-			$groupUser = new Entity\GroupUser();
-			
-			$groupUser->setUser($this->_security->getToken()->getUser());
-			$groupUser->setTrip($this->_tripEntity);
-			$groupUser->setRole(Entity\GroupUser::ROLE_CREATOR);
-			
-			$this->_tripEntity->addGroupUser($groupUser);
-		}
+        }
+        else if ($event->getForm()->get('group')->getData()) {
+            $groupUser = new Entity\GroupUser();
+            
+            $groupUser->setUser($this->_security->getToken()->getUser());
+            $groupUser->setTrip($this->_tripEntity);
+            $groupUser->setRole(Entity\GroupUser::ROLE_CREATOR);
+            
+            $this->_tripEntity->addGroupUser($groupUser);
+        }
             
     }
 

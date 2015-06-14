@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * User Model
+ * author: Haiping Lu
+ */
 namespace AppBundle\Model;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
