@@ -1,0 +1,117 @@
+/**
+ * Job Junction - Post AD Page CSS
+ * @author: Haiping Lu
+ * @create: 20/05/2015
+ */
+#post-ad label {
+    padding-top: 0;
+}
+label.radio {
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+    font-size: 1em;
+}
+form label > span:first-child {
+	line-height: 24px;
+}
+.template-selection {
+    background: #F3F6F4;
+}
+.template-selection .col-sm-12:first-child,
+.template-selection .col-sm-12:last-child {
+    padding: 15px 0;
+    color: #96B8A1;
+}
+.template-selection > .row {
+    text-align: center;
+}
+.template-selection .img-responsive {
+    margin: 0 auto;
+}
+.template-selection h3 {
+    *margin: 25px 0;
+
+}
+#post-ad .template-item label {
+    font-size: 1em;
+    font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
+    padding-top: 7px;
+}
+.template-selection .logo-field {
+    text-align: right;
+}
+fieldset {
+    padding: 20px;
+}
+fieldset label {
+    font-size: 1.3em;
+    line-height: 34px;
+}
+fieldset.ad-category  h3 {
+    color: #C32433;
+}
+fieldset.ad-category  label {
+    color: #DB414B;
+}
+fieldset.ad-detail {
+    background: #FEF9F6;
+}
+fieldset.ad-detail h3 {
+    color: #EF996B;
+}
+fieldset.ad-detail label {
+    color: #EB834A;
+}
+.top-field {
+    margin-bottom: 5px;
+}
+.radio-selection {
+    line-height: 30px;
+    color: #333;
+    z-index: 1;
+}
+.radio-selection span{
+    color: #333;
+}
+.logo-field span.btn-success {
+    padding: 0px 15px;
+}
+.logo-field input {
+    opacity: 0;
+    width: 70px;
+    display: inline-block;
+    height: 32px;
+    position: absolute;
+    left: 15px;
+}
+.logo-thumb img {
+    margin: 10px;
+}
+#complete .glyphicon-ok-sign {
+    vertical-align: top;
+    color: #419641;
+}
+#complete .text-center {
+	margin: 15px 0;
+}
+.submit-tip {
+	color: #D77774;
+	font-size: 0.95em;
+}
+/* responsive */
+@media all and (max-width:767px) {
+
+    .template-selection .logo-field {
+        text-align: left;
+    }
+}
+
+@media all and (max-width:500px) {
+
+    .logo-field > .col-xs-7 {
+        display: none !important;
+    }
+    .logo-field > .col-xs-5 {
+        width: 100%;
+        text-align: center;
+    }
+}

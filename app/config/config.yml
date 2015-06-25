@@ -63,6 +63,10 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+    
+        dql:
+            string_functions:
+                DATE: AppBundle\Doctrine\DQL\DateFunction
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -88,6 +92,8 @@ fos_rest:
             # Some best-practices documentation about REST recommends to not use the URL as an indicator of the response format
             - { path: ^/api/doc, priorities: [html], fallback_format: ~ }
             #- { path: ^/api/, priorities: [json, xml], fallback_format: ~, prefer_extension: true }
+            - { path: ^/admin/api/, priorities: [json, xml], fallback_format: ~, prefer_extension: true }
+            - { path: ^/admin/, priorities: [html], fallback_format: ~ }
             - { path: ^/, priorities: [json, xml, html], fallback_format: ~, prefer_extension: true }
             #- { path: ^/, priorities: [html, "*/*"], fallback_format: ~, prefer_extension: true }
     view:

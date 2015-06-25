@@ -111,6 +111,22 @@ class TripModel extends AbstractModel
         return FALSE;
     }
     
+	public function filterMyOffer(array $friendRequests)
+	{
+		$user = $this->_container->get('security.context')->getToken()->getUser();
+		
+		$filtered = array();
+		
+		foreach($friendRequests as $r) {
+			if (!$r->getRideOffers()->exists(function($k, $e) use ($user) {
+				return $e->getUserId() == $user->getId();
+			})) {
+				$filtered[] = $r;
+			}
+		}
+		
+		return $filtered;
+	}
     public function pickOffer(Entity\RideOffer $rideOffer)
     {
         $trip = $this->getEntity();

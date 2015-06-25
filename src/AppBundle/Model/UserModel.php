@@ -176,6 +176,7 @@ class UserModel extends AbstractModel
                 $friends['data'][] = $item;
             }
             $data = array(
+				'id' => $u->getId(),
                 'username' => $u->getUsername(),
                 'name' => $u->getName(),
                 'phone' => $u->getPhone(),

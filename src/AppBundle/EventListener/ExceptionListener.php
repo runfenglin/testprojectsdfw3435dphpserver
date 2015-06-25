@@ -30,8 +30,11 @@ class ExceptionListener
                 case 404:{
                     
                     $request = $event->getRequest();
-                    
-                    if (!$request->attributes->get('_locale', NULL)) {
+
+					if (1 === strpos($request->getPathInfo(), 'admin')) {
+						break;
+					}
+                    elseif (!$request->attributes->get('_locale', NULL)) {
                     
                         $error = $this->_container->get('translator')->trans('locale.not.found');
                         

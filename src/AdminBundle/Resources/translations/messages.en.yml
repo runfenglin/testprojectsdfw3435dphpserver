@@ -1,0 +1,4 @@
+security.login.username: Username
+security.login.password: Password
+security.login.remember_me: Remember Me
+security.login.submit: Login

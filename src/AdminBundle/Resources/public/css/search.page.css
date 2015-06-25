@@ -1,0 +1,64 @@
+/**
+ * Job Junction - Search Result Page (Job List) CSS
+ * @author: Haiping Lu
+ * @create: 19/05/2015
+ */
+h3 {
+    margin: 0;
+}
+.sort-by {
+    text-align: right;
+}
+.dl-horizontal dt {
+    text-align: left;
+    width: 70px;
+}
+.dl-horizontal dd {
+    margin-left: 80px;
+}
+.jobs > .row {
+    *padding-top: 15px;
+    *padding-bottom: 15px;
+    border: 1px solid #CCC;
+    margin: 10px 0;
+}
+.jobs > .row > div {
+    padding: 15px;
+}
+.jobs .job-title {
+    font-weight: 200;
+    font-size: 1.6em;
+}
+.jobs .company-name {
+    font-size: 1.1em;
+    color: #DB414B;
+}
+.jobs .col-sm-2.hidden-xs {
+    *min-height: 20px;
+}
+/* responsive */
+@media all and (max-width:979px) {
+    .jobs .dl-horizontal dt {
+        float: none;
+    }
+    .jobs .dl-horizontal dd {
+        margin-left: 0;
+    }
+}
+@media all and (max-width:767px) {
+
+    .sort-by{
+        text-align: left;
+    }
+    .jobs .dl-horizontal dt {
+        float: left;
+    }
+    .jobs > .row {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .jobs > .row > div {
+        padding: 0px 15px;
+    }
+
+}

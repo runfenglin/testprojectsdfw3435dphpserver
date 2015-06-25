@@ -191,7 +191,7 @@ class RideOfferFormListener implements EventSubscriberInterface
         $form = $event->getForm();
         
         $trip = $form->get('trip')->getData();
-         
+
         if ($trip->getUser()->isEqualTo($this->_rideOfferEntity->getUser())) {
             $form['trip']->addError(
                 new FormError(
@@ -216,6 +216,7 @@ class RideOfferFormListener implements EventSubscriberInterface
             }
             
         }
+		
     }
 
 }

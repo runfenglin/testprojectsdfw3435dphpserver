@@ -21,6 +21,8 @@ class AppKernel extends Kernel
 			new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 			new RMS\PushNotificationsBundle\RMSPushNotificationsBundle(),
             new AppBundle\AppBundle(),
+            new AdminBundle\AdminBundle(),
+            new AdminApiBundle\AdminApiBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

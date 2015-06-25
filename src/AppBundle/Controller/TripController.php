@@ -100,8 +100,12 @@ class TripController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $friendRequests = $em->getRepository('AppBundle:Trip')
                            ->getFriendRequestsByUser($user);
+						 
+		$tripModel = $this->get('app.trip.model');
+		
+		$filtered = $tripModel->filterMyOffer($friendRequests);
         
-        return $this->get('app.trip.model')->expose($friendRequests);
+        return $this->get('app.trip.model')->expose($filtered);
     }
     
     /**

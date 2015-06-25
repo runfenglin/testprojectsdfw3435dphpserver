@@ -165,7 +165,12 @@ class UserController extends FOSRestController
     public function updateDeviceTokenAction(Request $request)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
-        $dToken = $request->request->get('device_token');
+        
+		if(!$dToken = $request->request->get('device_token', NULL)) {
+			$error = $this->get('translator')->trans('device.token.empty');
+			return new JsonResponse(array("error" => $error), Response::HTTP_BAD_REQUEST);
+		}
+		
         $user->setDeviceToken($dToken);
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
@@ -231,9 +236,9 @@ class UserController extends FOSRestController
         try {
             $rideOfferModel = $this->container
                               ->get('app.ride.offer.model');
-                            
+                       
             $rideOffer = $rideOfferModel->post($request->request->all());
-            
+                
             if ($rideOffer instanceof Entity\RideOffer) {
                 
                 return $rideOfferModel->pushNotification($rideOffer)

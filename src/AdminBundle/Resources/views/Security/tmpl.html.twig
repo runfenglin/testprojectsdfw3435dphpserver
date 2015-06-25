@@ -1,0 +1,118 @@
+{% if tmpl == 'base'%}
+
+<header id="header" class="animated fadeInDown">
+    <div id="logo-group">
+        <span id="logo"> 
+			<img src="/bundles/admin/images/logo.png" alt="Thumb Up"> 
+		</span>
+    </div>
+</header>
+
+<div class="animated fadeInDown">
+
+    <div id="content" class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-7 col-lg-8 hidden-xs">
+				<div class="row">
+					<div class="col-md-8 col-lg-9 col-sm-12">
+						<h1 class="txt-color-red login-header-big">ThumbUp</h1>
+						<h5 class="about-heading">About ThumbUp - Are you up to date?</h5>
+
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium, totam rem aperiam, eaque ipsa.
+                        </p>
+						
+						<h5 class="about-heading">Not just your average template!</h5>
+
+                        <p>
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta
+                            nobis est eligendi voluptatem accusantium!
+                        </p>
+					</div>
+					<div class="col-md-4 col-lg-3 hidden-sm hidden-xs">
+						<img src="/bundles/admin/images/iphoneview.png" class="img-responsive">
+					</div>
+				</div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4">
+                <div class="well no-padding">
+                    <div class="auth-form" ui-view="content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elseif tmpl == 'login' %}
+<form action="{{ path("secure_logincheck") }}" id="login-form" class="smart-form client-form"  method="post" data-smart-validate-form>
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+	<header>
+		Sign In
+	</header>
+	<fieldset>
+		<section ng-show="[[error]]" class="alert alert-danger">
+			<a href="#" class="close" data-dismiss="alert">&times;</a>
+			<span>
+				<i class="fa-fw fa fa-times"></i>
+				<strong>Error</strong>
+			</span>
+			[[error]]
+		</section>
+
+		<section my-message-bar message="Bubble.message"></section>
+		<section>
+			<label class="label">{{ 'security.login.username'|trans }}</label>
+			<label class="input"> <i class="icon-append fa fa-user"></i>
+				<input type="text" 
+					   id="username" 
+					   name="_username" 
+					   ng-model="jsfrom.username"
+					   required="required"
+					   data-smart-validate-input
+					   data-required
+					   data-message-required="Please enter your username or email address">
+				
+				<b class="tooltip tooltip-top-right">
+					<i class="fa fa-user txt-color-teal"></i>
+					Please enter username or email address
+				</b>
+			</label>
+		</section>
+		<section>
+			<label class="label">{{ 'security.login.password'|trans }}</label>
+			<label class="input"> <i class="icon-append fa fa-lock"></i>
+				<input type="password" 
+					   class="form-control" 
+					   id="password" 
+					   name="_password" 
+					   required="required"
+					   ng-model="jsform.password"
+					   data-smart-validate-input
+					   data-required
+					   data-minlength="3"
+					   data-maxlength="20"
+					   data-message="Please enter your password"
+					   data-message-minlength="The length of password must not be less than 3"
+					   data-message-maxlength="The length of password must not be greater than 20" />
+				<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Enter
+					your password</b> </label>
+
+			<!--div class="note">
+				<a ui-sref="forgotPassword">Forgot password?</a>
+			</div-->
+		</section>
+		<section>
+			<label class="checkbox">
+				<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+				<i></i>{{ 'security.login.remember_me'|trans }}</label>
+		</section>
+	</fieldset>
+	<footer>
+		<button type="submit" name="_submit" class="btn btn-primary">
+			{{ 'security.login.submit'|trans }}
+		</button>
+	</footer>
+</form>
+
+{% endif %}

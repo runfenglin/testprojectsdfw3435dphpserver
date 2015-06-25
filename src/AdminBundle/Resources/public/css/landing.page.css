@@ -1,0 +1,208 @@
+/**
+ * Job Junction - Job Description Page CSS
+ * @author: Haiping Lu
+ * @create: 20/05/2015
+ */
+h3 {
+    margin: 0;
+    line-height: 33px;
+}
+.go-back-nav {
+    margin-bottom: 15px;
+}
+#landing > .row.action {
+    margin-top: 15px;
+}
+/* template 1*/
+.template-job-title-bg-1 {
+    background: url(/bundles/app/images/template/t1/job-title-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.7em;
+    color: #FFF;
+    padding: 20px;
+}
+.template-company-name-bg-1 {
+    background: url(/bundles/app/images/template/t1/company-name-bg.png) repeat-y;
+    -webkit-background-size: ;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.5em;
+    color: #FFF;
+    padding: 0 20px;
+}
+.template-company-name-bg-1 p {
+	margin: 0;
+}
+.template-description-bg-1 {
+    background: url(/bundles/app/images/template/t1/description-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+
+    padding: 10px 30px;
+}
+
+.template-contact-bg-1 {
+    background: url(/bundles/app/images/template/t1/contact-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.3em;
+    color: #FFF;
+    padding: 20px;
+}
+/* template 2 */
+.template-job-title-bg-2 {
+    background: url(/bundles/app/images/template/t2/job-title-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.7em;
+    color: #FFF;
+    padding: 20px;
+}
+.template-company-name-bg-2 {
+    background: url(/bundles/app/images/template/t2/company-name-bg.png) repeat-y;
+    -webkit-background-size: ;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.5em;
+    color: #FFF;
+    padding: 20px;
+}
+
+.template-description-bg-2 {
+    background: url(/bundles/app/images/template/t2/description-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+
+    padding: 10px 30px;
+}
+
+.template-contact-bg-2 {
+    background: url(/bundles/app/images/template/t2/contact-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.3em;
+    color: #FFF;
+    padding: 20px;
+}
+/* template 3 */
+.template-job-title-bg-3 {
+    background: url(/bundles/app/images/template/t3/job-title-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.7em;
+    color: #FFF;
+    padding: 20px;
+}
+.template-company-name-bg-3 {
+    background: url(/bundles/app/images/template/t3/company-name-bg.png) repeat-y;
+    -webkit-background-size: ;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.5em;
+    color: #FFF;
+    padding: 20px;
+}
+
+.template-description-bg-3 {
+    background: url(/bundles/app/images/template/t3/description-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+
+    padding: 10px 30px;
+}
+
+.template-contact-bg-3 {
+    background: url(/bundles/app/images/template/t3/contact-bg.png) repeat-y;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    font-size: 1.3em;
+    color: #FFF;
+    padding: 20px;
+}
+.dl-horizontal dt {
+    text-align: left;
+    width: 70px;
+    font-weight: 400;
+}
+.dl-horizontal dd {
+    margin-left: 100px;
+    margin-bottom: 5px;
+}
+.template-top-2 {
+    position: relative;
+}
+small.sub-headline {
+    font-size: 0.7em;
+}
+/*
+.template-top-2 .job-title {
+    position: absolute;
+    top: 5%;
+    left: 7%;
+    font-size: 1.7em;
+    color: #FFF;
+}
+.template-top-2 .company-name {
+    font-size: 1.5em;
+    color: #fff;
+    position: absolute;
+    top: 12%;
+    left: 9%;
+}
+.template-top-2 .description {
+
+    position: absolute;
+    top: 20%;
+    left: 7%;
+    right: 3%;
+}
+.template-bottom-2 {
+    position: relative;
+}
+.template-bottom-2 .contact {
+    position: absolute;
+    top: 20%;
+    left: 2%;
+    right: 2%;
+    font-size: 1.2em;
+    color: #FFF;
+}*/
+/* responsive */
+@media all and (max-width:979px) {
+    .dl-horizontal dt {
+        float: none;
+        font-weight: 700;
+    }
+    .dl-horizontal dd {
+        margin-left: 0;
+    }
+}
+
+@media all and (max-width:767px) {
+
+    .dl-horizontal dt {
+        float: left;
+    }
+}

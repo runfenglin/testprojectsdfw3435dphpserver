@@ -10,6 +10,59 @@ use AppBundle\Entity as Entity;
 
 class TripRepository extends EntityRepository
 {
+	public function getTripRequestSummary()
+	{
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('COUNT(t.id) as num, DATE(t.created) AS date_group')
+                    ->from($this->_entityName, 't')
+					->where('t.group = FALSE')
+					->where('t.driver IS NULL')
+					->orderBy('t.created', 'DESC')
+					->groupBy('date_group')
+					->setMaxResults(10)
+					->getQuery()
+					->getScalarResult();
+	}
+	
+	public function getRequestTotalCount()
+	{
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('COUNT(t.id)')
+                    ->from($this->_entityName, 't')
+					->where('t.group = FALSE')
+					->where('t.driver IS NULL')
+					->getQuery()
+					->getSingleScalarResult();
+	}
+	
+	public function getTripSummary()
+	{
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('COUNT(t.id) as num, DATE(t.created) AS date_group')
+                    ->from($this->_entityName, 't')
+					->where('t.group = FALSE')
+					->where('t.driver IS NOT NULL')
+					->orderBy('t.created', 'DESC')
+					->groupBy('date_group')
+					->setMaxResults(10)
+					->getQuery()
+					->getScalarResult();
+	}
+	
+	public function getTripTotalCount()
+	{
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('COUNT(t.id)')
+                    ->from($this->_entityName, 't')
+					->where('t.group = FALSE')
+					->where('t.driver IS NOT NULL')
+					->getQuery()
+					->getSingleScalarResult();
+	}
 
     public function getRideRequestsByUser(Entity\User $user)
     {

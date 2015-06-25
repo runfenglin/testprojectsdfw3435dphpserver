@@ -1,0 +1,56 @@
+/**
+ * Job Junction - Home Page CSS
+ * @author: Haiping Lu
+ * @create: 19/05/2015
+ */
+body {
+    color: #843C3E;
+}
+#job-type li{
+    display: inline;
+}
+#job-type li.v-separate-line {
+    border-right-color: #843C3E;
+}
+#job-classification {
+    padding-bottom: 15px;
+}
+#post-ad-panel {
+    background: #F8F3F3;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+#post-ad-panel ul li {
+    background: url(/bundles/app/images/tick-icon.png);
+    background-repeat: no-repeat;
+    background-position: 0px center;
+    padding-left: 40px;
+    line-height: 30px;
+}
+#job-count h4 {
+	margin: 0;
+}
+#job-type a{
+    color: #843C3E;
+}
+#job-type li.selected {
+    text-decoration: underline;
+}
+#job-classification a {
+    color: #843C3E;
+}
+#job-classification li.selected {
+    text-decoration: underline;
+}
+/* responsive */
+@media all and (max-width:767px) {
+    #job-classification ul li{
+        text-align: center;
+    }
+    #post-ad-panel ul li{
+        text-align: center;
+        padding-left: 0;
+        background: none;
+        font-size: 1.3em;
+    }
+}

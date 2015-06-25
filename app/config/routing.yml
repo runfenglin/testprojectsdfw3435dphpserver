@@ -1,3 +1,13 @@
+admin_api:
+    resource: "@AdminApiBundle/Resources/config/routing.yml"
+    type:     rest
+    prefix:   /admin/api
+
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
 #app:
 #    resource: "@AppBundle/Controller/"
 #    type:     annotation

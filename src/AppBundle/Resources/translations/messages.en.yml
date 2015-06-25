@@ -24,6 +24,9 @@ register.country.invalid: Invalid country code
 register.password.dismatch: Passwords do not match
 register.password.required: Initial password is required
 register.password.invalid: Password must be min 6 chars, contain only digits, characters, hyphen and underscore
+
+device.token.empty: Device Token can not be empty
+
 activity.checkin.invalid: Invalid checkin data
 activity.checkin.not.found: Checkin data not found
 activity.checkin.reference.required: Checkin reference is required
