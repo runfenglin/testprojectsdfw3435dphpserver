@@ -2,4 +2,10 @@ admin_api_user:
     prefix: /user
     type: rest
     resource: "AdminApiBundle\Controller\UserController"
-    name_prefix: admin_api_
+    name_prefix: admin_api_user_
+    
+admin_api_trip:
+    prefix: /trip
+    type: rest
+    resource: "AdminApiBundle\Controller\TripController"
+    name_prefix: admin_api_trip_

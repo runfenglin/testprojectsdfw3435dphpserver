@@ -127,5 +127,35 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                ->getQuery()
                ->getResult();
     }
+	
+	public function getMediaAccounts()
+	{
+		return $this->_em
+               ->createQueryBuilder()
+               ->select('u', 'mf', 'fm', 'sm', 'st')
+               ->from($this->_entityName, 'u')
+               ->leftJoin('u.myFriends', 'mf')
+               ->leftJoin('u.friendsWithMe', 'fm')
+			   ->leftJoin('u.socialAccounts', 'sm')
+			   ->leftJoin('sm.type', 'st')
+               ->where('u.email IS NOT NULL') 
+               ->getQuery()
+               ->getResult();
+	}
+	
+	public function getMobileAccounts()
+	{
+		return $this->_em
+               ->createQueryBuilder()
+               ->select('u', 'mf', 'fm', 'sm', 'st')
+               ->from($this->_entityName, 'u')
+               ->leftJoin('u.myFriends', 'mf')
+               ->leftJoin('u.friendsWithMe', 'fm')
+			   ->leftJoin('u.socialAccounts', 'sm')
+			   ->leftJoin('sm.type', 'st')
+               ->where('u.phone IS NOT NULL') 
+               ->getQuery()
+               ->getResult();
+	}
 
 }

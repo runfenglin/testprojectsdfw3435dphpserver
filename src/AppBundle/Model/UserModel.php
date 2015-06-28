@@ -183,7 +183,7 @@ class UserModel extends AbstractModel
                 'email' => $u->getEmail(),
                 'avatar' => $u->base64EncodedAvatar(),
                 'created' => $u->getCreated()->getTimestamp(),
-                'socialAcccounts' => $socialAccounts,
+                'social_accounts' => $socialAccounts,
                 'friends' => $friends
             );
             

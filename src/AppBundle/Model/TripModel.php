@@ -47,31 +47,37 @@ class TripModel extends AbstractModel
                 'name' => $t->getUser()->getName(),
                 'avatar' => $t->getUser()->getAvatar()
             );
-            if ($t->getDriver()){
+            
+			if ($t->getGroup()){
+                foreach($t->getGroupUsers() as $i => $gu){
+                    
+                    $expose[$k]['group_users'][$i]['name'] = $gu->getUser()->getName();
+					$expose[$k]['group_users'][$i]['avatar'] = $gu->getUser()->getAvatar();
+                    $expose[$k]['group_users'][$i]['id'] = $gu->getUser()->getId();
+                    $expose[$k]['group_users'][$i]['role'] = $gu->getRole();
+                }
+            }
+			elseif ($t->getDriver()){
                 $expose[$k]['driver'] = array(
                     'id' => $t->getDriver()->getId(),
                     'name' => $t->getDriver()->getName(),
                     'avatar' => $t->getDriver()->getAvatar()
                 );
             }
+			else {
+				$expose[$k]['offer_count'] = $t->getRideOffers()->count();
+			}
             $expose[$k]['time'] = $t->getTime()->getTimestamp();
             $expose[$k]['departure'] = $t->getDeparture();
             $expose[$k]['departure_reference'] = $t->getDepartureReference();
             $expose[$k]['destination'] = $t->getDestination();
             $expose[$k]['destination_reference'] = $t->getDestinationReference();
             $expose[$k]['group'] = $t->getGroup();
-            if ($t->getGroup()){
-                foreach($t->getGroupUsers() as $i => $gu){
-                    
-                    $expose[$k]['group_users'][$i]['name'] = $gu->getUser()->getName();
-                    $expose[$k]['group_users'][$i]['id'] = $gu->getUser()->getId();
-                    $expose[$k]['group_users'][$i]['role'] = $gu->getRole();
-                }
-            }
+            
             if ($t->getParent()) {
                 $expose[$k]['parent'] = $t->getParent()->getId();
             }
-            $expose[$k]['offer_count'] = $t->getRideOffers()->count();
+            
         }
         
         return $expose;

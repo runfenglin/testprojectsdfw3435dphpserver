@@ -180,4 +180,65 @@ class TripRepository extends EntityRepository
                     ->getQuery()
                     ->getResult();
     }
+	
+	public function getTripRequests()
+	{
+		//TODO implement pagination
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('t', 'u', 'o')
+                    ->from($this->_entityName, 't')
+					->join('t.user', 'u')
+					->leftJoin('t.rideOffers', 'o')
+                    ->where('t.driver IS NULL')
+                    ->andWhere('t.group = :group')
+					->setParameter('group', FALSE)
+                    ->getQuery()
+                    ->getResult();
+	}
+	
+	public function getPairedTrips()
+	{
+		//TODO implement pagination
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('t', 'u', 'd', 'p')
+                    ->from($this->_entityName, 't')
+					->join('t.user', 'u')
+					->join('t.driver', 'd')
+					->leftJoin('t.parent', 'p')
+                    ->getQuery()
+                    ->getResult();
+	}
+	
+	public function getGroupTrips()
+	{
+		//TODO implement pagination
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('t', 'u', 'g', 'gu')
+                    ->from($this->_entityName, 't')
+					->join('t.user', 'u')
+					->leftJoin('t.groupUsers', 'g')
+					->join('g.user', 'gu')
+                    ->where('t.group = :group')
+					->setParameter('group', TRUE)
+                    ->getQuery()
+                    ->getResult();
+	}
+	
+	public function getGroupTripDetail($id)
+	{
+		return $this->_em
+                    ->createQueryBuilder()
+                    ->select('t', 'u', 'g', 'gu')
+                    ->from($this->_entityName, 't')
+					->join('t.user', 'u')
+					->leftJoin('t.groupUsers', 'g')
+					->join('g.user', 'gu')
+                    ->where('t.id = :Id')
+					->setParameter('Id', $id)
+                    ->getQuery()
+                    ->getResult();
+	}
 }

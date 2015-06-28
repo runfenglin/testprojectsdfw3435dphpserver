@@ -1,0 +1,84 @@
+<div id="content">
+
+	<div class="row">
+		<big-breadcrumbs icon="road" items="['Trip', 'Single']" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+	
+	<div class="row">
+	<section widget-grid id="widget-grid" class="col-xs-12">
+		<div jarvis-widget id="table-hover-states-widget" data-widget-color="greenDark" data-widget-editbutton="false">
+			<header>
+				<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+				<h2>Trip List</h2>
+			</header>
+			
+			<div>
+				<div class="widget-body no-padding">
+					
+					<div class="table-responsive">
+						<div class="clearfix toolbar">
+							<div class="col-sm-4 col-xs-12">
+								<div class="input-group">
+									<span class="input-group-addon input-sm">
+										<i class="glyphicon glyphicon-search"></i>
+									</span>
+									<input type="search" class="form-control input-sm" placeholder ng-model="search">
+								</div>
+							</div>
+							
+							<!--div class="col-sm-2 col-xs-12 hidden-xs pull-right">
+								<select class="form-control input-sm">
+									<option value="10">10</option>
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+								</select>
+							</div-->
+						</div>
+						
+						<table class="table table-hover">
+							<thead>
+								<tr my-sort-columns predicate="predicate" reverse="reverse">
+									<th my-sort-by="user.name">User</th>
+									<th my-sort-by="departure">Departure</th>
+									<th my-sort-by="destination">Destination</th>
+									<th my-sort-by="time">Time</th>
+									<th my-sort-by="driver.name">Driver</th>
+								</tr>
+							</thead>
+							<tbody ng-if="trips.length==0">
+								<tr>
+									<td colspan="7">No paired trip is found</td>
+								</tr>
+							</tbody>
+							<tbody ng-if="trips.length">
+								<tr ng-repeat="t in trips|filter:search|orderBy:predicate:reverse">
+									<td>
+										<img data-ng-src="data:image/png;base64,[[t.user.avatar]]" src="/bundles/admin/images/male.png"/>
+										<span>[[t.user.name]]</span>
+										<a ng-show="t.group" ui-sref="app.trip.group({id:t.id})" tooltip="Group trip"> 
+											<i class="fa fa-group" ng-show="t.group"></i>
+										</a>
+									</td>
+									<td ng-bind-template="[[t.departure]]"></td>
+									<td ng-bind-template="[[t.destination]]"></td>
+									<td ng-bind-template="[[t.time * 1000 | date:'yyyy-MM-dd HH:mm']]"></td>
+									
+									<td>
+										<img ng-src="data:image/png;base64,[[t.driver.avatar]]" data-err-src="/bundles/admin/images/male.png" />
+										<span>[[t.driver.name]]</span>
+									</td>
+									
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+	</div>
+</div>

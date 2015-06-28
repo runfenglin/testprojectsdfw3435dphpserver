@@ -36,5 +36,33 @@ class UserController extends FOSRestController
         return array('username' => $user->getUsername(),'picture' => '/bundles/admin/images/avatar.png');
     }
     
-    
+    /**
+     * Get Mobile Account Data
+     *
+     * @Rest\Get("/mobile")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function queryMobileAccountAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository('AppBundle:User')->getMobileAccounts();
+		return $this->get('app.user.model')->expose($users);
+    }
+	
+	/**
+     * Get Media Account Data
+     *
+     * @Rest\Get("/media")
+     * @Rest\View()
+     *
+     * @return JSON
+     */
+    public function queryMediaAccountAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+		$users = $em->getRepository('AppBundle:User')->getMediaAccounts();
+		return $this->get('app.user.model')->expose($users);
+    }
 }

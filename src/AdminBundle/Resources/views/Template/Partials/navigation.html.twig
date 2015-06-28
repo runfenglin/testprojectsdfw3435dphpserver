@@ -18,19 +18,46 @@
 
         <ul data-smart-menu>
             <li data-ui-sref-active="active">
-                <a data-ui-sref="app.dashboard" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
-                        class="menu-item-parent">Dashboard</span></a>
+                <a data-ui-sref="app.dashboard" title="Dashboard">
+					<i class="fa fa-lg fa-fw fa-dashboard"></i> 
+					<span class="menu-item-parent">Dashboard</span>
+				</a>
+            </li>
+
+
+			<li data-menu-collapse>
+                <a hrefVoid>
+					<i class="fa fa-lg fa-fw fa-car"></i> 
+					<span class="menu-item-parent">Trip</span>
+				</a>
+                <ul>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.trip.request">Request</a>
+                    </li>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.trip.single">Paired</a>
+                    </li>
+					<li data-ui-sref-active="active">
+                        <a data-ui-sref="app.trip.group">Group</a>
+                    </li>
+                </ul>
             </li>
 			
-			<li data-ui-sref-active="active">
-                <a data-ui-sref="app.trip" title="Trip"><i class="fa fa-lg fa-fw fa-home"></i> <span
-                        class="menu-item-parent">Trip</span></a>
+			<li data-menu-collapse>
+                <a hrefVoid>
+					<i class="fa fa-lg fa-fw fa-user"></i> 
+					<span class="menu-item-parent">User</span>
+				</a>
+                <ul>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.user.mobile">Mobile Account</a>
+                    </li>
+                    <li data-ui-sref-active="active">
+                        <a data-ui-sref="app.user.media">SM Account</a>
+                    </li>
+                </ul>
             </li>
 			
-			<li data-ui-sref-active="active">
-                <a data-ui-sref="app.user" title="User"><i class="fa fa-lg fa-fw fa-home"></i> <span
-                        class="menu-item-parent">User</span></a>
-            </li>
 			
         </ul>
     </nav>
