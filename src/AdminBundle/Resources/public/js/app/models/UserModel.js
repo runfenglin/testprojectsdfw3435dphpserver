@@ -11,10 +11,17 @@ define(['app', 'lodash'], function(module, _){
             {Id: '@Id', Format: 'json'},
             {
                 self: {
-                    url: baseURL + '/self',
+                    url: baseURL + '/self.:Format',
                     method: 'GET',
                     isArray: false
-                }
+                },
+				
+				query: {
+                    url: baseURL + '/:Type.:Format',
+                    method: 'GET',
+					params: {Type: '@Type'},
+                    isArray: true					
+				}
             }
         );
 

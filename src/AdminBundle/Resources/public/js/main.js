@@ -14,6 +14,7 @@ define([
     'angular',
     'domReady',
     'bootstrap',
+	'appConfig',
     'app',
     'modules-includes'
 ], function (require, $, ng, domReady) {

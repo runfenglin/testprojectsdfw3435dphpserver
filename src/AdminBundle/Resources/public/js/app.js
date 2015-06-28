@@ -15,6 +15,7 @@ define([
     'angular-animate',
     'angular-sanitize',
     'angular-bootstrap',
+    'smartwidgets',
     'notification'
 ], function (ng, couchPotato) {
 
@@ -28,7 +29,10 @@ define([
 		'app.layout',
         'app.auth',
 		'app.dashboard',
-		'app.graphs'
+		'app.trip',
+		'app.user',
+		'app.graphs',
+		'app.widgets'
     ]);
     
     couchPotato.configureApp(app);

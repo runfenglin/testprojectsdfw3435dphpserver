@@ -36,6 +36,8 @@ var require = {
         'angular-ui-sortable': '/bundles/admin/plugins/angular-ui/ui-sortable/sortable',
 		'lodash': '/bundles/admin/plugins/lodash/dist/lodash.min',
 		'sparkline': '/bundles/admin/plugins/relayfoods-jquery.sparkline/dist/jquery.sparkline.min',
+		'smartwidgets': '/bundles/admin/plugins/smartwidgets/jarvis.widget.min',
+		'appConfig': '/bundles/admin/js/app.config',
 		'modules-includes': 'includes',
         'app': 'app'
     },
@@ -58,6 +60,7 @@ var require = {
         'angular-ui-tooltip': { deps: ['angular-ui-dimensions']},
         'angular-ui-dimensions': { deps: ['angular']},
 		'sparkline': { deps: ['jquery']},
+		'smartwidgets': { deps: ['jquery-ui']}
     },
     priority: [
         "jquery",
